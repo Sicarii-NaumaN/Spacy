@@ -18,6 +18,22 @@ set(
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
 )
+
+set(
+        SERVER_SRC
+        server
+        server/src
+        server/src/main.cpp
+        server/src/GameEnvironment.cpp
+)
+
+set(
+        SERVER_HDRS
+        server
+        server/include
+        server/include/GameEnvironment.h
+)
+
 set(
         NET_SRC_SERVER
         Net
@@ -48,6 +64,7 @@ set(
         Net/include/PacketManager.h
 )
 set (CLIENT ${CLIENT_SRC} ${CLIENT_HDRS})
+set (SERVER ${SERVER_SRC} ${SERVER_HDRS})
 
 find_package(Boost 1.71.0 COMPONENTS system filesystem thread REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -60,10 +77,16 @@ include_directories(
         Net
         Net/include
         Net/src
+        server
+        server/include
+        server/src
 )
 
 set (NET_SERVER ${NET_HDRS_SERVER} ${NET_SRC_SERVER})
 set (NET_CLIENT ${NET_HDRS_CLIENT} ${NET_SRC_CLIENT})
+
 add_executable(SpacyClient client/main.cpp ${CLIENT} ${NET_CLIENT})
+add_executable(SpacyServer server/main.cpp ${SERVER} ${NET_SERVER})
 
 target_link_libraries(SpacyClient sfml-graphics sfml-audio)
+target_link_libraries(SpacyServer ${Boost_LIBRARIES})
