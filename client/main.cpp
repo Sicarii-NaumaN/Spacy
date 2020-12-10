@@ -4,19 +4,22 @@
 #include <thread>
 
 #include "Graphics.h"
-
-int W = 1280;
-int H = 800;
-
-int TABLE_W1 = 200;
-int TABLE_W2 = 800;
-int TABLE_H = 550;
-
+#include "structConfig.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(W, H), "qwe");
-    Graphics graphics(window);
+    struct Config config;
+    config.window_width = 1280;
+    config.window_height = 800;
+    config.textures_path = "../client/textures/";
 
+    config.table_width_top = 200;
+    config.table_width_bot = 800;
+    config.table_height = 550;
+    config.table_shift = 50;
+
+    sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "qwe");
+    Graphics graphics(window, config);
+    int i = 0;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -24,7 +27,9 @@ int main() {
                 window.close();
         }
         graphics.drawField();
+        graphics.drawPlayer(config.window_width/2 - 50 + i/20, config.window_height/2 + 50 - i/20);
         window.display();
+        ++i;
     }
 
     return 0;

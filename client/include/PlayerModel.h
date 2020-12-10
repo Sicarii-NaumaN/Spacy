@@ -15,6 +15,7 @@ public:
 
     virtual void draw(sf::RenderTarget &renderTarget, sf::RenderStates renderStates);
 
+    void resize(float width_scale, float height_scale);
     void setTexture(const sf::Texture &texture);
     void setPosition(float x, float y);
 
