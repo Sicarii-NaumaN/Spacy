@@ -1,10 +1,5 @@
-//
-// Created by moira-q on 14.04.20.
-//
-
-#ifndef AVM_OBJECT_MANAGER_H
-#define AVM_OBJECT_MANAGER_H
-
+#ifndef SPACY_OBJECT_MANAGER_H
+#define SPACY_OBJECT_MANAGER_H
 
 #include <map>
 #include <vector>
@@ -21,13 +16,13 @@ public:
     std::shared_ptr<Object>& get_object_by_id(int id);
     std::unordered_map<int, std::shared_ptr<Object>>& get_objects_by_map();
     int pick_enable_id() const;
-    CollisionManager collisionSolver;
+    //CollisionManager collisionSolver;
+
 private:
-    
     mutable int id_counter;
     mutable std::mutex id_cointer_m;
     std::unordered_map<int, std::shared_ptr<Object>> objects;
 };
 
 
-#endif //AVM_OBJECT_MANAGER_H
+#endif //SPACY_OBJECT_MANAGER_H

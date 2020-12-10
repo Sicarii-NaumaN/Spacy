@@ -62,49 +62,18 @@ public:
 
 class PlayerState {
 public:
-    enum State {
-        STATE_STANDING,
-        STATE_FLYING
-    };
-    PlayerState(): state_(State::STATE_STANDING), flying_tick(0), shot_cd_tick(0) {};
-    State get_state() {
-        next_flying_tick();
+    PlayerState(): shot_cd_tick(0) {};
+    void get_state() {
         next_shot_tick();
-        next_blink_tick();
-        return state_;
     }
     bool is_shot_avaible() const {
         return !is_shot_cd;
     }
 
-    bool is_blink_avaible() const {
-        return !is_blink_cd;
-    }
-
-    void blink() {
-        is_blink_cd = true;
-    }
-
-
     void shot() {
         is_shot_cd = true;
     }
-    void state_to_fly() {
-        if (state_ != State::STATE_FLYING) {
-            state_ = State::STATE_FLYING;
-        }
-    }
 private:
-    void next_flying_tick() {
-        if (state_ == State::STATE_FLYING) {
-            flying_tick++;
-            if (flying_tick > FLYING_DURATION) {
-                state_ = State::STATE_STANDING;
-                flying_tick = 0;
-
-            }
-        }
-    };
     void next_shot_tick() {
         if (is_shot_cd) {
             shot_cd_tick++;
@@ -114,21 +83,9 @@ private:
             }
         }
     }
-    void next_blink_tick() {
-        if (is_blink_cd) {
-            blink_cd_tick++;
-            if (blink_cd_tick > BLINK_COULDOWN_TICKS) {
-                is_blink_cd = false;
-                blink_cd_tick = 0;
-            }
-        }
-    }
-    int flying_tick;
+
     int shot_cd_tick;
-    int blink_cd_tick;
-    bool is_blink_cd;
     bool is_shot_cd;
-    State state_;
 };
 
 class Player : public Object {
@@ -136,12 +93,8 @@ public:
     Player(int id, Point pos): Object(Type::PLAYER_OBJECT, id, pos, Model(26,26)),
                                sight(1, 0), speed(DEFAULT_PLAYER_SPEED) {};
     void update() override {
-        if (state_.get_state() == PlayerState::STATE_FLYING) {
-            position = position +  sight * speed;
-        } else {
-            speed = DEFAULT_PLAYER_SPEED;
-        }
-    }//обновление в зависимости от state
+      speed = DEFAULT_PLAYER_SPEED;
+    }
     PlayerState state_;
     Point sight;
     double speed;
@@ -157,27 +110,18 @@ class Map : public  Object {
 public:
     Map(int id, int durations_tick, std::vector<std::shared_ptr<Object>> plrs):
             Object(Type::MAP_OBJECT, id, Point(0, 0), Model(0, 0)),
-            game_duration_ticks(durations_tick), current_round_tick(0),
+            game_duration_ticks(durations_tick),
             players(move(plrs)),
             map_centr({WINDOW_W/ 2}, {WINDOW_H / 2}) {
-        for (int i = 1; i <= layers_count; ++i) {
-            pts_table[i] = i;
-        }
+
         for(const auto& player: players) {
             players_pts[player->ID] = 0;
         }
     }
     void update() override {
-        current_round_tick++;
-        for (const auto& player: players) {
-            add_points_to_player(player);
-        }
-
-    } //Добавляет очки, меняет зону
+        ;
+    }
     std::map<int, int> players_pts;
-    std::map<int, int> pts_table;
-    int layers_count;
-    double ring_radius;
 private:
     // TODO: Сделать добавление очков при попадании в соперника/его ворота
 
@@ -188,7 +132,6 @@ private:
     //         //           std::cout << "ID: " << player->ID << " +PTS: " << pts_table[position_rating] << std::endl;
     //     }
     // }
-    int current_round_tick;
     int game_duration_ticks;
     std::vector<std::shared_ptr<Object>> players;
 

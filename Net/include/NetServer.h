@@ -11,7 +11,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <PacketManagerServer.h>
-
+#include <Event.h>
 
 
 
@@ -20,11 +20,11 @@ public:
     explicit NetServer(int port) {}
     ~NetServer() = default;
 
-    //std::vector<User> accept_users(int player_count, const ObjectManager& objm);
+    std::vector<User> accept_users(int player_count, const ObjectManager& objm);
 
-    //void notify_all_users(std::unordered_map<int, std::shared_ptr<Object>>&);
+    void notify_all_users(std::unordered_map<int, std::shared_ptr<Object>>&);
 
-    //std::shared_ptr<Event> get_client_action(User& user);
+    std::shared_ptr<Event> get_client_action(User& user);
 
     int do_read_header(User&);
 

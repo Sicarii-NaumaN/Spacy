@@ -1,9 +1,4 @@
-//
-// Created by moira-q on 14.04.20.
-//
-
-#ifndef AVM_EVENT_H
-#define AVM_EVENT_H
+#pragma once
 
 #include <Object.h>
 #include <ObjectManager.h>
@@ -35,5 +30,3 @@ public:
     Shot(int Iniciator_ID, Vector sight_direct): Event(Iniciator_ID, sight_direct) {};
     std::shared_ptr<Object> proccess(std::shared_ptr<Object> obj, ObjectManager& objectmanager) override;
 };
-
-#endif //AVM_EVENT_H

@@ -11,10 +11,10 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
 }
 
 bool GameEnvironment::start_game() {
-  std::vector<User> players_init = netServer.accept_users(2, objectManager);
+  std::vector<User> players_init = net_server.accept_users(player_count, object_manager);
     std::vector<boost::thread> threads;
     for (auto& usr: players_init) {
-        objectManager.update_objects(init_user(usr));
+        object_manager.update_objects(init_user(usr));
         boost::thread  th([&](){
             this->serve_user(usr);
         });
@@ -40,7 +40,7 @@ bool GameEnvironment::start_game() {
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
             last_tick = curr_time;
             need_update = true;
-            netServer.notify_all_users(objectManager.get_objects_by_map());
+            net_server.notify_all_users(object_manager.get_objects_by_map());
         }
         curr_time = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
@@ -50,16 +50,17 @@ bool GameEnvironment::start_game() {
     for (auto& th: threads) {
         th.join();
     }
+    return 0;
 }
 
 void GameEnvironment::initialize_objects() {
   std::vector<std::shared_ptr<Object>> players;
     for (int i = 0; i < player_count; i++) {
-        players.push_back(objectManager.get_object_by_id(i));
+        players.push_back(object_manager.get_object_by_id(i));
     }
-    std::shared_ptr<Map> map = std::make_shared<Map>(objectManager.pick_enable_id(),
-                                                     game_duration * FRAMES_PER_SECOND, move(players));
-    objectManager.update_objects(map);
+    std::shared_ptr<Map> map = std::make_shared<Map>(object_manager.pick_enable_id(),
+                                                     max_game_duration * FRAMES_PER_SECOND, move(players));
+    object_manager.update_objects(map);
 
     //TODO: Сделать стены
     // std::shared_ptr<Obstruction> obs1 = std::make_shared<Obstruction>(objectManager.pick_enable_id(), Point(460, 280), 30, 250);
@@ -78,7 +79,7 @@ void GameEnvironment::initialize_objects() {
 void GameEnvironment::update_objects() {
   while(game_is_active) {
         // Получаем объекты
-        std::unordered_map<int, std::shared_ptr<Object>>& objects = objectManager.get_objects_by_map();
+        std::unordered_map<int, std::shared_ptr<Object>>& objects = object_manager.get_objects_by_map();
         // Проверка на столкновения
         if (need_update) {
             // for (auto& object: objects) {
@@ -100,9 +101,9 @@ void GameEnvironment::update_objects() {
                 event_queue.pop();
 
                 // Получаем объект, к которому относится событие
-                auto object = objectManager.get_object_by_id(event->IniciatorID);
+                auto object = object_manager.get_object_by_id(event->IniciatorID);
                 // Вычисляем его новое состояние
-                auto new_state = event->proccess(object, objectManager);
+                auto new_state = event->proccess(object, object_manager);
                 // Проверяем на столкновение с другими объектами
                 // if (!objectManager.collisionSolver.is_object_collided(objects, new_state)) {
                 if (1) {
@@ -116,9 +117,9 @@ void GameEnvironment::update_objects() {
     }
 }
 
-std::shared_ptr(Player) GameEnvironment::init_user(User& user) {
+std::shared_ptr<Player> GameEnvironment::init_user(User& user) {
   int id = user.get_username();
-  std::shared_ptr<Player> player = std::make_shared<Player>(id);
+  std::shared_ptr<Player> player = std::make_shared<Player>(id, Point(0, 0));
   return player;
 }
 

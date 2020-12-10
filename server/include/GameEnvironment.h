@@ -9,25 +9,27 @@
 #include <PacketManagerServer.h>
 #include <ObjectManager.h>
 #include <NetServer.h>
+#include <Event.h>
 
-const static unsigned int FRAMES_PER_SECOND 20
-const static unsigned int MAX_PLAYERS 30
+const static unsigned int FRAMES_PER_SECOND = 20;
+const static unsigned int MAX_PLAYERS = 30;
 
 class GameEnvironment {
   public:
-    World(std::uint16_t port,                 // Порт
+    GameEnvironment(std::uint16_t port,                 // Порт
           unsigned int  max_game_duration,    // Максимальная длительность игры
           unsigned int  points_to_win         // Количество очков для победы
-        )
+        );
 
     bool start_game();
 
   private:
+    ObjectManager object_manager;
     std::queue<std::shared_ptr<Event>> event_queue;
 
     NetServer net_server;
 
-    double tick_dutation;
+    double tick_duration;
     double max_game_duration;
     double points_to_win;
 
@@ -41,4 +43,5 @@ class GameEnvironment {
 
     bool need_update;
     bool game_is_active;
-}
+    int player_count = 2;
+};
