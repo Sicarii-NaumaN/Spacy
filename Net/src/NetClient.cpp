@@ -14,7 +14,7 @@ void NetClient::connect_to_server(std::string addr_server, int port) {
     sock->connect(ep);
     char id_user[1];
     socket_ptr->read_some(buffer(id_user, 1));
-    id = static_cast<int>(id_user[0]);
+    id = static_cast<int>(id_user[0]); 
 }
 
 
@@ -28,7 +28,7 @@ std::vector<std::shared_ptr<ObjectInterface>> NetClient::get_server_message() {
     //std::cout << str << std::endl;
     std::stringstream stream(str);
     read_json(stream, root);
-
+    
     return packet_manager.packet_adaptation_client(root);
 }
 

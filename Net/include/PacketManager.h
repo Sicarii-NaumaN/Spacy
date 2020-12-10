@@ -1,16 +1,13 @@
-//
-// Created by naum on 10.12.2020.
-//
+#ifndef NEW_PACKETMANAGER_H
+#define NEW_PACKETMANAGER_H
 
-#ifndef SPACY_PACKETMANAGER_H
-#define SPACY_PACKETMANAGER_H
 #include <string>
 #include <vector>
 #include <memory>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-#include <PlayerModel.h>
+#include <stuctClient.h>
 
 
 using boost::property_tree::ptree;
@@ -27,4 +24,5 @@ public:
 
 };
 
-#endif //SPACY_PACKETMANAGER_H
+
+#endif //NEW_PACKETMANAGER_H

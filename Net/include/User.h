@@ -1,5 +1,5 @@
-#ifndef SPACY_USER_H
-#define SPACY_USER_H
+#ifndef NEW_USER_H
+#define NEW_USER_H
 
 #include <boost/asio.hpp>
 #include <utility>
@@ -23,4 +23,6 @@ private:
     bool status;
 };
 
-#endif //SPACY_USER_H
+
+
+#endif //NEW_USER_H

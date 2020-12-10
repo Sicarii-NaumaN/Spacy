@@ -1,5 +1,5 @@
-#ifndef SPACY_NETCLIENT_H
-#define SPACY_NETCLIENT_H
+#ifndef NEW_NETCLIENT_H
+#define NEW_NETCLIENT_H
 #include <PacketManager.h>
 #include <string>
 #include <boost/asio.hpp>
@@ -26,4 +26,5 @@ private:
     boost::asio::io_service io_service;
     PacketManager packet_manager;
 };
-#endif //SPACY_NETCLIENT_H
+
+#endif //NEW_NETCLIENT_H

@@ -9,6 +9,9 @@ set(
         client/include
         client/include/PlayerModel.h
         client/include/Graphics.h
+        client/include/actionServer.h
+        client/include/actionManager.h
+        client/include/structConfig.h
 
 )
 set(
@@ -17,6 +20,8 @@ set(
         client/src
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
+        client/src/actionServer.cpp
+        client/src/actionManager.cpp
 )
 set(
         NET_SRC_SERVER
@@ -67,3 +72,4 @@ set (NET_CLIENT ${NET_HDRS_CLIENT} ${NET_SRC_CLIENT})
 add_executable(SpacyClient client/main.cpp ${CLIENT} ${NET_CLIENT})
 
 target_link_libraries(SpacyClient sfml-graphics sfml-audio)
+target_link_libraries(SpacyClient ${Boost_LIBRARIES})

@@ -1,9 +1,5 @@
-//
-// Created by naum on 10.12.2020.
-//
-
-#ifndef SPACY_NETSERVER_H
-#define SPACY_NETSERVER_H
+#ifndef NEW_NETSERVER_H
+#define NEW_NETSERVER_H
 #include <boost/asio.hpp>
 #include <User.h>
 #include <vector>
@@ -20,11 +16,11 @@ public:
     explicit NetServer(int port) {}
     ~NetServer() = default;
 
-    //std::vector<User> accept_users(int player_count, const ObjectManager& objm);
+    std::vector<User> accept_users(int player_count, const ObjectManager& objm);
 
-    //void notify_all_users(std::unordered_map<int, std::shared_ptr<Object>>&);
+    void notify_all_users(std::unordered_map<int, std::shared_ptr<Object>>&);
 
-    //std::shared_ptr<Event> get_client_action(User& user);
+    std::shared_ptr<Event> get_client_action(User& user);
 
     int do_read_header(User&);
 
@@ -35,4 +31,6 @@ private:
     PacketManagerServer packet_manager;
     //PacketManager qwe;
 };
-#endif //SPACY_NETSERVER_H
+
+
+#endif //NEW_NETSERVER_H
