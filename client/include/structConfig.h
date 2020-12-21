@@ -26,6 +26,18 @@ struct Config {
     sf::Keyboard::Key DOWN;
     sf::Keyboard::Key LEFT;
     sf::Keyboard::Key RIGHT;
+
+    Config(){
+        window_width = 1280;
+        window_height = 800;
+        textures_path = "../client/textures/";
+
+        table_width_top = 200;
+        table_width_bot = 800;
+        table_height = 550;
+        table_shift = 50;
+    }
+
 };
 
 #endif //SPACY_STRUCTCONFIG_H

@@ -9,15 +9,19 @@ set(
         client/include
         client/include/PlayerModel.h
         client/include/Graphics.h
-
+        client/include/structConfig.h
 )
+
 set(
         CLIENT_SRC
         client
         client/src
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
+        client/include/structConfig.h
+        client/include/ActionServer.h
 )
+
 set (CLIENT ${CLIENT_SRC} ${CLIENT_HDRS})
 
 include_directories(
@@ -29,7 +33,5 @@ include_directories(
 
 
 add_executable(main client/main.cpp ${CLIENT})
-add_executable(kek kek.cpp)
 
 target_link_libraries(main sfml-graphics sfml-audio)
-target_link_libraries(kek sfml-graphics sfml-audio)

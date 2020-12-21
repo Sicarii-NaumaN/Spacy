@@ -38,6 +38,15 @@ void Graphics::drawField() {
     int y2 = (config.window_height + config.table_height)/2 + config.table_shift;
     int width_bot = config.table_width_bot;
 
+    sf::RectangleShape background;
+
+    background.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+
+    sf::Texture texture;
+    texture.loadFromFile(config.textures_path + "space.png");
+
+    background.setTexture(&texture);
+    window.draw(background);
     drawShape(background_texture,
               x1, y1, width_top,
               x2, y2, width_bot);

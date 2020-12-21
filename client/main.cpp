@@ -8,28 +8,35 @@
 
 int main() {
     struct Config config;
-    config.window_width = 1280;
-    config.window_height = 800;
-    config.textures_path = "../client/textures/";
+    int dx = 0;
+    int dy = 0;
 
-    config.table_width_top = 200;
-    config.table_width_bot = 800;
-    config.table_height = 550;
-    config.table_shift = 50;
-
-    sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "qwe");
+    sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     Graphics graphics(window, config);
-    int i = 0;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::W))) {
+                dy -= 5;
+            }
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A))) {
+                dx -= 5;
+            }
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::D))) {
+                dx += 5;
+            }
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::S))) {
+                dy += 5;
+            }
+
         }
         graphics.drawField();
-        graphics.drawPlayer(config.window_width/2 - 50 + i/20, config.window_height/2 + 50 - i/20);
+        graphics.drawPlayer(config.window_width/2 - 50 + dx, config.window_height/2 + 50 + dy);
         window.display();
-        ++i;
+
     }
 
     return 0;
