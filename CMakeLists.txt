@@ -25,6 +25,10 @@ set(
         server/src
         server/src/main.cpp
         server/src/GameEnvironment.cpp
+        server/src/Object.cpp
+        server/src/ObjectManager.cpp
+        server/src/Event.cpp
+        server/src/EventManager.cpp
 )
 
 set(
@@ -32,6 +36,10 @@ set(
         server
         server/include
         server/include/GameEnvironment.h
+        server/include/Object.h
+        server/include/ObjectManager.h
+        server/include/Event.h
+        server/include/EventManager.h
 )
 
 set(

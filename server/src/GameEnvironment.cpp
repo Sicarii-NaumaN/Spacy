@@ -1,4 +1,5 @@
 #include <GameEnvironment.h>
+#include <ObjectManager.h>
 
 GameEnvironment::GameEnvironment(std::uint16_t port,
                                 unsigned int max_game_duration,
@@ -11,11 +12,13 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
 }
 
 bool GameEnvironment::start_game() {
-  std::vector<User> players_init = net_server.accept_users(player_count, object_manager);
+    // Ждем пользователей
+    std::vector<User> players_init = net_server.accept_users(player_count, object_manager);
+    // Создаем поток для каждого пользователя
     std::vector<boost::thread> threads;
     for (auto& usr: players_init) {
         object_manager.update_objects(init_user(usr));
-        boost::thread  th([&](){
+        boost::thread th([&](){
             this->serve_user(usr);
         });
         threads.push_back(move(th));

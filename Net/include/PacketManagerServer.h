@@ -10,8 +10,8 @@
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-//#include <Event.h>
-//#include <Object.h>
+#include <Event.h>
+#include <Object.h>
 
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
@@ -21,8 +21,8 @@ class PacketManagerServer {
 public:
     PacketManagerServer() = default;
     ~PacketManagerServer() = default;
-    //std::string packet_handle_server(std::unordered_map<int, std::shared_ptr<Object>>& object);
-    //std::shared_ptr<Event> packet_adaptation_server(ptree& root);
+    std::string packet_handle_server(std::unordered_map<int, std::shared_ptr<Object>>& object);
+    std::shared_ptr<Event> packet_adaptation_server(ptree& root);
 };
 
 #endif //SPACY_PACKETMANAGERSERVER_H

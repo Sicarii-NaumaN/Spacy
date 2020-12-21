@@ -8,9 +8,7 @@
 std::shared_ptr<Object> Move::proccess(std::shared_ptr<Object> obj, ObjectManager &objectmanager) {
     std::shared_ptr<Player> sh_player= std::static_pointer_cast<Player>(obj);
     Player player = *sh_player.get();
-    if (player.state_.get_state() == PlayerState::STATE_FLYING) {
-        return std::make_shared<Player>(player);
-    }
+    
     switch (direction) {
         // TODO: Пересчет координат в трапецию
         // case UP: {
@@ -40,9 +38,7 @@ std::shared_ptr<Object> Move::proccess(std::shared_ptr<Object> obj, ObjectManage
 std::shared_ptr<Object> Shot::proccess(std::shared_ptr<Object> obj, ObjectManager &object_manager) {
     std::shared_ptr<Player> sh_player= std::static_pointer_cast<Player>(obj);
     Player player = *sh_player.get();
-    if (player.state_.get_state() == PlayerState::STATE_FLYING) {
-        return std::make_shared<Player>(player);
-    }
+
     if (sh_player->state_.is_shot_avaible()) {
         sh_player->sight = player.normalize(sight);
         player.sight = sh_player->sight;
