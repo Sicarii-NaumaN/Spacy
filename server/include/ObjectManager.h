@@ -7,7 +7,6 @@
 #include <mutex>
 #include <Object.h>
 #include <unordered_map>
-#include <CollisionManager.h>
 
 class ObjectManager {
 public:

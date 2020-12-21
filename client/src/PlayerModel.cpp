@@ -19,8 +19,11 @@ void PlayerModel::setTexture(const sf::Texture &texture) {
 }
 
 void PlayerModel::setPosition(float x, float y) {
-    position.x = x;
-    position.y = y;
+    sprite.setPosition(x, y);
+}
+
+void PlayerModel::resize(float width_scale, float height_scale) {
+    sprite.scale(width_scale, height_scale);
 }
 
 PlayerModel::PlayerModel() = default;

@@ -9,8 +9,9 @@
 #include <memory>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-
 #include <PlayerModel.h>
+#include <EventClient.h>
+#include <Object.h>
 
 
 using boost::property_tree::ptree;
@@ -24,7 +25,6 @@ public:
     ~PacketManager() = default;
     std::string packet_handle_client(std::shared_ptr<EventInterface>& event);
     std::vector<std::shared_ptr<ObjectInterface>> packet_adaptation_client(ptree& root);
-
 };
 
 #endif //SPACY_PACKETMANAGER_H

@@ -1,4 +1,6 @@
+#include "PacketManager.h"
 #include "NetClient.h"
+
 
 using namespace boost::asio;
 using boost::property_tree::ptree;

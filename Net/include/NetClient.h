@@ -1,5 +1,6 @@
 #ifndef SPACY_NETCLIENT_H
 #define SPACY_NETCLIENT_H
+
 #include <PacketManager.h>
 #include <string>
 #include <boost/asio.hpp>
