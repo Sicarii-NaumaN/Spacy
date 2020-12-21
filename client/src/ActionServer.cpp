@@ -1,58 +1,57 @@
-#include <ActionServer.h>
-#include "Event.h"
+#include "ActionServer.h"
 
-actionServer::actionServer (): myPosition(500.0,500.0), mySight({0, 0}, {0, 0}){}
+ActionServer::ActionServer (): myPosition(500.0, 500.0), mySight({0, 0}, {0, 0}){}
 
-void actionServer::sendActionMove(DirectionInterface direction){
+void ActionServer::sendActionMove(Direction direction){
 
     MoveInterface event(EventInterface::EventType::move, mySight, direction);
 
     std::shared_ptr<EventInterface> ptr = std::make_shared<MoveInterface>(event);
-    net.send_user_action(ptr);
+    netClient.send_user_action(ptr);
 
 }
 
-void actionServer::send_shot_event() {
+void ActionServer::sendActionShot() {
     auto event = ShotInterface(EventInterface::EventType::shot, mySight);
     std::shared_ptr<EventInterface> ptr = std::make_shared<ShotInterface>(event);
 
-    net.send_user_action(ptr);
+    netClient.send_user_action(ptr);
 }
 
-std::vector<std::shared_ptr<ObjectInterface>> actionServer::getMessage(){
-    return network.get_server_message();
+std::vector<std::shared_ptr<ObjectInterface>> ActionServer::getMessage(){
+    return netClient.get_server_message();
 }
 
-void actionServer::connect_client(){
-    network.connect_to_server(addr_server, port);
+void ActionServer::connectClient(){
+    netClient.connect_to_server(addr_server, port);
 }
 
-void actionServer::closeConnectClient(){
+void ActionServer::closeConnection(){
     //функция разрыва соединения
 }
 
-bool actionServer::checkWinner(const std::vector<std::shared_ptr<ObjectInterface>> &objects){
-    std::map<ObjectInterface::Type, std::vector<std::shared_ptr<ObjectInterface>>> group;
-
-    for (const std::shared_ptr<ObjectInterface> &obj : objects) {
-        group[obj->type].push_back(obj);
-    }
-
-    int pointOfWinner = 0;
-    int idOfWinner = 0;
-    std::vector<MapInterface> mapData;
-
-    for (std::shared_ptr<ObjectInterface> &obj : group[ObjectInterface::Type::MAP_OBJECT]) {
-        mapData.emplace_back(*std::static_pointer_cast<MapInterface>(obj));
-    }
-
-    for (auto point : mapData[0].players_pts){
-        if(point.second > pointOfWinner) {
-            pointOfWinner = point.second;
-            idOfWinner = point.first;
-        }
-    }
-
-    return idOfWinner == myId;
-
-}
+//bool ActionServer::checkWinner(const std::vector<std::shared_ptr<ObjectInterface>> &objects){
+//    std::map<ObjectInterface::Type, std::vector<std::shared_ptr<ObjectInterface>>> group;
+//
+//    for (const std::shared_ptr<ObjectInterface> &obj : objects) {
+//        group[obj->type].push_back(obj);
+//    }
+//
+//    int pointOfWinner = 0;
+//    int idOfWinner = 0;
+//    std::vector<MapInterface> mapData;
+//
+//    for (std::shared_ptr<ObjectInterface> &obj : group[ObjectInterface::Type::MAP_OBJECT]) {
+//        mapData.emplace_back(*std::static_pointer_cast<MapInterface>(obj));
+//    }
+//
+//    for (auto point : mapData[0].players_pts){
+//        if(point.second > pointOfWinner) {
+//            pointOfWinner = point.second;
+//            idOfWinner = point.first;
+//        }
+//    }
+//
+//    return idOfWinner == myId;
+//
+//}

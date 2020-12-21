@@ -9,6 +9,8 @@ set(
         client/include
         client/include/PlayerModel.h
         client/include/Graphics.h
+        client/include/ActionServer.h
+        client/include/EventClient.h
 
 )
 set(
@@ -17,6 +19,7 @@ set(
         client/src
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
+        client/src/ActionServer.cpp
 )
 
 set(

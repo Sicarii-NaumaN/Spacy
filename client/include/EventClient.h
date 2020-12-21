@@ -18,11 +18,11 @@ struct ModelInterface {
     ModelInterface(int h, int w):height(h), width(w) {}
 };
 
-enum DirectionInterface {
-    up,
-    down,
-    left,
-    right
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
 struct MousePosition {
@@ -43,25 +43,14 @@ struct EventInterface {
 };
 
 struct MoveInterface: EventInterface{
-    DirectionInterface direction;
-    MoveInterface(EventType t, VectorInterface s, DirectionInterface dir):EventInterface(t, s), direction(dir) {}
-};
-
-struct BlinkInterface: EventInterface{
-    BlinkInterface(EventType t, VectorInterface s):EventInterface(t, s) {}
+    Direction direction;
+    MoveInterface(EventType t, VectorInterface s, Direction dir):EventInterface(t, s), direction(dir) {}
 };
 
 struct ShotInterface: EventInterface{
     ShotInterface(EventType t, VectorInterface s):EventInterface(t, s) {}
 };
 
-
-enum Type {
-    STATIC_OBJECT,
-    PLAYER_OBJECT,
-    BULLET_OBJECT,
-    MAP_OBJECT
-};
 
 struct ObjectInterface {
     enum Type {

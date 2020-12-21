@@ -3,7 +3,7 @@ using namespace boost::asio;
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 using boost::property_tree::write_json;
-
+#include <iostream>
 std::vector<User> NetServer::accept_users(int players_count, const ObjectManager& objm) {
     ip::tcp::acceptor acc(io_service, ip::tcp::endpoint(ip::tcp::v4(),8001));
     int player = 0;
@@ -19,6 +19,10 @@ std::vector<User> NetServer::accept_users(int players_count, const ObjectManager
         users[player].sock->write_some(buffer(str));
         player++;
     }
+
+    // * DEBUG * //
+    std::cout<< "NetServer: USER CONNECTED!" << std::endl;
+
     return users;
 }
 

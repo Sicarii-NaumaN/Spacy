@@ -11,18 +11,18 @@
 #include <iostream>
 
 #include <vector>
-#include "Event.h"
-//#include <NetClient.h>
+#include "EventClient.h"
+#include "NetClient.h"
 #include <SFML/System.hpp>
 
-class actionServer {
+class ActionServer {
 private:
-    NetClient net;
+    NetClient netClient;
     std::string addr_server = "127.0.0.1";
     int port = 8001;
 public:
-    actionServer();
-    ~actionServer() = default;
+    ActionServer();
+    ~ActionServer() = default;
 
     PointInterface myPosition;
     VectorInterface mySight;
@@ -30,9 +30,9 @@ public:
     int myId;
 
     void connectClient();
-    void closeConnectClient();
+    void closeConnection();
 
-    void sendActionMove(DirectionInterface);
+    void sendActionMove(Direction);
     void sendActionShot();
     void updatePosition(const std::vector<std::shared_ptr<ObjectInterface>> &);
     void updateSight(sf::Vector2f);

@@ -6,18 +6,29 @@
 
 #include "Graphics.h"
 #include "structConfig.h"
+#include "ActionManager.h"
+#include "ActionServer.h"
+#include "EventClient.h"
 
 int main() {
     struct Config config;
+    ActionServer actionServer;
+    //ActionManager user;
+    bool isGame = false;
+
     int vx = 0;
     int vy = 0;
 
-    int x = config.window_width/2 - 50;
-    int y = config.window_height/2 + 50;
+    int x = config.window_width / 2 - 50;
+    int y = config.window_height / 2 + 50;
+
+    actionServer.connectClient();
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     Graphics graphics(window, config);
     window.setKeyRepeatEnabled(false);
+
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -27,36 +38,39 @@ int main() {
             int defaultSpeed = 15;
 
             if (event.type == sf::Event::KeyPressed) {
-              switch (event.key.code) {
-                case sf::Keyboard::W :
-                  vy = -defaultSpeed;
-                break;
-                case sf::Keyboard::A :
-                  vx = -defaultSpeed;
-                break;
-                case sf::Keyboard::S :
-                  vy = defaultSpeed;
-                break;
-                case sf::Keyboard::D :
-                  vx = defaultSpeed;
-                break;
-              }
-            }
-            else if (event.type == sf::Event::KeyReleased) {
-              switch (event.key.code) {
-                case sf::Keyboard::W :
-                  vy = (vy < 0) ? 0 : vy;
-                break;
-                case sf::Keyboard::S :
-                  vy = (vy > 0) ? 0 : vy;
-                break;
-                case sf::Keyboard::D :
-                  vx = (vx > 0) ? 0 : vx;
-                break;
-                case sf::Keyboard::A :
-                  vx = (vx < 0) ? 0 : vx;
-                break;
-              }
+                switch (event.key.code) {
+                    case sf::Keyboard::W :
+                        vy = -defaultSpeed;
+                        actionServer.sendActionMove(UP);
+                        break;
+                    case sf::Keyboard::A :
+                        vx = -defaultSpeed;
+                        actionServer.sendActionMove(LEFT);
+                        break;
+                    case sf::Keyboard::S :
+                        vy = defaultSpeed;
+                        actionServer.sendActionMove(DOWN);
+                        break;
+                    case sf::Keyboard::D :
+                        vx = defaultSpeed;
+                        actionServer.sendActionMove(RIGHT);
+                        break;
+                }
+            } else if (event.type == sf::Event::KeyReleased) {
+                switch (event.key.code) {
+                    case sf::Keyboard::W :
+                        vy = (vy < 0) ? 0 : vy;
+                        break;
+                    case sf::Keyboard::S :
+                        vy = (vy > 0) ? 0 : vy;
+                        break;
+                    case sf::Keyboard::D :
+                        vx = (vx > 0) ? 0 : vx;
+                        break;
+                    case sf::Keyboard::A :
+                        vx = (vx < 0) ? 0 : vx;
+                        break;
+                }
             }
         }
         x += vx;

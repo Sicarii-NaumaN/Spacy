@@ -1,11 +1,14 @@
 #include <GameEnvironment.h>
 
 int main() {
-  auto new_game = GameEnvironment(
-    8000,   // Порт
+    // * Коннектится только на 8001 порту, 8000 не работает. Причина неизвестна
+    auto new_game = GameEnvironment(
+    8001,   // Порт
     120,    // Максимальная длительность игры в секундах
     1       // Количество очков для победы
   );
 
-  return new_game.start_game();
+  // * Не получается законнектиться, если возвращаем start_game()
+  new_game.start_game();
+  return 0;
 }

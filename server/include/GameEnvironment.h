@@ -43,5 +43,5 @@ class GameEnvironment {
 
     bool need_update;
     bool game_is_active;
-    int player_count = 2;
+    int player_count = 1;
 };
