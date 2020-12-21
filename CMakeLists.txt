@@ -10,6 +10,7 @@ set(
         client/include/PlayerModel.h
         client/include/Graphics.h
         client/include/structConfig.h
+        client/include/ActionServer.h
 )
 
 set(
@@ -18,8 +19,6 @@ set(
         client/src
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
-        client/include/structConfig.h
-        client/include/ActionServer.h
 )
 
 set (CLIENT ${CLIENT_SRC} ${CLIENT_HDRS})
