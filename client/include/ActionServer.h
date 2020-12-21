@@ -12,7 +12,7 @@
 
 #include <vector>
 #include "Event.h"
-#include <NetClient.h>
+//#include <NetClient.h>
 #include <SFML/System.hpp>
 
 class actionServer {
