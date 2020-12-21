@@ -54,6 +54,9 @@ void Graphics::drawField() {
 
 void Graphics::drawPlayer(int x, int y) {
     player.setPosition(x, y);
+    float scale_factor = (float)1.3 - ((float)config.window_height - (float)y) / (float)config.window_height;
+    scale_factor *= 0.2;
+    player.resize(scale_factor, scale_factor);
     player.draw(window, renderStates);
 }
 

@@ -23,7 +23,7 @@ void PlayerModel::setPosition(float x, float y) {
 }
 
 void PlayerModel::resize(float width_scale, float height_scale) {
-    sprite.scale(width_scale, height_scale);
+    sprite.setScale(width_scale, height_scale);
 }
 
 PlayerModel::PlayerModel() = default;
