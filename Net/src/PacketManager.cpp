@@ -76,8 +76,7 @@ std::vector<std::shared_ptr<ObjectInterface>> PacketManager::packet_adaptation_c
 std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface>& event) {
     std::map <EventInterface::EventType, int> mp;
     mp[EventInterface::move] = 1;
-    mp[EventInterface::blink] = 2;
-    mp[EventInterface::shot] = 3;
+    mp[EventInterface::shot] = 2;
 
     ptree root;
     switch (mp[event->type]) {
@@ -92,7 +91,7 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface>&
 
             break;
         }
-        case 3: {
+        case 2: {
             auto ptr = std::static_pointer_cast<ShotInterface>(event);
             root.put("type", "shot");
             root.put("sight.from.x", (int)ptr->sight.from.x);

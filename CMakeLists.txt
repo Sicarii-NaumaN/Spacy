@@ -12,7 +12,6 @@ set(
         client/include/actionServer.h
         client/include/actionManager.h
         client/include/structConfig.h
-
 )
 set(
         CLIENT_SRC

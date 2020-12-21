@@ -4,10 +4,6 @@ void actionManager::sendMove(actionServer &action, DirectionInterface dir) {
     action.sendActionMove(dir);
 }
 
-void actionManager::sendBlink(actionServer &action) {
-    action.sendActionBlink();
-}
-
 void actionManager::actionUser(sf::RenderWindow &window, sf::Event &event, actionServer &action) {
     usleep(10000);
     if (!isGame) {
@@ -39,9 +35,6 @@ void actionManager::actionUser(sf::RenderWindow &window, sf::Event &event, actio
         }
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::S))) {
             action.sendActionMove(down);
-        }
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space))) {
-            action.sendActionBlink();
         }
         if ((sf::Keyboard::isKeyPressed(sf::Keyboard::E))) {
             action.sendActionShot();

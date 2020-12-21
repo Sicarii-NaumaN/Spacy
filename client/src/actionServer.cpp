@@ -11,13 +11,6 @@ void actionServer::sendActionMove(DirectionInterface direction){
 
 }
 
-void actionServer::sendActionBlink(){
-
-    auto event = BlinkInterface(EventInterface::EventType::blink, mySight);
-    std::shared_ptr<EventInterface> ptr = std::make_shared<BlinkInterface>(event);
-
-    network.send_user_action(ptr);
-}
 
 void actionServer::sendActionShot(){
 

@@ -32,7 +32,6 @@ struct MousePosition {
 struct EventInterface {
     enum EventType {
         move,
-        blink,
         shot
     };
     EventType type; //move
@@ -45,9 +44,6 @@ struct MoveInterface: EventInterface{
     MoveInterface(EventType t, VectorInterface s, DirectionInterface dir):EventInterface(t, s), direction(dir) {}
 };
 
-struct BlinkInterface: EventInterface{
-    BlinkInterface(EventType t, VectorInterface s):EventInterface(t, s) {}
-};
 
 struct ShotInterface: EventInterface{
     ShotInterface(EventType t, VectorInterface s):EventInterface(t, s) {}

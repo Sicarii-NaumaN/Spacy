@@ -37,7 +37,7 @@ public:
     void closeConnectClient();
 
     void sendActionMove(DirectionInterface);
-    void sendActionBlink();
+
     void sendActionShot();
     void updatePosition(const std::vector<std::shared_ptr<ObjectInterface>> &);
     void updateSight(sf::Vector2f);
