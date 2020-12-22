@@ -14,7 +14,9 @@ public:
     void drawFrontWall();
     void drawSideWalls();
     void drawField();
-    void drawPlayer(int x, int y);
+    void drawPlayer();
+    void movePlayer(float vx, float vy);
+    void movePlayerTo(float x, float y);
 //    void drawProjectile(const std::vector<BulletInterface> &);
     void setWindowIcon();
 
@@ -34,6 +36,8 @@ private:
     sf::Texture bullet_texture;
     sf::Texture metal_texture;
     sf::Texture metal_light_texture;
+
+    sf::Transform transform;
 
     Projector projector;
 };

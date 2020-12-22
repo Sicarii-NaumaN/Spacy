@@ -9,6 +9,8 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     metal_light_texture.loadFromFile(config.textures_path + "metal_light.jpg");
     metal_texture.loadFromFile(config.textures_path + "metal.jpg");
 
+    transform.translate(0, -100);
+
     player.setTexture(player_texture);
     player.resize(0.20, 0.20);
     player.setPosition(500, 400);
@@ -39,7 +41,7 @@ void Graphics::drawShape(const sf::Texture& texture) {
     field.setPoint(3, p4);
 
     field.setTexture(&texture);
-    window.draw(field);
+    window.draw(field, transform);
 }
 
 void Graphics::drawSideWalls() {
@@ -79,8 +81,8 @@ void Graphics::drawSideWalls() {
     wall1.setTexture(&metal_light_texture);
     wall3.setTexture(&metal_light_texture);
 
-    window.draw(wall1);
-    window.draw(wall3);
+    window.draw(wall1, transform);
+    window.draw(wall3, transform);
 }
 
 void Graphics::drawBackWall() {
@@ -111,7 +113,7 @@ void Graphics::drawBackWall() {
 
   wall4.setTexture(&metal_texture);
 
-  window.draw(wall4);
+  window.draw(wall4, transform);
 }
 
 void Graphics::drawFrontWall() {
@@ -142,7 +144,7 @@ void Graphics::drawFrontWall() {
 
     front_wall.setTexture(&metal_texture);
 
-    window.draw(front_wall);
+    window.draw(front_wall, transform);
 }
 
 void Graphics::drawField() {
@@ -163,11 +165,22 @@ void Graphics::drawField() {
     drawSideWalls();
 }
 
-void Graphics::drawPlayer(int x, int y) {
-    player.setPosition(x, y);
+void Graphics::movePlayer(float vx, float vy) {
+  auto pos = player.getPosition();
+  player.setPosition(pos.x + vx, pos.y + vy);
+}
+
+void Graphics::movePlayerTo(float x, float y) {
+  player.setPosition(x, y);
+}
+
+void Graphics::drawPlayer() {
+    auto pos = player.getPosition();
+    float x = pos.x;
+    float y = pos.y;
     float player_width = player.getWidth();
 
-    sf::Vector2f projected_position = projector.projectPoint(sf::Vector2f(x, y));
+    sf::Vector2f projected_position = projector.projectPoint(player.getPosition());
     player.setSpritePosition(projected_position.x, projected_position.y);
 
     float new_width = projector.projectLength(sf::Vector2f(x, y), player_width);
