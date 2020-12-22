@@ -1,21 +1,28 @@
 #include "Graphics.h"
-#include "Utils.h"
-#include <iostream>
+
 
 Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(window), config(config) {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
 
-    player_texture[0].loadFromFile(config.textures_path + "rear_left_20.png");
-    player_texture[1].loadFromFile(config.textures_path + "rear_left_10.png");
-    player_texture[2].loadFromFile(config.textures_path + "rear.png");
-    player_texture[3].loadFromFile(config.textures_path + "rear_right_10.png");
-    player_texture[4].loadFromFile(config.textures_path + "rear_right_20.png");
+    player_texture[0].loadFromFile(config.textures_path + "left-5.png");
+    player_texture[1].loadFromFile(config.textures_path + "left-4.png");
+    player_texture[2].loadFromFile(config.textures_path + "left-3.png");
+    player_texture[3].loadFromFile(config.textures_path + "left-2.png");
+    player_texture[4].loadFromFile(config.textures_path + "left-1.png");
+    player_texture[5].loadFromFile(config.textures_path + "center.png");
+    player_texture[6].loadFromFile(config.textures_path + "right-1.png");
+    player_texture[7].loadFromFile(config.textures_path + "right-2.png");
+    player_texture[8].loadFromFile(config.textures_path + "right-3.png");
+    player_texture[9].loadFromFile(config.textures_path + "right-4.png");
+    player_texture[10].loadFromFile(config.textures_path + "right-5.png");
 
 
     //    enemy_texture.loadFromFile(config.textures_path + "front.png");
 
     metal_light_texture.loadFromFile(config.textures_path + "metal_light.jpg");
     metal_texture.loadFromFile(config.textures_path + "metal.jpg");
+
+    bullet_texture.loadFromFile(config.textures_path + "bullet.png");
 
     transform.translate(0, -100);
 
@@ -27,7 +34,7 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     // Параметры проецирования:
     // Угол наклона плоскости проецирования
     // Размеры окна
-    projector = Projector(M_PI / 6, config.window_width, config.window_height);
+    projector = Projector(M_PI / 5, config.field_width, config.field_height);
 
     setWindowIcon();
 }
@@ -196,7 +203,7 @@ void Graphics::drawPlayer() {
     float scale_factor = new_width / player_width;
 
     player.resize(scale_factor);
-    player.setTexture(player_texture[(int) (projected_position.x / 248)]);
+    player.setTexture(player_texture[(int) (player.getPosition().x / 117)]);
     player.draw(window, renderStates);
 }
 
@@ -204,4 +211,21 @@ void Graphics::setWindowIcon() {
     sf::Image icon;
     icon.loadFromFile(config.textures_path + "icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+}
+
+void Graphics::drawBullet(float x, float y) {
+    BulletModel bullet;
+    bullet.setTexture(bullet_texture);
+
+    float bullet_width = bullet.getWidth();
+
+    auto projected_position = projector.projectPoint(sf::Vector2f(x, y));
+
+    bullet.setSpritePosition(projected_position.x, projected_position.y);
+
+    float new_width = projector.projectLength(sf::Vector2f(x, y), bullet_width);
+    float scale_factor = new_width / bullet_width;
+    bullet.resize(scale_factor);
+
+    bullet.draw(window, renderStates);
 }

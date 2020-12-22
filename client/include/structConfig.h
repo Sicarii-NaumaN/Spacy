@@ -6,11 +6,6 @@ struct Config {
     int window_width;
     int window_height;
 
-    int table_width_top;
-    int table_width_bot;
-    int table_height;
-    int table_shift;
-
     int field_width;
     int field_height;
 
@@ -26,10 +21,8 @@ struct Config {
         window_height = 800;
         textures_path = "../client/textures/";
 
-        table_width_top = 200;
-        table_width_bot = 800;
-        table_height = 550;
-        table_shift = 50;
+        field_height = 800;
+        field_width = 1280;
     }
 
 };

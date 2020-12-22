@@ -7,8 +7,6 @@ PlayerModel::PlayerModel(float startX, float startY, float width, float height, 
     sprite.setPosition(position.x, position.y);
 }
 
-PlayerModel::~PlayerModel() = default;
-
 void PlayerModel::draw(sf::RenderTarget &renderTarget, sf::RenderStates renderStates) {
     sprite.scale(0.2, 0.2);
 

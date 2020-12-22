@@ -10,7 +10,7 @@ public:
 
     PlayerModel(float startX, float startY, float width, float height, float sightToX, float sightToY);
 
-    virtual ~PlayerModel();
+    virtual ~PlayerModel() = default;
 
     virtual void draw(sf::RenderTarget &renderTarget, sf::RenderStates renderStates);
 

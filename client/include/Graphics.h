@@ -3,9 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "PlayerModel.h"
+#include "BulletModel.h"
 #include "Utils.h"
 #include <unordered_map>
 #include "structConfig.h"
+#include <iostream>
 
 class Graphics {
 public:
@@ -25,6 +27,7 @@ public:
     void setWindowIcon();
 
     explicit Graphics(sf::RenderWindow &window, const Config &config);
+    virtual ~Graphics() = default;
 private:
     struct Config config;
 
@@ -35,7 +38,7 @@ private:
     sf::RenderStates renderStates;
 
     sf::Texture background_texture;
-    sf::Texture player_texture[5];
+    sf::Texture player_texture[11];
     std::vector<sf::Texture> enemy_texture;
     sf::Texture bullet_texture;
     sf::Texture metal_texture;

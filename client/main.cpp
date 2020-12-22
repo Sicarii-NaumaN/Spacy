@@ -34,7 +34,7 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
-
+    int i = 0;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
