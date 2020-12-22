@@ -4,7 +4,6 @@ PlayerModel::PlayerModel(float startX, float startY, float width, float height, 
         : width(width), height(height), sightToX(sightToX), sightToY(sightToY) {
     position.x = startX;
     position.y = startY;
-
     sprite.setPosition(position.x, position.y);
 }
 
@@ -16,10 +15,16 @@ void PlayerModel::draw(sf::RenderTarget &renderTarget, sf::RenderStates renderSt
 
 void PlayerModel::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
+    sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
 }
 
 void PlayerModel::setPosition(float x, float y) {
-    sprite.setPosition(x, y);
+    position.x = x;
+    position.y = y;
+}
+
+void PlayerModel::setSpritePosition(float x, float y) {
+  sprite.setPosition(x, y);
 }
 
 void PlayerModel::resize(float width_scale, float height_scale) {

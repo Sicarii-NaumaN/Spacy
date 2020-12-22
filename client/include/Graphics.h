@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "PlayerModel.h"
+#include "Utils.h"
 #include <unordered_map>
 #include "structConfig.h"
 
@@ -35,6 +36,8 @@ private:
     sf::Texture player_texture;
     sf::Texture enemy_texture;
     sf::Texture bullet_texture;
+
+    Projector projector;
 };
 
 #endif //SPACY_GRAPHICS_H

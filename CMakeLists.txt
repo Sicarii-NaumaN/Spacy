@@ -9,6 +9,7 @@ set(
         client/include
         client/include/PlayerModel.h
         client/include/Graphics.h
+        client/include/Utils.h
 
 )
 set(

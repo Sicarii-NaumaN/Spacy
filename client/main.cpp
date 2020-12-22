@@ -12,8 +12,8 @@ int main() {
     int vx = 0;
     int vy = 0;
 
-    int x = config.window_width/2 - 50;
-    int y = config.window_height/2 + 50;
+    int x = config.window_width/2;
+    int y = config.window_height/2;
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     Graphics graphics(window, config);

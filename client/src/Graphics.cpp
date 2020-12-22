@@ -1,4 +1,6 @@
 #include "Graphics.h"
+#include "Utils.h"
+#include <iostream>
 
 Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(window), config(config) {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
@@ -10,6 +12,7 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     player.setPosition(500, 400);
     enemy.setTexture(enemy_texture);
 
+    projector = Projector(M_PI/6, config.window_width, config.window_height);
 
     setWindowIcon();
 }
@@ -18,10 +21,16 @@ void Graphics::drawShape(const sf::Texture& texture,
                          int x1, int y1, int w1,
                          int x2, int y2, int w2) {
     sf::ConvexShape field(4);
-    field.setPoint(0, sf::Vector2f(x1 - w1, y1));
-    field.setPoint(1, sf::Vector2f(x2 - w2, y2));
-    field.setPoint(2, sf::Vector2f(x2 + w2, y2));
-    field.setPoint(3, sf::Vector2f(x1 + w1, y1));
+
+    Point p1 = projector.projectPoint(Point(0, 0));
+    Point p2 = projector.projectPoint(Point(0, config.window_height));
+    Point p3 = projector.projectPoint(Point(config.window_width, config.window_height));
+    Point p4 = projector.projectPoint(Point(config.window_width, 0));
+
+    field.setPoint(0, sf::Vector2f(p1.x, p1.y));
+    field.setPoint(1, sf::Vector2f(p2.x, p2.y));
+    field.setPoint(2, sf::Vector2f(p3.x, p3.y));
+    field.setPoint(3, sf::Vector2f(p4.x, p4.y));
 
     sf::Texture bg;
     field.setTexture(&texture);
@@ -54,8 +63,14 @@ void Graphics::drawField() {
 
 void Graphics::drawPlayer(int x, int y) {
     player.setPosition(x, y);
-    float scale_factor = (float)1.3 - ((float)config.window_height - (float)y) / (float)config.window_height;
-    scale_factor *= 0.2;
+    float player_width = player.getWidth() * 0.3;
+
+    Point projected_position = projector.projectPoint(Point(x, y));
+    player.setSpritePosition(projected_position.x, projected_position.y);
+
+    float new_width = projector.projectLength(Point(x, y), player_width);
+    float scale_factor = new_width / player_width * 0.3;
+
     player.resize(scale_factor, scale_factor);
     player.draw(window, renderStates);
 }
