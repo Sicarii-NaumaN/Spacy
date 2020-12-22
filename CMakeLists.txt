@@ -11,6 +11,7 @@ set(
         client/include/Graphics.h
         client/include/ActionServer.h
         client/include/EventClient.h
+        client/include/Utils.h
 
 )
 set(
