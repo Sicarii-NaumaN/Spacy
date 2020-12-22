@@ -2,12 +2,6 @@
 #define SPACY_STRUCTCONFIG_H
 #include <SFML/Graphics.hpp>
 
-//int W = 1280;
-//int H = 800;
-//int TABLE_W1 = 200;
-//int TABLE_W2 = 800;
-//int TABLE_H = 550;
-
 struct Config {
     int window_width;
     int window_height;

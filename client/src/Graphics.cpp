@@ -30,10 +30,10 @@ void Graphics::drawShape(const sf::Texture& texture) {
     float w = config.window_width;
     float h = config.window_height;
 
-    sf::Vector2f p1 = projector.projectPoint(0, 0);
-    sf::Vector2f p2 = projector.projectPoint(0, h);
-    sf::Vector2f p3 = projector.projectPoint(w, h);
-    sf::Vector2f p4 = projector.projectPoint(w, 0);
+    auto p1 = projector.projectPoint(0, 0);
+    auto p2 = projector.projectPoint(0, h);
+    auto p3 = projector.projectPoint(w, h);
+    auto p4 = projector.projectPoint(w, 0);
 
     field.setPoint(0, p1);
     field.setPoint(1, p2);
@@ -48,10 +48,10 @@ void Graphics::drawSideWalls() {
     float w = config.window_width;
     float h = config.window_height;
 
-    sf::Vector2f p00 = projector.projectPoint(0, 0);
-    sf::Vector2f p01 = projector.projectPoint(0, h);
-    sf::Vector2f p10 = projector.projectPoint(w, h);
-    sf::Vector2f p11 = projector.projectPoint(w, 0);
+    auto p00 = projector.projectPoint(0, 0);
+    auto p01 = projector.projectPoint(0, h);
+    auto p10 = projector.projectPoint(w, h);
+    auto p11 = projector.projectPoint(w, 0);
 
     float top_width = abs(p00.x - p11.x);
     float bottom_width = abs(p01.x - p10.x);
@@ -60,39 +60,39 @@ void Graphics::drawSideWalls() {
     float h1 = 50;
     float h2 = h1 * scale_factor;
 
-    sf::Vector2f t00 = sf::Vector2f(p00.x, p00.y - h2);
-    sf::Vector2f t01 = sf::Vector2f(p01.x, p01.y - h1);
-    sf::Vector2f t10 = sf::Vector2f(p10.x, p10.y - h1);
-    sf::Vector2f t11 = sf::Vector2f(p11.x, p11.y - h2);
+    auto t00 = sf::Vector2f(p00.x, p00.y - h2);
+    auto t01 = sf::Vector2f(p01.x, p01.y - h1);
+    auto t10 = sf::Vector2f(p10.x, p10.y - h1);
+    auto t11 = sf::Vector2f(p11.x, p11.y - h2);
 
-    sf::ConvexShape wall1(4);
-    sf::ConvexShape wall3(4);
+    sf::ConvexShape left_wall(4);
+    sf::ConvexShape right_wall(4);
 
-    wall1.setPoint(0, p00);
-    wall1.setPoint(1, p01);
-    wall1.setPoint(2, t01);
-    wall1.setPoint(3, t00);
+    left_wall.setPoint(0, p00);
+    left_wall.setPoint(1, p01);
+    left_wall.setPoint(2, t01);
+    left_wall.setPoint(3, t00);
 
-    wall3.setPoint(0, p10);
-    wall3.setPoint(1, p11);
-    wall3.setPoint(2, t11);
-    wall3.setPoint(3, t10);
+    right_wall.setPoint(0, p10);
+    right_wall.setPoint(1, p11);
+    right_wall.setPoint(2, t11);
+    right_wall.setPoint(3, t10);
 
-    wall1.setTexture(&metal_light_texture);
-    wall3.setTexture(&metal_light_texture);
+    left_wall.setTexture(&metal_light_texture);
+    right_wall.setTexture(&metal_light_texture);
 
-    window.draw(wall1, transform);
-    window.draw(wall3, transform);
+    window.draw(left_wall, transform);
+    window.draw(right_wall, transform);
 }
 
 void Graphics::drawBackWall() {
   float w = config.window_width;
   float h = config.window_height;
 
-  sf::Vector2f p00 = projector.projectPoint(0, 0);
-  sf::Vector2f p01 = projector.projectPoint(0, h);
-  sf::Vector2f p10 = projector.projectPoint(w, h);
-  sf::Vector2f p11 = projector.projectPoint(w, 0);
+  auto p00 = projector.projectPoint(0, 0);
+  auto p01 = projector.projectPoint(0, h);
+  auto p10 = projector.projectPoint(w, h);
+  auto p11 = projector.projectPoint(w, 0);
 
   float top_width = abs(p00.x - p11.x);
   float bottom_width = abs(p01.x - p10.x);
@@ -101,29 +101,29 @@ void Graphics::drawBackWall() {
   float h1 = 50;
   float h2 = h1 * scale_factor;
 
-  sf::Vector2f t00 = sf::Vector2f(p00.x, p00.y - h2);
-  sf::Vector2f t11 = sf::Vector2f(p11.x, p11.y - h2);
+  auto t00 = sf::Vector2f(p00.x, p00.y - h2);
+  auto t11 = sf::Vector2f(p11.x, p11.y - h2);
 
-  sf::ConvexShape wall4(4);
+  sf::ConvexShape back_wall(4);
 
-  wall4.setPoint(0, p11);
-  wall4.setPoint(1, p00);
-  wall4.setPoint(2, t00);
-  wall4.setPoint(3, t11);
+  back_wall.setPoint(0, p11);
+  back_wall.setPoint(1, p00);
+  back_wall.setPoint(2, t00);
+  back_wall.setPoint(3, t11);
 
-  wall4.setTexture(&metal_texture);
+  back_wall.setTexture(&metal_texture);
 
-  window.draw(wall4, transform);
+  window.draw(back_wall, transform);
 }
 
 void Graphics::drawFrontWall() {
     float w = config.window_width;
     float h = config.window_height;
 
-    sf::Vector2f p00 = projector.projectPoint(0, 0);
-    sf::Vector2f p01 = projector.projectPoint(0, h);
-    sf::Vector2f p10 = projector.projectPoint(w, h);
-    sf::Vector2f p11 = projector.projectPoint(w, 0);
+    auto p00 = projector.projectPoint(0, 0);
+    auto p01 = projector.projectPoint(0, h);
+    auto p10 = projector.projectPoint(w, h);
+    auto p11 = projector.projectPoint(w, 0);
 
     float top_width = abs(p00.x - p11.x);
     float bottom_width = abs(p01.x - p10.x);
@@ -132,8 +132,8 @@ void Graphics::drawFrontWall() {
     float h1 = 50;
     float h2 = h1 * scale_factor;
 
-    sf::Vector2f t01 = sf::Vector2f(p01.x, p01.y - h1);
-    sf::Vector2f t10 = sf::Vector2f(p10.x, p10.y - h1);
+    auto t01 = sf::Vector2f(p01.x, p01.y - h1);
+    auto t10 = sf::Vector2f(p10.x, p10.y - h1);
 
     sf::ConvexShape front_wall(4);
 
@@ -149,8 +149,7 @@ void Graphics::drawFrontWall() {
 
 void Graphics::drawField() {
     sf::RectangleShape background;
-
-    background.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+    background.setSize({window.getSize().x, window.getSize().y});
 
     sf::Texture texture;
     sf::Texture wall_texture;
@@ -160,9 +159,10 @@ void Graphics::drawField() {
 
     background.setTexture(&texture);
     window.draw(background);
-    drawShape(background_texture);
-    drawBackWall();
-    drawSideWalls();
+
+    drawShape(background_texture); // Стол
+    drawBackWall(); // Задняя стенка
+    drawSideWalls(); // Боковые стены
 }
 
 void Graphics::movePlayer(float vx, float vy) {
@@ -180,7 +180,7 @@ void Graphics::drawPlayer() {
     float y = pos.y;
     float player_width = player.getWidth();
 
-    sf::Vector2f projected_position = projector.projectPoint(player.getPosition());
+    auto projected_position = projector.projectPoint(player.getPosition());
     player.setSpritePosition(projected_position.x, projected_position.y);
 
     float new_width = projector.projectLength(sf::Vector2f(x, y), player_width);

@@ -12,9 +12,11 @@
 
 int main() {
     struct Config config;
-    ActionServer actionServer;
+    //ActionServer actionServer;
     //ActionManager user;
     bool isGame = false;
+
+    int defaultSpeed = 15;
 
     int vx = 0;
     int vy = 0;
@@ -22,7 +24,7 @@ int main() {
     int x = config.window_width / 2;
     int y = config.window_height / 2 - 150;
 
-    actionServer.connectClient();
+    //actionServer.connectClient();
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     Graphics graphics(window, config);
@@ -35,31 +37,32 @@ int main() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            switch (event.type) {
+              case sf::Event::Closed:
                 window.close();
+                break;
 
-            int defaultSpeed = 15;
-
-            if (event.type == sf::Event::KeyPressed) {
+              case sf::Event::KeyPressed:
                 switch (event.key.code) {
                     case sf::Keyboard::W :
                         vy = -defaultSpeed;
-                        actionServer.sendActionMove(UP);
+                        //actionServer.sendActionMove(UP);
                         break;
                     case sf::Keyboard::A :
                         vx = -defaultSpeed;
-                        actionServer.sendActionMove(LEFT);
+                        //actionServer.sendActionMove(LEFT);
                         break;
                     case sf::Keyboard::S :
                         vy = defaultSpeed;
-                        actionServer.sendActionMove(DOWN);
+                        //actionServer.sendActionMove(DOWN);
                         break;
                     case sf::Keyboard::D :
                         vx = defaultSpeed;
-                        actionServer.sendActionMove(RIGHT);
+                        //actionServer.sendActionMove(RIGHT);
                         break;
                 }
-            } else if (event.type == sf::Event::KeyReleased) {
+                break;
+              case sf::Event::KeyReleased:
                 switch (event.key.code) {
                     case sf::Keyboard::W :
                         vy = (vy < 0) ? 0 : vy;
@@ -74,6 +77,7 @@ int main() {
                         vx = (vx < 0) ? 0 : vx;
                         break;
                 }
+                break;
             }
         }
         graphics.movePlayer(vx, vy);
@@ -81,8 +85,6 @@ int main() {
         graphics.drawPlayer();
         graphics.drawFrontWall();
         window.display();
-
     }
-
     return 0;
 }
