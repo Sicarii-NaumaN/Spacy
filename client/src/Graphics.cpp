@@ -4,27 +4,35 @@
 
 Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(window), config(config) {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
-    player_texture.loadFromFile(config.textures_path + "plane_back_0.png");
-    enemy_texture.loadFromFile(config.textures_path + "plane_front_0.jpg");
+
+    player_texture[0].loadFromFile(config.textures_path + "rear_left_20.png");
+    player_texture[1].loadFromFile(config.textures_path + "rear_left_10.png");
+    player_texture[2].loadFromFile(config.textures_path + "rear.png");
+    player_texture[3].loadFromFile(config.textures_path + "rear_right_10.png");
+    player_texture[4].loadFromFile(config.textures_path + "rear_right_20.png");
+
+
+    //    enemy_texture.loadFromFile(config.textures_path + "front.png");
+
     metal_light_texture.loadFromFile(config.textures_path + "metal_light.jpg");
     metal_texture.loadFromFile(config.textures_path + "metal.jpg");
 
     transform.translate(0, -100);
 
-    player.setTexture(player_texture);
+    player.setTexture(player_texture[2]);
     player.resize(0.20, 0.20);
     player.setPosition(500, 400);
-    enemy.setTexture(enemy_texture);
+//    enemy.setTexture(enemy_texture);
 
     // Параметры проецирования:
     // Угол наклона плоскости проецирования
     // Размеры окна
-    projector = Projector(M_PI/6, config.window_width, config.window_height);
+    projector = Projector(M_PI / 6, config.window_width, config.window_height);
 
     setWindowIcon();
 }
 
-void Graphics::drawShape(const sf::Texture& texture) {
+void Graphics::drawShape(const sf::Texture &texture) {
     sf::ConvexShape field(4);
 
     float w = config.window_width;
@@ -86,34 +94,34 @@ void Graphics::drawSideWalls() {
 }
 
 void Graphics::drawBackWall() {
-  float w = config.window_width;
-  float h = config.window_height;
+    float w = config.window_width;
+    float h = config.window_height;
 
-  auto p00 = projector.projectPoint(0, 0);
-  auto p01 = projector.projectPoint(0, h);
-  auto p10 = projector.projectPoint(w, h);
-  auto p11 = projector.projectPoint(w, 0);
+    auto p00 = projector.projectPoint(0, 0);
+    auto p01 = projector.projectPoint(0, h);
+    auto p10 = projector.projectPoint(w, h);
+    auto p11 = projector.projectPoint(w, 0);
 
-  float top_width = abs(p00.x - p11.x);
-  float bottom_width = abs(p01.x - p10.x);
-  float scale_factor = top_width / bottom_width;
+    float top_width = abs(p00.x - p11.x);
+    float bottom_width = abs(p01.x - p10.x);
+    float scale_factor = top_width / bottom_width;
 
-  float h1 = 50;
-  float h2 = h1 * scale_factor;
+    float h1 = 50;
+    float h2 = h1 * scale_factor;
 
-  auto t00 = sf::Vector2f(p00.x, p00.y - h2);
-  auto t11 = sf::Vector2f(p11.x, p11.y - h2);
+    auto t00 = sf::Vector2f(p00.x, p00.y - h2);
+    auto t11 = sf::Vector2f(p11.x, p11.y - h2);
 
-  sf::ConvexShape back_wall(4);
+    sf::ConvexShape back_wall(4);
 
-  back_wall.setPoint(0, p11);
-  back_wall.setPoint(1, p00);
-  back_wall.setPoint(2, t00);
-  back_wall.setPoint(3, t11);
+    back_wall.setPoint(0, p11);
+    back_wall.setPoint(1, p00);
+    back_wall.setPoint(2, t00);
+    back_wall.setPoint(3, t11);
 
-  back_wall.setTexture(&metal_texture);
+    back_wall.setTexture(&metal_texture);
 
-  window.draw(back_wall, transform);
+    window.draw(back_wall, transform);
 }
 
 void Graphics::drawFrontWall() {
@@ -149,7 +157,7 @@ void Graphics::drawFrontWall() {
 
 void Graphics::drawField() {
     sf::RectangleShape background;
-    background.setSize({window.getSize().x, window.getSize().y});
+    background.setSize({(float) window.getSize().x, (float) window.getSize().y});
 
     sf::Texture texture;
     sf::Texture wall_texture;
@@ -166,12 +174,12 @@ void Graphics::drawField() {
 }
 
 void Graphics::movePlayer(float vx, float vy) {
-  auto pos = player.getPosition();
-  player.setPosition(pos.x + vx, pos.y + vy);
+    auto pos = player.getPosition();
+    player.setPosition(pos.x + vx, pos.y + vy);
 }
 
 void Graphics::movePlayerTo(float x, float y) {
-  player.setPosition(x, y);
+    player.setPosition(x, y);
 }
 
 void Graphics::drawPlayer() {
@@ -181,12 +189,14 @@ void Graphics::drawPlayer() {
     float player_width = player.getWidth();
 
     auto projected_position = projector.projectPoint(player.getPosition());
+
     player.setSpritePosition(projected_position.x, projected_position.y);
 
     float new_width = projector.projectLength(sf::Vector2f(x, y), player_width);
     float scale_factor = new_width / player_width;
 
     player.resize(scale_factor);
+    player.setTexture(player_texture[(int) (projected_position.x / 248)]);
     player.draw(window, renderStates);
 }
 
