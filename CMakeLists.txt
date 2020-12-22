@@ -21,7 +21,6 @@ set(
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
         client/src/ActionServer.cpp
-        client/src/BulletModel.cpp
         client/src/BulletModel.cpp)
 
 set(

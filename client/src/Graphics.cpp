@@ -1,6 +1,5 @@
 #include "Graphics.h"
 
-
 Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(window), config(config) {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
 

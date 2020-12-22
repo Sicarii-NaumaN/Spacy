@@ -84,6 +84,8 @@ int main() {
         graphics.movePlayer(vx, vy);
         graphics.drawField();
         graphics.drawPlayer();
+        i += 10;
+        graphics.drawBullet(240, 600 - i);
         graphics.drawFrontWall();
         window.display();
     }
