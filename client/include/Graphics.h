@@ -10,14 +10,18 @@
 class Graphics {
 public:
     void drawShape(const sf::Texture& texture);
+
     void drawBackWall();
     void drawFrontWall();
     void drawSideWalls();
     void drawField();
+
     void drawPlayer();
     void movePlayer(float vx, float vy);
     void movePlayerTo(float x, float y);
-//    void drawProjectile(const std::vector<BulletInterface> &);
+
+    void drawBullet(float x, float y);
+
     void setWindowIcon();
 
     explicit Graphics(sf::RenderWindow &window, const Config &config);
@@ -31,8 +35,8 @@ private:
     sf::RenderStates renderStates;
 
     sf::Texture background_texture;
-    sf::Texture player_texture;
-    sf::Texture enemy_texture;
+    sf::Texture player_texture[5];
+    std::vector<sf::Texture> enemy_texture;
     sf::Texture bullet_texture;
     sf::Texture metal_texture;
     sf::Texture metal_light_texture;

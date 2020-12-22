@@ -14,6 +14,7 @@ void PlayerModel::draw(sf::RenderTarget &renderTarget, sf::RenderStates renderSt
 
     sf::Transform transform;
     transform.translate(0, -100);
+
     renderStates.transform = transform;
 
     renderTarget.draw(sprite, renderStates);

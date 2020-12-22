@@ -16,7 +16,8 @@ int main() {
     //ActionManager user;
     bool isGame = false;
 
-    int defaultSpeed = 15;
+    int defaultSpeed = 25;
+
 
     int vx = 0;
     int vy = 0;
