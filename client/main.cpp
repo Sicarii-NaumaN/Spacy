@@ -63,6 +63,7 @@ int main() {
         y += vy;
         graphics.drawField();
         graphics.drawPlayer(x, y);
+        graphics.drawFrontWall();
         window.display();
 
     }
