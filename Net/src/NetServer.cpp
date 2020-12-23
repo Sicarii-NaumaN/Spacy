@@ -39,10 +39,13 @@ void NetServer::notify_all_users(std::unordered_map<int, std::shared_ptr<Object>
     std::string buf = packet_manager.packet_handle_server(object);
     for (auto & item : users){
         int str = buf.size();
+        std::cout << "WRITING TO USER\n";
+        std::cout << buf << std::endl;
         item.sock->write_some(buffer(std::to_string(std::to_string(str).size()), 1));
         item.sock->write_some(buffer(std::to_string(str), 10));
         item.sock->write_some(buffer(buf));
     }
+
 }
 
 std::shared_ptr<Event> NetServer::get_client_action(User& user) {

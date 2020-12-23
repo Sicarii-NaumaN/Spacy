@@ -47,32 +47,17 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
      }
     std::stringstream buf;
     write_json(buf, root);
+
     return buf.str();
 }
 
 std::shared_ptr<Event> PacketManagerServer::packet_adaptation_server(ptree& root) {
      std::map <std::string, int> mp;
-     mp["move"] = 1;
      mp["shot"] = 2;
      mp["keypressed"] = 3;
 
-
-     std::map <std::string, Direction> dir;
-     dir["1"] = Direction::DOWN;
-     dir["2"] = Direction::LEFT;
-     dir["3"] = Direction::RIGHT;
-     dir["0"] = Direction::UP;
-
-
      std::shared_ptr<Event> ptr;
      switch (mp[root.get("type", "")]) {
-         case 1: {
-             int id = root.get("IDuser", 0);
-             Direction direction = dir[root.get("direction", "")];
-             auto move = Move(id, direction);
-             ptr = std::make_shared<Move>(move);
-             break;
-         }
          case 2: {
              int id = root.get("IDuser", 0);
              auto shot = Shot(id);

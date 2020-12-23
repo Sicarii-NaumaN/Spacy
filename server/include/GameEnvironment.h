@@ -11,7 +11,7 @@
 #include <NetServer.h>
 #include <Event.h>
 
-const static unsigned int FRAMES_PER_SECOND = 20;
+const static unsigned int FRAMES_PER_SECOND = 15;
 const static unsigned int MAX_PLAYERS = 30;
 
 class GameEnvironment {

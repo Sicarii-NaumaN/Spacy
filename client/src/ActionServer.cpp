@@ -14,8 +14,8 @@ void ActionServer::sendKeyReleasedAction(int keyCode, int mx, int my) {
     netClient.send_user_action(ptr);
 }
 
-void ActionServer::sendActionShot() {
-    auto event = ShotInterface();
+void ActionServer::sendActionShot(int ox, int oy, int mx, int my) {
+    auto event = ShotInterface(ox, oy, mx, my);
     std::shared_ptr<EventInterface> ptr = std::make_shared<ShotInterface>(event);
 
     netClient.send_user_action(ptr);

@@ -1,11 +1,6 @@
-//
-// Created by moira-q on 14.04.20.
-//
-
 #include <ObjectManager.h>
 
 #include <include/ObjectManager.h>
-
 
 int ObjectManager::pick_enable_id() const{
     std::lock_guard<std::mutex>lg(id_cointer_m);

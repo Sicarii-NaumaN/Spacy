@@ -12,6 +12,9 @@
 
 #include "Game.h"
 
+const int fps = 30;
+const float tick_duration = 1.0 / fps;
+
 int main() {
     struct Config config;
     ActionServer actionServer;
@@ -35,17 +38,23 @@ int main() {
 
     window.setKeyRepeatEnabled(false);
 
+    boost::posix_time::time_duration current_tick_duration;
+    auto last_tick = boost::posix_time::microsec_clock::universal_time();
+
+
     int i = 0;
     while (window.isOpen()) {
         auto msg = actionServer.getMessage();
         for (auto m : msg) {
           switch (m->type) {
             case Object::Type::PLAYER: {
-              std::cout << "Got player data\n";
+              std::shared_ptr<PlayerInterface> player = std::static_pointer_cast<PlayerInterface>(m);
+              std::cout << player->position.x << ' ' << player->position.y << std::endl;
+              graphics.movePlayerTo(player->position.x, player->position.y);
               break;
             }
           }
-        }
+            }
 
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -82,12 +91,20 @@ int main() {
               }
             }
         }
-        graphics.drawField();
-        graphics.drawPlayer();
-        // i += 10;
-        // graphics.drawBullet(240, 600 - i);
-        graphics.drawFrontWall();
-        window.display();
+
+        auto curr_time = boost::posix_time::microsec_clock::universal_time();
+        current_tick_duration = curr_time - last_tick;
+        if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
+            last_tick = curr_time;
+
+            graphics.drawField();
+            graphics.drawPlayer();
+            graphics.drawFrontWall();
+            window.display();
+        }
+        curr_time = boost::posix_time::microsec_clock::universal_time();
+
+
     }
     return 0;
 }

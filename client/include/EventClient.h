@@ -4,8 +4,8 @@ const static int DEFAULT_BULLET_SPEED_CLIENT = 10;
 #include <map>
 
 struct VectorInterface {
-    double x, y;
-    VectorInterface(double xpos, double ypos): x(xpos), y(ypos) {}
+    float x, y;
+    VectorInterface(float xpos, float ypos): x(xpos), y(ypos) {}
 };
 
 struct ModelInterface {
@@ -75,7 +75,6 @@ struct ObjectInterface {
 
 struct PlayerInterface:ObjectInterface {
     PlayerInterface(int id, VectorInterface pos, ModelInterface mod): ObjectInterface(Type::PLAYER, id, pos, mod) {}
-
 };
 
 struct BulletStateInterface {

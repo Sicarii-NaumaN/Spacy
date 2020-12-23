@@ -8,7 +8,7 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
                               net_server(port),
                               max_game_duration(max_game_duration),
                               points_to_win(points_to_win) {
-  tick_duration = 1 / FRAMES_PER_SECOND;
+  tick_duration = 1.0 / FRAMES_PER_SECOND;
 }
 
 bool GameEnvironment::start_game() {
@@ -46,15 +46,13 @@ bool GameEnvironment::start_game() {
     std::cout << "[TIMER] " << "MAXIMUM = " << max_game_duration << std::endl;
     // Главный таймер
     while (current_game_duration.total_seconds() < max_game_duration) {
-        //std::cout << "[GAME ENV] " << "tick..." << std::endl;
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
+            std::cout << current_game_duration.total_seconds() << std::endl;
             last_tick = curr_time;
             need_update = true;
-            //std::cout << "[GAME ENV] " << "Notifying users" << std::endl;
             net_server.notify_all_users(object_manager.get_objects_by_map());
-            //std::cout << "[GAME ENV] " << "Notifying done" << std::endl;
         }
         curr_time = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
@@ -85,15 +83,7 @@ void GameEnvironment::update_objects() {
         std::unordered_map<int, std::shared_ptr<Object>>& objects = object_manager.get_objects_by_map();
         // Проверка на столкновения
         if (need_update) {
-            // for (auto& object: objects) {
-            //     if (object.second->type != Object::STATIC_OBJECT) {
-            //         object.second->update();
-            //         auto collisions = objectManager.collisionSolver.check_object_collisions(objects, object.second);
-            //         for (auto& collision: collisions) {
-            //             objectManager.collisionSolver.resolve_collision(object.second, collision);
-            //         }
-            //     }
-            // }
+            // TODO: отскок шарика от стен
             need_update = false;
         // Обновляем состояние объектов, проверяем на коллизии в новом состоянии
         } else {
@@ -122,7 +112,7 @@ void GameEnvironment::update_objects() {
 
 std::shared_ptr<Player> GameEnvironment::init_user(User& user) {
   int id = user.get_username();
-  std::shared_ptr<Player> player = std::make_shared<Player>(id, Vector(0, 0));
+  std::shared_ptr<Player> player = std::make_shared<Player>(id, Vector(0, 0), Vector(0, 0));
   return player;
 }
 

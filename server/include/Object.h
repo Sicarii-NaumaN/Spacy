@@ -85,17 +85,16 @@ private:
 
 class Player : public Object {
 public:
-    Player(int id, Vector pos): Object(Type::PLAYER, id, pos, Model(26,26)),
-                               sight(1, 0), speed(0, 0) {};
+    Player(int id, Vector pos, Vector speed): Object(Type::PLAYER, id, pos, Model(26,26)),
+                               speed(speed) {};
     void update() override {
-      speed = Vector(0, 0);
+      position = position + speed;
     }
 
     void setSpeed(float vx, float vy) {
       speed = Vector(vx, vy);
     }
     PlayerState state_;
-    Vector sight;
     Vector speed;
 };
 

@@ -31,7 +31,6 @@ std::vector<std::shared_ptr<ObjectInterface>> NetClient::get_server_message() {
     //std::cout << str << std::endl;
     std::stringstream stream(str);
     read_json(stream, root);
-
     return packet_manager.packet_adaptation_client(root);
 }
 
