@@ -24,21 +24,14 @@ public:
     ActionServer();
     ~ActionServer() = default;
 
-    PointInterface myPosition;
-    VectorInterface mySight;
-
-    int myId;
-
     void connectClient();
     void closeConnection();
 
-    void sendActionMove(Direction);
+    void sendKeyPressedAction(int keyCode, int mx, int my);
+    void sendKeyReleasedAction(int keyCode, int mx, int my);
     void sendActionShot();
-    void updatePosition(const std::vector<std::shared_ptr<ObjectInterface>> &);
-    void updateSight(sf::Vector2f);
 
     std::vector<std::shared_ptr<ObjectInterface>> getMessage();
-
 };
 
 #endif //SPACY_ACTIONSERVER_H

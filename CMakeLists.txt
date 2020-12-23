@@ -13,7 +13,9 @@ set(
         client/include/EventClient.h
         client/include/Utils.h
         client/include/BulletModel.h
+        client/include/Game.h
 )
+
 set(
         CLIENT_SRC
         client
@@ -21,7 +23,8 @@ set(
         client/src/PlayerModel.cpp
         client/src/Graphics.cpp
         client/src/ActionServer.cpp
-        client/src/BulletModel.cpp)
+        client/src/BulletModel.cpp
+)
 
 set(
         SERVER_SRC
@@ -32,7 +35,6 @@ set(
         server/src/Object.cpp
         server/src/ObjectManager.cpp
         server/src/Event.cpp
-        server/src/EventManager.cpp
 )
 
 set(
@@ -43,7 +45,6 @@ set(
         server/include/Object.h
         server/include/ObjectManager.h
         server/include/Event.h
-        server/include/EventManager.h
 )
 
 set(

@@ -26,6 +26,8 @@ private:
 
     float sightToX;
     float sightToY;
+
+    int player_id;
 };
 
 

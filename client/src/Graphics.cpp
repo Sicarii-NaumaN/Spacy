@@ -179,11 +179,6 @@ void Graphics::drawField() {
     drawSideWalls(); // Боковые стены
 }
 
-void Graphics::movePlayer(float vx, float vy) {
-    auto pos = player.getPosition();
-    player.setPosition(pos.x + vx, pos.y + vy);
-}
-
 void Graphics::movePlayerTo(float x, float y) {
     player.setPosition(x, y);
 }

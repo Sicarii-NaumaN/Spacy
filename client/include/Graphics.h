@@ -19,7 +19,6 @@ public:
     void drawField();
 
     void drawPlayer();
-    void movePlayer(float vx, float vy);
     void movePlayerTo(float x, float y);
 
     void drawBullet(float x, float y);

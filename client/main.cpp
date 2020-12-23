@@ -6,86 +6,86 @@
 
 #include "Graphics.h"
 #include "structConfig.h"
-#include "ActionManager.h"
 #include "ActionServer.h"
 #include "EventClient.h"
+#include "Object.h"
+
+#include "Game.h"
 
 int main() {
     struct Config config;
-    //ActionServer actionServer;
+    ActionServer actionServer;
     //ActionManager user;
     bool isGame = false;
+    std::map<sf::Keyboard::Key, int> keyToCode;
+    keyToCode[sf::Keyboard::W] = 0;
+    keyToCode[sf::Keyboard::A] = 1;
+    keyToCode[sf::Keyboard::S] = 2;
+    keyToCode[sf::Keyboard::D] = 3;
 
-    int defaultSpeed = 25;
 
-
-    int vx = 0;
-    int vy = 0;
-
-    int x = config.window_width / 2;
-    int y = config.window_height / 2 - 150;
-
-    //actionServer.connectClient();
+    actionServer.connectClient();
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     Graphics graphics(window, config);
 
-    graphics.movePlayerTo(x, y);
+    //graphics.movePlayerTo(x, y);
+
+    Game game(2);
 
     window.setKeyRepeatEnabled(false);
 
     int i = 0;
     while (window.isOpen()) {
+        auto msg = actionServer.getMessage();
+        for (auto m : msg) {
+          switch (m->type) {
+            case Object::Type::PLAYER: {
+              std::cout << "Got player data\n";
+              break;
+            }
+          }
+        }
+
         sf::Event event;
         while (window.pollEvent(event)) {
+            sf::Vector2 mousePos = sf::Mouse::getPosition(window);
+
             switch (event.type) {
               case sf::Event::Closed:
                 window.close();
                 break;
 
-              case sf::Event::KeyPressed:
+              case sf::Event::KeyPressed: {
+                auto key = event.key.code;
                 switch (event.key.code) {
                     case sf::Keyboard::W :
-                        vy = -defaultSpeed;
-                        //actionServer.sendActionMove(UP);
-                        break;
                     case sf::Keyboard::A :
-                        vx = -defaultSpeed;
-                        //actionServer.sendActionMove(LEFT);
-                        break;
                     case sf::Keyboard::S :
-                        vy = defaultSpeed;
-                        //actionServer.sendActionMove(DOWN);
-                        break;
                     case sf::Keyboard::D :
-                        vx = defaultSpeed;
-                        //actionServer.sendActionMove(RIGHT);
+                        actionServer.sendKeyPressedAction(keyToCode[key], mousePos.x, mousePos.y);
                         break;
                 }
                 break;
-              case sf::Event::KeyReleased:
+              }
+              case sf::Event::KeyReleased: {
+                auto key = event.key.code;
                 switch (event.key.code) {
                     case sf::Keyboard::W :
-                        vy = (vy < 0) ? 0 : vy;
-                        break;
-                    case sf::Keyboard::S :
-                        vy = (vy > 0) ? 0 : vy;
-                        break;
-                    case sf::Keyboard::D :
-                        vx = (vx > 0) ? 0 : vx;
-                        break;
                     case sf::Keyboard::A :
-                        vx = (vx < 0) ? 0 : vx;
+                    case sf::Keyboard::S :
+                    case sf::Keyboard::D :
+                        actionServer.sendKeyReleasedAction(keyToCode[key], mousePos.x, mousePos.y);
                         break;
                 }
                 break;
+              }
             }
         }
-        graphics.movePlayer(vx, vy);
         graphics.drawField();
         graphics.drawPlayer();
-        i += 10;
-        graphics.drawBullet(240, 600 - i);
+        // i += 10;
+        // graphics.drawBullet(240, 600 - i);
         graphics.drawFrontWall();
         window.display();
     }

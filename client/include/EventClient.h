@@ -3,97 +3,80 @@
 const static int DEFAULT_BULLET_SPEED_CLIENT = 10;
 #include <map>
 
-struct PointInterface {
-    double x, y;
-    PointInterface(double xpos, double ypos): x(xpos), y(ypos) {}
-};
-
 struct VectorInterface {
-    PointInterface from, to;
-    VectorInterface(PointInterface f, PointInterface t):from(f), to(t){}
+    double x, y;
+    VectorInterface(double xpos, double ypos): x(xpos), y(ypos) {}
 };
 
 struct ModelInterface {
-    int height, width;
-    ModelInterface(int h, int w):height(h), width(w) {}
+    float width, height;
+    ModelInterface(int w, int h): height(h), width(w) {}
 };
-
-enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
-
-struct MousePosition {
-    int x;
-    int y;
-};
-
 
 struct EventInterface {
     enum EventType {
-        move,
-        blink,
-        shot
+        SHOT,
+        KEYPRESSED
     };
     EventType type; //move, blink
-    VectorInterface sight;
-    EventInterface(EventType t, VectorInterface s): type(t), sight(s) {}
+    EventInterface(EventType t): type(t) {}
 };
 
-struct MoveInterface: EventInterface{
-    Direction direction;
-    MoveInterface(EventType t, VectorInterface s, Direction dir):EventInterface(t, s), direction(dir) {}
+struct KeyEvent: EventInterface {
+  enum KeyState {
+    PRESSED,
+    RELEASED
+  };
+
+  int keyCode;
+  int mouse_x, mouse_y;
+  KeyState state;
+  KeyEvent(int keyCode, int mx, int my, KeyState state):
+    EventInterface(EventType::KEYPRESSED),
+    keyCode(keyCode),
+    mouse_x(mx),
+    mouse_y(my),
+    state(state){}
+};
+
+struct KeyPressedEvent: KeyEvent {
+  KeyPressedEvent(int keyCode, int mx, int my):
+    KeyEvent(keyCode, mx, my, KeyEvent::KeyState::PRESSED) {};
+};
+
+struct KeyReleasedEvent: KeyEvent {
+  KeyReleasedEvent(int keyCode, int mx, int my):
+    KeyEvent(keyCode, mx, my, KeyEvent::KeyState::RELEASED) {};
 };
 
 struct ShotInterface: EventInterface{
-    ShotInterface(EventType t, VectorInterface s):EventInterface(t, s) {}
+    int origin_x, origin_y;
+    int mouse_x, mouse_y;
+    ShotInterface(int ox, int oy, int mx, int my):
+      EventInterface(EventType::SHOT),
+      mouse_x(mx),
+      mouse_y(my),
+      origin_x(ox),
+      origin_y(oy) {}
 };
-
 
 struct ObjectInterface {
     enum Type {
-        STATIC_OBJECT,
-        PLAYER_OBJECT,
-        BULLET_OBJECT,
-        MAP_OBJECT
+        PLAYER,
+        BULLET,
+        MAP
     };
-    PointInterface position;
+    VectorInterface position;
     ModelInterface model;
     Type type;
     int ID;
-    ObjectInterface(Type t, int id, PointInterface pos, ModelInterface mod):type(t), ID(id), position(pos), model(mod) {}
-
+    ObjectInterface(Type t, int id, VectorInterface pos, ModelInterface mod):type(t), ID(id), position(pos), model(mod) {}
 };
 
 struct PlayerInterface:ObjectInterface {
-    VectorInterface sight;
-    int speed;
-    enum State {
-        STATE_STANDING,
-        STATE_FLYING
-    };
-    State state_;
-    PlayerInterface(Type t, int id, PointInterface pos, ModelInterface mod,  VectorInterface sight): ObjectInterface(t, id, pos, mod),
-                                                                                                     sight(sight), speed(50) {}
+    PlayerInterface(int id, VectorInterface pos, ModelInterface mod): ObjectInterface(Type::PLAYER, id, pos, mod) {}
 
 };
-
-
-struct MapInterface:ObjectInterface {
-    int layers_count;
-    double ring_radius;
-    std::map<int, int> players_pts;
-    MapInterface(int id, int layers_count, double ring_radius, std::map<int, int> players_pts):
-            ObjectInterface(Type::MAP_OBJECT, id, PointInterface(0, 0), ModelInterface(0, 0)),
-            layers_count(layers_count), ring_radius(ring_radius), players_pts(std::move(players_pts)){}
-};
-
-struct ObstructionInterface:ObjectInterface {
-    ObstructionInterface(Type t, int id, PointInterface pos, ModelInterface mod): ObjectInterface(t, id, pos, mod) {}
-};
-
 
 struct BulletStateInterface {
     enum State {
@@ -107,7 +90,7 @@ struct BulletStateInterface {
 
 struct BulletInterface:ObjectInterface {
 
-    BulletInterface(int id, PointInterface pos, int iniciator_id): ObjectInterface(Type::BULLET_OBJECT, id, pos, ModelInterface(15,15)),
+    BulletInterface(int id, VectorInterface pos, int iniciator_id): ObjectInterface(Type::BULLET, id, pos, ModelInterface(15,15)),
                                                                    speed(DEFAULT_BULLET_SPEED_CLIENT), iniciator_ID(iniciator_id) {};
     BulletStateInterface state;
     int iniciator_ID;

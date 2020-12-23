@@ -7,7 +7,6 @@
 #include <iostream>
 
 const static double DEFAULT_BULLET_SPEED = 20;
-const static double DEFAULT_PLAYER_SPEED = 3;
 const static int SHOT_COULDOWN_TICKS = 15;
 const static int BULLET_TICKS_LIVETIME = 250;
 
@@ -15,46 +14,42 @@ const static int WINDOW_H = 800;
 const static int WINDOW_W = 1280;
 
 
-struct Point {
-    double x, y;
-    Point() = default;
-    Point(double xpos, double ypos): x(xpos), y(ypos) {}
-    Point operator+ (const Point& rhs) const {
+struct Vector {
+    float x, y;
+    Vector() = default;
+    Vector(float xpos, float ypos): x(xpos), y(ypos) {}
+    Vector operator+ (const Vector& rhs) const {
         return {this->x + rhs.x, this->y + rhs.y};
     }
-    Point operator- (const Point& rhs) const {
+    Vector operator- (const Vector& rhs) const {
         return {this->x - rhs.x, this->y - rhs.y};
     }
-    Point operator* (double value) const {
+    Vector operator* (float value) const {
         return {this->x * value, this->y * value};
     }
-    double distance_between(const Point& other) const {
+    float distance_between(const Vector& other) const {
         return sqrt(pow((this->x - other.x), 2) + pow((this->y - other.y), 2));
     }
 
 };
 
-struct Vector {
-    Point from, to;
-    Vector(Point f, Point t):from(f), to(t){}
-};
-
 struct Model {
-    int height, width;
-    Model(int w, int h):height(h), width(w) {}
+    float width;
+    float height;
+
+    Model(float w, float h): height(h), width(w) {}
 };
 
 class Object {
 public:
     enum Type {
-        STATIC_OBJECT,
-        PLAYER_OBJECT,
-        BULLET_OBJECT,
-        MAP_OBJECT
+        PLAYER,
+        BULLET,
+        MAP
     };
-    Object(Type t, int id, Point pos, Model mod):type(t), ID(id), position(pos), model(mod) {}
+    Object(Type t, int id, Vector pos, Model mod):type(t), ID(id), position(pos), model(mod) {}
     virtual void update()  = 0;
-    Point position;
+    Vector position;
     Model model;
     Type type;
     int ID;
@@ -90,26 +85,24 @@ private:
 
 class Player : public Object {
 public:
-    Player(int id, Point pos): Object(Type::PLAYER_OBJECT, id, pos, Model(26,26)),
-                               sight(1, 0), speed(DEFAULT_PLAYER_SPEED) {};
+    Player(int id, Vector pos): Object(Type::PLAYER, id, pos, Model(26,26)),
+                               sight(1, 0), speed(0, 0) {};
     void update() override {
-      speed = DEFAULT_PLAYER_SPEED;
+      speed = Vector(0, 0);
+    }
+
+    void setSpeed(float vx, float vy) {
+      speed = Vector(vx, vy);
     }
     PlayerState state_;
-    Point sight;
-    double speed;
-    Point normalize(const Vector& vec) const {
-        double t1 = vec.to.x - vec.from.x;
-        double t2 = vec.to.y - vec.from.y;
-        double l = sqrt(t1 * t1 + t2 * t2);
-        return {t1 / l, t2 / l};
-    }
+    Vector sight;
+    Vector speed;
 };
 
 class Map : public  Object {
 public:
     Map(int id, int durations_tick, std::vector<std::shared_ptr<Object>> plrs):
-            Object(Type::MAP_OBJECT, id, Point(0, 0), Model(0, 0)),
+            Object(Type::MAP, id, Vector(0, 0), Model(0, 0)),
             game_duration_ticks(durations_tick),
             players(move(plrs)),
             map_centr({WINDOW_W/ 2}, {WINDOW_H / 2}) {
@@ -135,13 +128,7 @@ private:
     int game_duration_ticks;
     std::vector<std::shared_ptr<Object>> players;
 
-    Point map_centr;
-};
-
-class Obstruction : public  Object {
-public:
-    Obstruction(int id, Point pos, int w, int h): Object(Type::STATIC_OBJECT, id, pos, Model(w,h)) {};
-    void update() override {}
+    Vector map_centr;
 };
 
 class BulletState {
@@ -174,7 +161,7 @@ private:
 
 class Bullet : public  Object {
 public:
-    Bullet(int id, Point pos, Point sight, int iniciator_id): Object(Type::BULLET_OBJECT, id, pos, Model(7,7)),
+    Bullet(int id, Vector pos, Vector sight, int iniciator_id): Object(Type::BULLET, id, pos, Model(7,7)),
                                                               sight(sight), speed(DEFAULT_BULLET_SPEED), iniciator_ID(iniciator_id) {};
 
     void update() override {
@@ -183,7 +170,7 @@ public:
         }
     }
     BulletState state;
-    Point sight;
+    Vector sight;
     int iniciator_ID;
     double speed;
 };

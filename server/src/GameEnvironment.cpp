@@ -12,9 +12,12 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
 }
 
 bool GameEnvironment::start_game() {
+    std::cout << "[GAME ENV] " << "Starting game..." << std::endl;
     // Ждем пользователей
+    std::cout << "[GAME ENV] " << "Waiting for players..." << std::endl;
     std::vector<User> players_init = net_server.accept_users(player_count, object_manager);
-    // Создаем поток для каждого пользователя
+    std::cout << "[GAME ENV] " << "Players connected" << std::endl;
+    // Создаем слушателя событий для каждого пользователя
     std::vector<boost::thread> threads;
     for (auto& usr: players_init) {
         object_manager.update_objects(init_user(usr));
@@ -25,34 +28,44 @@ bool GameEnvironment::start_game() {
     }
     initialize_objects();
     game_is_active = true;
+    std::cout << "[GAME ENV] " << "Updating objects" << std::endl;
     boost::thread th([&](){
         this->update_objects();
     });
+    std::cout << "[GAME ENV] " << "Objects updated" << std::endl;
     threads.push_back(move(th));
 
+    std::cout << "[GAME ENV] " << "Starting main game cycle" << std::endl;
     // Определяем переменные времени
     auto round_start = boost::posix_time::microsec_clock::universal_time();
     boost::posix_time::time_duration current_game_duration;
     boost::posix_time::time_duration current_tick_duration;
     auto last_tick = boost::posix_time::microsec_clock::universal_time();
 
+    std::cout << "[TIMER] " << "CURRENT = " << current_game_duration.total_seconds() << std::endl;
+    std::cout << "[TIMER] " << "MAXIMUM = " << max_game_duration << std::endl;
     // Главный таймер
     while (current_game_duration.total_seconds() < max_game_duration) {
+        //std::cout << "[GAME ENV] " << "tick..." << std::endl;
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
             last_tick = curr_time;
             need_update = true;
+            //std::cout << "[GAME ENV] " << "Notifying users" << std::endl;
             net_server.notify_all_users(object_manager.get_objects_by_map());
+            //std::cout << "[GAME ENV] " << "Notifying done" << std::endl;
         }
         curr_time = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
     }
 
+    std::cout << "[GAME ENV] " << "Game over" << std::endl;
     game_is_active = false;
     for (auto& th: threads) {
         th.join();
     }
+    std::cout << "[GAME ENV] " << "Exiting..." << std::endl;
     return 0;
 }
 
@@ -64,19 +77,6 @@ void GameEnvironment::initialize_objects() {
     std::shared_ptr<Map> map = std::make_shared<Map>(object_manager.pick_enable_id(),
                                                      max_game_duration * FRAMES_PER_SECOND, move(players));
     object_manager.update_objects(map);
-
-    //TODO: Сделать стены
-    // std::shared_ptr<Obstruction> obs1 = std::make_shared<Obstruction>(objectManager.pick_enable_id(), Point(460, 280), 30, 250);
-    // objectManager.update_objects(obs1);
-    //
-    // std::shared_ptr<Obstruction> obs2 = std::make_shared<Obstruction>(objectManager.pick_enable_id(), Point(520, 200), 250, 30);
-    // objectManager.update_objects(obs2);
-    //
-    // std::shared_ptr<Obstruction> obs3 = std::make_shared<Obstruction>(objectManager.pick_enable_id(), Point(800, 280), 30, 250);
-    // objectManager.update_objects(obs3);
-    //
-    // std::shared_ptr<Obstruction> obs4 = std::make_shared<Obstruction>(objectManager.pick_enable_id(), Point(520, 560), 250, 30);
-    // objectManager.update_objects(obs4);
 }
 
 void GameEnvironment::update_objects() {
@@ -106,7 +106,7 @@ void GameEnvironment::update_objects() {
                 // Получаем объект, к которому относится событие
                 auto object = object_manager.get_object_by_id(event->IniciatorID);
                 // Вычисляем его новое состояние
-                auto new_state = event->proccess(object, object_manager);
+                auto new_state = event->process(object, object_manager);
                 // Проверяем на столкновение с другими объектами
                 // if (!objectManager.collisionSolver.is_object_collided(objects, new_state)) {
                 if (1) {
@@ -122,11 +122,12 @@ void GameEnvironment::update_objects() {
 
 std::shared_ptr<Player> GameEnvironment::init_user(User& user) {
   int id = user.get_username();
-  std::shared_ptr<Player> player = std::make_shared<Player>(id, Point(0, 0));
+  std::shared_ptr<Player> player = std::make_shared<Player>(id, Vector(0, 0));
   return player;
 }
 
 void GameEnvironment::serve_user(User &user) {
+  std::cout << "[GAME ENV -- SERVICE] " << "Serve user start" << std::endl;
   while(game_is_active) {
         std::shared_ptr<Event> event = net_server.get_client_action(user);
         // * DEBUG * //
