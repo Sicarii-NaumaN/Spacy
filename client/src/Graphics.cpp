@@ -15,6 +15,18 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     player_texture[9].loadFromFile(config.textures_path + "right-4.png");
     player_texture[10].loadFromFile(config.textures_path + "right-5.png");
 
+    enemy_texture[0].loadFromFile(config.textures_path + "back-left-5.png");
+    enemy_texture[1].loadFromFile(config.textures_path + "back-left-4.png");
+    enemy_texture[2].loadFromFile(config.textures_path + "back-left-3.png");
+    enemy_texture[3].loadFromFile(config.textures_path + "back-left-2.png");
+    enemy_texture[4].loadFromFile(config.textures_path + "back-left-1.png");
+    enemy_texture[5].loadFromFile(config.textures_path + "back-center.png");
+    enemy_texture[6].loadFromFile(config.textures_path + "back-right-1.png");
+    enemy_texture[7].loadFromFile(config.textures_path + "back-right-2.png");
+    enemy_texture[8].loadFromFile(config.textures_path + "back-right-3.png");
+    enemy_texture[9].loadFromFile(config.textures_path + "back-right-4.png");
+    enemy_texture[10].loadFromFile(config.textures_path + "back-right-5.png");
+
 
     //    enemy_texture.loadFromFile(config.textures_path + "front.png");
 
@@ -25,7 +37,7 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
 
     transform.translate(0, -100);
 
-    player.setTexture(player_texture[2]);
+    player.setTexture(enemy_texture[5]);
     player.resize(0.20, 0.20);
     player.setPosition(500, 400);
 //    enemy.setTexture(enemy_texture);
@@ -222,4 +234,26 @@ void Graphics::drawBullet(float x, float y) {
     bullet.resize(scale_factor);
 
     bullet.draw(window, renderStates);
+}
+
+void Graphics::drawEnemy() {
+    auto pos = enemy.getPosition();
+    float x = pos.x;
+    float y = pos.y;
+    float enemy_width = enemy.getWidth();
+
+    auto projected_position = projector.projectPoint(enemy.getPosition());
+
+    enemy.setSpritePosition(projected_position.x, projected_position.y);
+
+    float new_width = projector.projectLength(sf::Vector2f(x, y), enemy_width);
+    float scale_factor = new_width / enemy_width;
+
+    enemy.resize(scale_factor);
+    enemy.setTexture(enemy_texture[(int) (enemy.getPosition().x / 117)]);
+    enemy.draw(window, renderStates);
+}
+
+void Graphics::moveEnemyTo(float x, float y) {
+    enemy.setPosition(x, y);
 }

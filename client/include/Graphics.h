@@ -19,7 +19,10 @@ public:
     void drawField();
 
     void drawPlayer();
+    void drawEnemy();
+
     void movePlayerTo(float x, float y);
+    void moveEnemyTo(float x, float y);
 
     void drawBullet(float x, float y);
 
@@ -38,7 +41,7 @@ private:
 
     sf::Texture background_texture;
     sf::Texture player_texture[11];
-    std::vector<sf::Texture> enemy_texture;
+    sf::Texture enemy_texture[11];
     sf::Texture bullet_texture;
     sf::Texture metal_texture;
     sf::Texture metal_light_texture;
