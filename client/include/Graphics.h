@@ -1,17 +1,18 @@
 #ifndef SPACY_GRAPHICS_H
 #define SPACY_GRAPHICS_H
 
-#include <SFML/Graphics.hpp>
-#include "PlayerModel.h"
 #include "BulletModel.h"
-#include "Utils.h"
-#include <unordered_map>
+#include "PlayerModel.h"
 #include "structConfig.h"
+#include "Utils.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <unordered_map>
 
-class Graphics {
+class Graphics
+{
 public:
-    void drawShape(const sf::Texture& texture);
+    void drawShape(const sf::Texture &texture);
 
     void drawBackWall();
     void drawFrontWall();
@@ -30,25 +31,26 @@ public:
 
     explicit Graphics(sf::RenderWindow &window, const Config &config);
     virtual ~Graphics() = default;
-private:
-    struct Config config;
 
-    PlayerModel player;
-    PlayerModel enemy;
+private:
+    struct Config    config;
+
+    PlayerModel      player;
+    PlayerModel      enemy;
 
     sf::RenderWindow &window;
     sf::RenderStates renderStates;
 
-    sf::Texture background_texture;
-    sf::Texture player_texture[11];
-    sf::Texture enemy_texture[11];
-    sf::Texture bullet_texture;
-    sf::Texture metal_texture;
-    sf::Texture metal_light_texture;
+    sf::Texture      background_texture;
+    sf::Texture      player_texture[11];
+    sf::Texture      enemy_texture[11];
+    sf::Texture      bullet_texture;
+    sf::Texture      metal_texture;
+    sf::Texture      metal_light_texture;
 
-    sf::Transform transform;
+    sf::Transform    transform;
 
-    Projector projector;
+    Projector        projector;
 };
 
-#endif //SPACY_GRAPHICS_H
+#endif // SPACY_GRAPHICS_H

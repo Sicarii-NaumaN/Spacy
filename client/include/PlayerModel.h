@@ -1,10 +1,11 @@
 #ifndef PLAYERMODEL_H_INCLUDED
 #define PLAYERMODEL_H_INCLUDED
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-class PlayerModel {
+class PlayerModel
+{
 public:
     PlayerModel();
 
@@ -20,20 +21,25 @@ public:
     void setPosition(float x, float y);
     void setSpritePosition(float x, float y);
 
-    int getID() { return id; }
+    int getID() { return(id); }
 
-    sf::Vector2f getPosition() {return position; }
-    sf::Vector2f getSpritePosition() { return sprite.getPosition(); }
-    float getWidth() { return sprite.getTexture()->getSize().x * sprite.getScale().x;}
+    sf::Vector2f getPosition() { return(position); }
+    sf::Vector2f getSpritePosition() { return(sprite.getPosition()); }
+
+
+    float getWidth()
+    {
+        return(sprite.getTexture()->getSize().x * sprite.getScale().x);
+    }
 
 private:
-    int id;
-    sf::Sprite sprite;
+    int          id;
+    sf::Sprite   sprite;
     sf::Vector2f position;
-    float width;
-    float height;
-    float sightToX;
-    float sightToY;
+    float        width;
+    float        height;
+    float        sightToX;
+    float        sightToY;
 };
 
 #endif

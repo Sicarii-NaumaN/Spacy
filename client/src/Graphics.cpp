@@ -1,6 +1,9 @@
 #include "Graphics.h"
 
-Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(window), config(config) {
+Graphics::Graphics(sf::RenderWindow &window, const Config &config)
+    : window(window)
+    , config(config)
+{
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
 
     player_texture[0].loadFromFile(config.textures_path + "left-5.png");
@@ -26,7 +29,6 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     enemy_texture[8].loadFromFile(config.textures_path + "back-right-3.png");
     enemy_texture[9].loadFromFile(config.textures_path + "back-right-4.png");
     enemy_texture[10].loadFromFile(config.textures_path + "back-right-5.png");
-
 
     //    enemy_texture.loadFromFile(config.textures_path + "front.png");
 
@@ -54,16 +56,18 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
     setWindowIcon();
 }
 
-void Graphics::drawShape(const sf::Texture &texture) {
+
+void Graphics::drawShape(const sf::Texture &texture)
+{
     sf::ConvexShape field(4);
 
-    float w = config.window_width;
-    float h = config.window_height;
+    float           w = config.window_width;
+    float           h = config.window_height;
 
-    auto p1 = projector.projectPoint(0, 0);
-    auto p2 = projector.projectPoint(0, h);
-    auto p3 = projector.projectPoint(w, h);
-    auto p4 = projector.projectPoint(w, 0);
+    auto            p1 = projector.projectPoint(0, 0);
+    auto            p2 = projector.projectPoint(0, h);
+    auto            p3 = projector.projectPoint(w, h);
+    auto            p4 = projector.projectPoint(w, 0);
 
     field.setPoint(0, p1);
     field.setPoint(1, p2);
@@ -74,26 +78,28 @@ void Graphics::drawShape(const sf::Texture &texture) {
     window.draw(field, transform);
 }
 
-void Graphics::drawSideWalls() {
-    float w = config.window_width;
-    float h = config.window_height;
 
-    auto p00 = projector.projectPoint(0, 0);
-    auto p01 = projector.projectPoint(0, h);
-    auto p10 = projector.projectPoint(w, h);
-    auto p11 = projector.projectPoint(w, 0);
+void Graphics::drawSideWalls()
+{
+    float           w = config.window_width;
+    float           h = config.window_height;
 
-    float top_width = abs(p00.x - p11.x);
-    float bottom_width = abs(p01.x - p10.x);
-    float scale_factor = top_width / bottom_width;
+    auto            p00 = projector.projectPoint(0, 0);
+    auto            p01 = projector.projectPoint(0, h);
+    auto            p10 = projector.projectPoint(w, h);
+    auto            p11 = projector.projectPoint(w, 0);
 
-    float h1 = 50;
-    float h2 = h1 * scale_factor;
+    float           top_width    = abs(p00.x - p11.x);
+    float           bottom_width = abs(p01.x - p10.x);
+    float           scale_factor = top_width / bottom_width;
 
-    auto t00 = sf::Vector2f(p00.x, p00.y - h2);
-    auto t01 = sf::Vector2f(p01.x, p01.y - h1);
-    auto t10 = sf::Vector2f(p10.x, p10.y - h1);
-    auto t11 = sf::Vector2f(p11.x, p11.y - h2);
+    float           h1 = 50;
+    float           h2 = h1 * scale_factor;
+
+    auto            t00 = sf::Vector2f(p00.x, p00.y - h2);
+    auto            t01 = sf::Vector2f(p01.x, p01.y - h1);
+    auto            t10 = sf::Vector2f(p10.x, p10.y - h1);
+    auto            t11 = sf::Vector2f(p11.x, p11.y - h2);
 
     sf::ConvexShape left_wall(4);
     sf::ConvexShape right_wall(4);
@@ -115,24 +121,26 @@ void Graphics::drawSideWalls() {
     window.draw(right_wall, transform);
 }
 
-void Graphics::drawBackWall() {
-    float w = config.window_width;
-    float h = config.window_height;
 
-    auto p00 = projector.projectPoint(0, 0);
-    auto p01 = projector.projectPoint(0, h);
-    auto p10 = projector.projectPoint(w, h);
-    auto p11 = projector.projectPoint(w, 0);
+void Graphics::drawBackWall()
+{
+    float           w = config.window_width;
+    float           h = config.window_height;
 
-    float top_width = abs(p00.x - p11.x);
-    float bottom_width = abs(p01.x - p10.x);
-    float scale_factor = top_width / bottom_width;
+    auto            p00 = projector.projectPoint(0, 0);
+    auto            p01 = projector.projectPoint(0, h);
+    auto            p10 = projector.projectPoint(w, h);
+    auto            p11 = projector.projectPoint(w, 0);
 
-    float h1 = 50;
-    float h2 = h1 * scale_factor;
+    float           top_width    = abs(p00.x - p11.x);
+    float           bottom_width = abs(p01.x - p10.x);
+    float           scale_factor = top_width / bottom_width;
 
-    auto t00 = sf::Vector2f(p00.x, p00.y - h2);
-    auto t11 = sf::Vector2f(p11.x, p11.y - h2);
+    float           h1 = 50;
+    float           h2 = h1 * scale_factor;
+
+    auto            t00 = sf::Vector2f(p00.x, p00.y - h2);
+    auto            t11 = sf::Vector2f(p11.x, p11.y - h2);
 
     sf::ConvexShape back_wall(4);
 
@@ -146,24 +154,26 @@ void Graphics::drawBackWall() {
     window.draw(back_wall, transform);
 }
 
-void Graphics::drawFrontWall() {
-    float w = config.window_width;
-    float h = config.window_height;
 
-    auto p00 = projector.projectPoint(0, 0);
-    auto p01 = projector.projectPoint(0, h);
-    auto p10 = projector.projectPoint(w, h);
-    auto p11 = projector.projectPoint(w, 0);
+void Graphics::drawFrontWall()
+{
+    float           w = config.window_width;
+    float           h = config.window_height;
 
-    float top_width = abs(p00.x - p11.x);
-    float bottom_width = abs(p01.x - p10.x);
-    float scale_factor = top_width / bottom_width;
+    auto            p00 = projector.projectPoint(0, 0);
+    auto            p01 = projector.projectPoint(0, h);
+    auto            p10 = projector.projectPoint(w, h);
+    auto            p11 = projector.projectPoint(w, 0);
 
-    float h1 = 50;
-    float h2 = h1 * scale_factor;
+    float           top_width    = abs(p00.x - p11.x);
+    float           bottom_width = abs(p01.x - p10.x);
+    float           scale_factor = top_width / bottom_width;
 
-    auto t01 = sf::Vector2f(p01.x, p01.y - h1);
-    auto t10 = sf::Vector2f(p10.x, p10.y - h1);
+    float           h1 = 50;
+    float           h2 = h1 * scale_factor;
+
+    auto            t01 = sf::Vector2f(p01.x, p01.y - h1);
+    auto            t10 = sf::Vector2f(p10.x, p10.y - h1);
 
     sf::ConvexShape front_wall(4);
 
@@ -177,9 +187,15 @@ void Graphics::drawFrontWall() {
     window.draw(front_wall, transform);
 }
 
-void Graphics::drawField() {
+
+void Graphics::drawField()
+{
     sf::RectangleShape background;
-    background.setSize({(float) window.getSize().x, (float) window.getSize().y});
+
+    background.setSize(
+    {
+        (float)window.getSize().x, (float)window.getSize().y
+    });
 
     sf::Texture texture;
     sf::Texture wall_texture;
@@ -191,73 +207,87 @@ void Graphics::drawField() {
     window.draw(background);
 
     drawShape(background_texture); // Стол
-    drawBackWall(); // Задняя стенка
-    drawSideWalls(); // Боковые стены
+    drawBackWall();                // Задняя стенка
+    drawSideWalls();               // Боковые стены
 }
 
-void Graphics::movePlayerTo(float x, float y) {
+
+void Graphics::movePlayerTo(float x, float y)
+{
     player.setPosition(x, y);
 }
 
-void Graphics::drawPlayer() {
-    auto pos = player.getPosition();
-    float x = pos.x;
-    float y = pos.y;
+
+void Graphics::drawPlayer()
+{
+    auto  pos          = player.getPosition();
+    float x            = pos.x;
+    float y            = pos.y;
     float player_width = player.getWidth();
 
-    auto projected_position = projector.projectPoint(player.getPosition());
+    auto  projected_position = projector.projectPoint(player.getPosition());
 
     player.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width = projector.projectLength(sf::Vector2f(x, y), player_width);
+    float new_width    = projector.projectLength(sf::Vector2f(x, y), player_width);
     float scale_factor = new_width / player_width;
 
     player.resize(scale_factor);
-    player.setTexture(player_texture[(int) (player.getPosition().x / 117)]);
+    player.setTexture(player_texture[(int)(player.getPosition().x / 117)]);
     player.draw(window, renderStates);
 }
 
-void Graphics::setWindowIcon() {
+
+void Graphics::setWindowIcon()
+{
     sf::Image icon;
+
     icon.loadFromFile(config.textures_path + "icon.png");
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
-void Graphics::drawBullet(float x, float y) {
+
+void Graphics::drawBullet(float x, float y)
+{
     BulletModel bullet;
+
     bullet.setTexture(bullet_texture);
 
     float bullet_width = bullet.getWidth();
 
-    auto projected_position = projector.projectPoint(sf::Vector2f(x, y));
+    auto  projected_position = projector.projectPoint(sf::Vector2f(x, y));
 
     bullet.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width = projector.projectLength(sf::Vector2f(x, y), bullet_width);
+    float new_width    = projector.projectLength(sf::Vector2f(x, y), bullet_width);
     float scale_factor = new_width / bullet_width;
     bullet.resize(scale_factor);
 
     bullet.draw(window, renderStates);
 }
 
-void Graphics::drawEnemy() {
-    auto pos = enemy.getPosition();
-    float x = pos.x;
-    float y = pos.y;
+
+void Graphics::drawEnemy()
+{
+    auto  pos         = enemy.getPosition();
+    float x           = pos.x;
+    float y           = pos.y;
     float enemy_width = enemy.getWidth();
 
-    auto projected_position = projector.projectPoint(enemy.getPosition());
+    auto  projected_position = projector.projectPoint(enemy.getPosition());
 
     enemy.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width = projector.projectLength(sf::Vector2f(x, y), enemy_width);
+    float new_width    = projector.projectLength(sf::Vector2f(x, y), enemy_width);
     float scale_factor = new_width / enemy_width;
 
     enemy.resize(scale_factor);
-    enemy.setTexture(enemy_texture[(int) (enemy.getPosition().x / 117)]);
+    enemy.setTexture(enemy_texture[(int)(enemy.getPosition().x / 117)]);
     enemy.draw(window, renderStates);
 }
 
-void Graphics::moveEnemyTo(float x, float y) {
+
+void Graphics::moveEnemyTo(float x, float y)
+{
     enemy.setPosition(x, y);
 }

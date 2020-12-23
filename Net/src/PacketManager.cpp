@@ -1,67 +1,86 @@
-#include <iostream>
 #include "PacketManager.h"
+#include <iostream>
 
-std::vector<std::shared_ptr<ObjectInterface>> PacketManager::packet_adaptation_client(ptree& root) {
-    //std::cout << "[Adaptation] Starting adaptation...\n";
-    std::vector<std::shared_ptr<ObjectInterface>> vector;
 
-    std::map <std::string, int> mp;
+std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_client(ptree &root)
+{
+    // std::cout << "[Adaptation] Starting adaptation...\n";
+    std::vector<std::shared_ptr<ObjectInterface> > vector;
+
+    std::map<std::string, int>                     mp;
+
     mp["player"] = Object::Type::PLAYER;
     mp["bullet"] = Object::Type::BULLET;
-    mp["map"] = Object::Type::MAP;
+    mp["map"]    = Object::Type::MAP;
 
-     for (int j = 0; j < root.get("object", 0); ++j) {
-         ptree tree = root.get_child(std::to_string(j));
-         //std::cout << "[Adaptation] Parsing object #" << j << " of type " << tree.get("type", "") << std::endl;
-         switch (mp[tree.get("type", "")]) {
-             case Object::Type::PLAYER: {
-                 int id = tree.get("id", 0);
-                 int x = tree.get("x", 0);
-                 int y = tree.get("y", 0);
-                 int w = tree.get("w", 0);
-                 int h = tree.get("h", 0);
+    for (int j = 0; j < root.get("object", 0); ++j)
+    {
+        ptree tree = root.get_child(std::to_string(j));
 
-                 std::cout << "SDLFJSKDFJLSDKFJ " << x << ' ' << y  << ' ' << w << ' ' << h << std::endl;
+        // std::cout << "[Adaptation] Parsing object #" << j << " of type " <<
+        // tree.get("type", "") << std::endl;
+        switch (mp[tree.get("type", "")])
+        {
+        case Object::Type::PLAYER:
+        {
+            int                              id = tree.get("id", 0);
+            int                              x  = tree.get("x", 0);
+            int                              y  = tree.get("y", 0);
+            int                              w  = tree.get("w", 0);
+            int                              h  = tree.get("h", 0);
 
-                 struct PlayerInterface pl(id, VectorInterface(x, y), ModelInterface(3, 7));
-                 std::shared_ptr<ObjectInterface> ptr = std::make_shared<PlayerInterface>(pl);
-                 vector.push_back(ptr);
-                 break;
-             }
-             default: {
-                 break;
-             }
+            struct PlayerInterface           pl(id, VectorInterface(x, y),
+                                                ModelInterface(3, 7));
+            std::shared_ptr<ObjectInterface> ptr =
+                std::make_shared<PlayerInterface>(pl);
+            vector.push_back(ptr);
+            break;
+        }
 
-         }
-     }
-    //std::cout << "[Adaptation] Adaptation finished.\n";
-    return vector;
-}
+        default:
+        {
+            break;
+        }
+        }
+    }
 
-std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface>& event) {
-    std::map <EventInterface::EventType, int> mp;
-    mp[EventInterface::SHOT] = 2;
+    // std::cout << "[Adaptation] Adaptation finished.\n";
+    return(vector);
+} // PacketManager::packet_adaptation_client
+
+
+std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> &event)
+{
+    std::map<EventInterface::EventType, int> mp;
+
+    mp[EventInterface::SHOT]       = 2;
     mp[EventInterface::KEYPRESSED] = 3;
 
-     ptree root;
-     switch (mp[event->type]) {
-         case 2: {
-             auto ptr = std::static_pointer_cast<ShotInterface>(event);
-             root.put("type", "shot");
-             break;
-         }
-         case 3: {
-             auto ptr = std::static_pointer_cast<KeyPressedEvent>(event);
-             root.put("type", "keypressed");
-             root.put("keycode", ptr->keyCode);
-             break;
-         }
-         default: {
-             break;
-         }
+    ptree root;
 
-     }
+    switch (mp[event->type])
+    {
+    case 2:
+    {
+        auto ptr = std::static_pointer_cast<ShotInterface>(event);
+        root.put("type", "shot");
+        break;
+    }
+
+    case 3:
+    {
+        auto ptr = std::static_pointer_cast<KeyPressedEvent>(event);
+        root.put("type", "keypressed");
+        root.put("keycode", ptr->keyCode);
+        break;
+    }
+
+    default:
+    {
+        break;
+    }
+    }
     std::stringstream buf;
     write_json(buf, root);
-    return buf.str();
+    return(buf.str());
 }

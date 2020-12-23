@@ -3,7 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
-class BulletModel{
+class BulletModel
+{
 public:
     BulletModel() = default;
     virtual ~BulletModel() = default;
@@ -16,19 +17,23 @@ public:
     void setPosition(float x, float y);
     void setSpritePosition(float x, float y);
 
-    sf::Vector2f getPosition() {return position; }
-    sf::Vector2f getSpritePosition() { return sprite.getPosition(); }
-    float getWidth() { return sprite.getTexture()->getSize().x * sprite.getScale().x;}
+    sf::Vector2f getPosition() { return(position); }
+    sf::Vector2f getSpritePosition() { return(sprite.getPosition()); }
+
+
+    float getWidth()
+    {
+        return(sprite.getTexture()->getSize().x * sprite.getScale().x);
+    }
 
 private:
-    sf::Sprite sprite;
+    sf::Sprite   sprite;
     sf::Vector2f position;
 
-    float sightToX;
-    float sightToY;
+    float        sightToX;
+    float        sightToY;
 
-    int player_id;
+    int          player_id;
 };
 
-
-#endif //SPACY_BULLETMODEL_H
+#endif // SPACY_BULLETMODEL_H
