@@ -37,10 +37,14 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config) : window(wind
 
     transform.translate(0, -100);
 
-    player.setTexture(enemy_texture[5]);
+    player.setTexture(player_texture[5]);
     player.resize(0.20, 0.20);
     player.setPosition(500, 400);
-//    enemy.setTexture(enemy_texture);
+
+    enemy.setTexture(enemy_texture[5]);
+    enemy.resize(0.10, 0.10);
+    enemy.setPosition(500, 750);
+    //    enemy.setTexture(enemy_texture);
 
     // Параметры проецирования:
     // Угол наклона плоскости проецирования
