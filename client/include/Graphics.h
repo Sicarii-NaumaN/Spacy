@@ -32,6 +32,8 @@ public:
     explicit Graphics(sf::RenderWindow &window, const Config &config, bool flipped = false);
     virtual ~Graphics() = default;
 
+    sf::Vector2f getPlayerPosition();
+
 private:
     struct Config    config;
 

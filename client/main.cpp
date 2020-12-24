@@ -34,7 +34,7 @@ int main()
     sf::RenderWindow window(
         sf::VideoMode(config.window_width, config.window_height), "Spacy");
 
-    Graphics         graphics(window, config, actionServer.getId() % 2 == 1);
+    Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 
     // graphics.movePlayerTo(x, y);
 
@@ -120,7 +120,20 @@ int main()
                 }
                 break;
             }
+
+            case sf::Event::MouseButtonPressed:
+            {
+                if (event.mouseButton.button == sf::Mouse::Left)
+                {
+                    auto pl_pos = graphics.getPlayerPosition();
+                    actionServer.sendActionShot(
+                        mousePos.x,
+                        mousePos.y,
+                        //SD:LFKJSDF:LSKJDF:SLDKJF:SLDKJF:SLDKJFS:LDKJF
+                    );
+                }
             }
+            } // switch
         }
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
@@ -133,7 +146,6 @@ int main()
             graphics.drawPlayer();
             graphics.drawEnemy();
             graphics.drawFrontWall();
-
         }
         window.display();
         curr_time = boost::posix_time::microsec_clock::universal_time();

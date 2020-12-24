@@ -100,9 +100,14 @@ int NetServer::do_read_header(User &user)
 {
     std::cout << "[NET SERVER] "
               << "Reading size of message" << std::endl;
-    char buf[1024] = "";
+    char buf0[1] = "";
+    char buf[10] = "";
+    user.sock->read_some(buffer(buf0, 1));
+    std::istringstream iss0(buf0, std::istringstream::in);
+    int                val0;
+    iss0 >> val0;
 
-    user.sock->read_some(buffer(buf, 3));
+    user.sock->read_some(buffer(buf, val0));
     std::cout << "[NET SERVER] "
               << "Message===================" << std::endl;
     std::cout << buf;

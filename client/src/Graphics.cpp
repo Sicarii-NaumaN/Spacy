@@ -53,6 +53,12 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
 }
 
 
+sf::Vector2f getPlayerPosition() {
+    float x = player.position.x;
+    float y = player.position.y;
+    return sf::Vector2f(x, y);
+}
+
 void Graphics::drawShape(const sf::Texture &texture)
 {
     sf::ConvexShape field(4);

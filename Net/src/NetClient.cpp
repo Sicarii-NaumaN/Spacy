@@ -50,6 +50,7 @@ void NetClient::send_user_action(std::shared_ptr<EventInterface> &event)
     std::cout << "[NET CLIENT INFO] "
               << "Size: " << std::to_string(buf.size()) << std::endl;
 
+    socket_ptr->write_some(buffer(std::to_string(std::to_string(buf.size()).size()), 1));
     socket_ptr->write_some(buffer(std::to_string(buf.size()), 3));
     socket_ptr->write_some(buffer(buf));
 }
@@ -59,7 +60,7 @@ int NetClient::do_read_header()
 {
     // std::cout << "Reading size of size...\n";
     char buf[1]     = "";
-    char buf2[1024] = "";
+    char buf2[10] = "";
 
     socket_ptr->read_some(buffer(buf, 1));
     std::istringstream iss1(buf, std::istringstream::in);
