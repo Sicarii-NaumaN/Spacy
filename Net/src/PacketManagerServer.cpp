@@ -37,26 +37,6 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
                 root.add_child(std::to_string(j), tree);
                 break;
             }
-
-            case Object::Type::MAP:
-            {
-                auto ptr = std::static_pointer_cast<Map>(object[j]);
-                tree.put("type", "map");
-                tree.put("count_player", ptr->players_pts.size());
-
-                for (const auto &item : ptr->players_pts)
-                {
-                    tree.put(std::to_string(item.first), item.second);
-                }
-
-                root.add_child(std::to_string(j), tree);
-                break;
-            }
-
-            default:
-            {
-                break;
-            }
             } // switch
         }
     }

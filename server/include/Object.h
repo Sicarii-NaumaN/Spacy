@@ -7,7 +7,6 @@
 #include <vector>
 
 const static double DEFAULT_BULLET_SPEED  = 20;
-const static int    SHOT_COULDOWN_TICKS   = 15;
 const static int    BULLET_TICKS_LIFETIME = 100;
 
 const static int WINDOW_H = 800;
@@ -59,16 +58,6 @@ struct Vector
     }
 };
 
-struct Model
-{
-    float width;
-    float height;
-
-    Model(float w, float h)
-        : height(h)
-        , width(w) {}
-};
-
 class Object
 {
 public:
@@ -89,35 +78,6 @@ public:
     int    ID;
 };
 
-class PlayerState
-{
-public:
-    PlayerState()
-        : shot_cd_tick(0) {}
-    void get_state() { next_shot_tick(); }
-    bool is_shot_avaible() const { return(!is_shot_cd); }
-
-    void shot() { is_shot_cd = true; }
-
-private:
-    void next_shot_tick()
-    {
-        if (is_shot_cd)
-        {
-            shot_cd_tick++;
-
-            if (shot_cd_tick > SHOT_COULDOWN_TICKS)
-            {
-                is_shot_cd   = false;
-                shot_cd_tick = 0;
-            }
-        }
-    }
-
-    int  shot_cd_tick;
-    bool is_shot_cd;
-};
-
 class Player : public Object
 {
 public:
@@ -131,48 +91,10 @@ public:
     void setSpeedX(float vx) { speed.x = vx; }
     void setSpeedY(float vy) { speed.y = vy; }
 
-    PlayerState state_;
     Vector      speed;
     int         side;
 };
 
-class Map : public Object
-{
-public:
-    Map(int id, int durations_tick, std::vector<std::shared_ptr<Object> > plrs)
-        : Object(Type::MAP, id, Vector(0, 0))
-        , game_duration_ticks(durations_tick)
-        , players(move(plrs))
-        , map_centr(
-            { WINDOW_W / 2 },
-            { WINDOW_H / 2 })
-    {
-        for (const auto &player : players)
-        {
-            players_pts[player->ID] = 0;
-        }
-    }
-    void update() override {}
-
-    std::map<int, int> players_pts;
-
-private:
-    // TODO: Сделать добавление очков при попадании в соперника/его ворота
-
-    // void add_points_to_player(const std::shared_ptr<Object>& player) {
-    //     int position_rating = (map_centr.distance_between(player->position) /
-    //     ring_radius); if (position_rating < layers_count) {
-    //         players_pts[player->ID] += pts_table[pts_table.size() -
-    //         position_rating];
-    //         //           std::cout << "ID: " << player->ID << " +PTS: " <<
-    //         pts_table[position_rating] << std::endl;
-    //     }
-    // }
-    int                                   game_duration_ticks;
-    std::vector<std::shared_ptr<Object> > players;
-
-    Vector                                map_centr;
-};
 
 class Bullet : public Object
 {

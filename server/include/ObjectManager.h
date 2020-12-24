@@ -15,6 +15,7 @@ public:
     ObjectManager()
         : id_counter(0) {}
     void update_objects(std::shared_ptr<Object> changed_object);
+    void remove_object(int index);
     std::shared_ptr<Object> &get_object_by_id(int id);
     std::list<std::shared_ptr<Player>> get_users();
     std::unordered_map<int, std::shared_ptr<Object> > &get_objects_by_map();

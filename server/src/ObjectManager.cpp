@@ -24,6 +24,9 @@ std::shared_ptr<Object> &ObjectManager::get_object_by_id(int id)
     return(objects[id]);
 }
 
+void ObjectManager::remove_object(int index) {
+    objects.erase(index);
+}
 
 void ObjectManager::update_objects(std::shared_ptr<Object> changed_object)
 {

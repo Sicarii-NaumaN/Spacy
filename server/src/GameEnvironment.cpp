@@ -67,23 +67,32 @@ bool GameEnvironment::start_game()
             need_update = true;
 
             auto objects = object_manager.get_objects_by_map();
-            for (int i = 0; i < objects.size(); ++i) {
+
+            for (int i = 0; i < objects.size(); ++i)
+            {
                 auto obj = objects[i];
-                switch (obj->type) {
-                    case Object::Type::PLAYER: {
-                        obj->update();
-                        break;
+
+                switch (obj->type)
+                {
+                case Object::Type::PLAYER:
+                {
+                    obj->update();
+                    break;
+                }
+
+                case Object::Type::BULLET:
+                {
+                    obj->update();
+                    auto bullet = std::static_pointer_cast<Bullet>(obj);
+
+                    // TODO: Сделать очередь из пуль
+                    if (bullet->state == 0)
+                    {
+                        object_manager.remove_object(i);
+                        i--;
                     }
-                    case Object::Type::BULLET: {
-                        obj->update();
-                        auto bullet = std::static_pointer_cast<Bullet>(obj);
-                        // TODO: Сделать очередь из пуль
-                        if (bullet->lifetime <= 0) {
-                            objects.erase(i);
-                            i--;
-                        }
-                        break;
-                    }
+                    break;
+                }
                 }
             }
 
@@ -115,11 +124,6 @@ void GameEnvironment::initialize_objects()
     {
         players.push_back(object_manager.get_object_by_id(i));
     }
-
-    std::shared_ptr<Map> map = std::make_shared<Map>(
-        object_manager.pick_enable_id(), max_game_duration * FRAMES_PER_SECOND,
-        move(players));
-    object_manager.update_objects(map);
 }
 
 
@@ -153,17 +157,8 @@ void GameEnvironment::update_objects()
                 // Вычисляем его новое состояние
                 auto new_state = event->process(object, object_manager);
 
-                // Проверяем на столкновение с другими объектами
-                // if (!objectManager.collisionSolver.is_object_collided(objects,
-                // new_state)) {
-                if (1)
-                {
-                    // Если нет столкновений, обновляем состояние
-                    *object = *new_state;
-                    // objectManager.update_objects(New_state);
-                }
+                *object = *new_state;
             }
-            // Обрабатываем ивент из очереди
         }
     }
 } // GameEnvironment::update_objects
@@ -171,20 +166,21 @@ void GameEnvironment::update_objects()
 
 std::shared_ptr<Player> GameEnvironment::init_user(User &user)
 {
-    int                     id     = user.get_username();
+    int id = user.get_username();
     int side = id;
     int pos_x = 0, pos_y = 0;
     int speed_x = 0, speed_y = 0;
 
-    if (side == 0) {
+    if (side == 0)
+    {
         pos_x = 640;
         pos_y = 600;
     }
-    else if (side == 1) {
+    else if (side == 1)
+    {
         pos_x = 640;
         pos_y = 200;
     }
-
     std::shared_ptr<Player> player =
         std::make_shared<Player>(id, side, Vector(pos_x, pos_y), Vector(speed_x, speed_y));
 
