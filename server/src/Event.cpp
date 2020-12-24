@@ -31,39 +31,70 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 
     Player                  player = *sh_player.get();
 
-    float defaultSpeed = 10;
-    if (state == 1)
-        defaultSpeed = 0;
+    float                   defaultSpeed = 30;
 
     std::cout << "KEYSTATE IS " << state << std::endl;
 
-
-    //WASD - 0123
-    switch (key_code)
+    if (state == 0)
     {
-    case 0:
-        player.setSpeedY(-defaultSpeed);
-        player.setSpeedX(0);
-        break;
+        switch (key_code) //WASD - 0123
+        {
+        case 0:
+            player.setSpeedY(-defaultSpeed);
+            break;
 
-    case 1:
-        player.setSpeedX(-defaultSpeed);
-        player.setSpeedY(0);
-        break;
+        case 1:
+            player.setSpeedX(-defaultSpeed);
+            break;
 
-    case 2:
-        player.setSpeedY(defaultSpeed);
-        player.setSpeedX(0);
-        break;
+        case 2:
+            player.setSpeedY(defaultSpeed);
+            break;
 
-    case 3:
-        player.setSpeedX(defaultSpeed);
-        player.setSpeedY(0);
-        break;
+        case 3:
+            player.setSpeedX(defaultSpeed);
+            break;
+        }
     }
+    else
+    {
+        switch (key_code) //WASD - 0123
+        {
+        case 0:
 
-    std::cout << "SDLFKJSDLF" << player.position.x << ' ' << player.position.y
-              << std::endl;
+            if (player.speed.y < 0)
+            {
+                player.setSpeedY(0);
+            }
+            break;
+
+        case 1:
+
+            if (player.speed.x < 0)
+            {
+                player.setSpeedX(0);
+            }
+            break;
+
+        case 2:
+
+            if (player.speed.y > 0)
+            {
+                player.setSpeedY(0);
+            }
+            break;
+
+        case 3:
+
+            if (player.speed.x > 0)
+            {
+                player.setSpeedX(0);
+            }
+            break;
+        }
+    }
+    // std::cout << "SDLFKJSDLF" << player.position.x << ' ' << player.position.y
+    //           << std::endl;
     object_manager.update_objects(std::make_shared<Player>(player));
 
     return(std::make_shared<Player>(player));
