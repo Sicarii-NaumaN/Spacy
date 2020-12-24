@@ -50,12 +50,11 @@ int main()
     while (window.isOpen())
     {
         auto msg = actionServer.getMessage();
-
         for (auto m : msg)
         {
             switch (m->type)
             {
-            case Object::Type::PLAYER:
+            case ObjectInterface::Type::PLAYER:
             {
                 std::shared_ptr<PlayerInterface> player =
                     std::static_pointer_cast<PlayerInterface>(m);
@@ -127,9 +126,10 @@ int main()
                 {
                     auto pl_pos = graphics.getPlayerPosition();
                     actionServer.sendActionShot(
+                        pl_pos.x,
+                        pl_pos.y,
                         mousePos.x,
-                        mousePos.y,
-                        //SD:LFKJSDF:LSKJDF:SLDKJF:SLDKJF:SLDKJFS:LDKJF
+                        mousePos.y
                     );
                 }
             }
@@ -143,6 +143,22 @@ int main()
             last_tick = curr_time;
 
             graphics.drawField();
+            graphics.drawGates();
+            for (auto m : msg)
+            {
+                switch (m->type)
+                {
+                case ObjectInterface::Type::BULLET:
+                {
+                    std::shared_ptr<BulletInterface> bullet =
+                        std::static_pointer_cast<BulletInterface>(m);
+                    std::cout << "BULLET HERE: x = " << bullet->position.x << ", y = " << bullet->position.y << std::endl;
+                    graphics.drawBullet(bullet->position.x, bullet->position.y);
+
+                    break;
+                }
+                }
+            }
             graphics.drawPlayer();
             graphics.drawEnemy();
             graphics.drawFrontWall();

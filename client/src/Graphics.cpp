@@ -53,10 +53,15 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
 }
 
 
-sf::Vector2f getPlayerPosition() {
-    float x = player.position.x;
-    float y = player.position.y;
-    return sf::Vector2f(x, y);
+sf::Vector2f Graphics::getPlayerPosition() {
+    return player.getPosition();
+}
+
+void Graphics::drawGates() {
+    sf::CircleShape gates;
+    gates.setRadius(30.0);
+    gates.setPosition(1290, 400);
+    window.draw(gates);
 }
 
 void Graphics::drawShape(const sf::Texture &texture)

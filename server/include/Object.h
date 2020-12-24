@@ -8,7 +8,7 @@
 
 const static double DEFAULT_BULLET_SPEED  = 20;
 const static int    SHOT_COULDOWN_TICKS   = 15;
-const static int    BULLET_TICKS_LIVETIME = 250;
+const static int    BULLET_TICKS_LIFETIME = 100;
 
 const static int WINDOW_H = 800;
 const static int WINDOW_W = 1280;
@@ -35,16 +35,23 @@ struct Vector
         return
             { this->x * value, this->y * value };
     }
-    Vector normalize() {
-        float len = sqrt(sqr() + sqr(y));
-        return Vector(x / len, y / len);
+
+
+    Vector normalize()
+    {
+        float len = sqrt(x * x + y * y);
+
+        return(Vector(x / len, y / len));
     }
 
-    Vector setMag(float value) {
+
+    Vector setMag(float value)
+    {
         Vector normalized = this->normalize();
-        return normalized * value;
 
+        return(normalized * value);
     }
+
 
     float distance_between(const Vector &other) const
     {
@@ -178,24 +185,40 @@ public:
         , state(1) {}
 
 
+    void constrain()
+    {
+        int x = position.x;
+        int y = position.y;
+
+        if (x > 1280 || x < 0)
+        {
+            speed.x *= -1;
+        }
+
+        if (y > 770 || y < 0)
+        {
+            speed.y *= -1;
+        }
+        position = position + speed;
+    }
+
+
     void update() override
     {
-        if (state == BulletState::ACTIVE)
-        {
-            if (state == 0)
-            {
-                return;
-            }
+        if (state == 0) { return; }
 
-            if (lifetime == 0)
-            {
-                state = 0;
-                return;
-            }
-            lifetime--;
-            position = position + speed;
+        if (lifetime == 0)
+        {
+            state = 0;
+            return;
         }
+        lifetime--;
+
+        position = position + speed;
+        constrain();
     }
+
+
     Vector speed;
     int    lifetime;
     int    iniciator_ID;

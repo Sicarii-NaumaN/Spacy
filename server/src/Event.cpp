@@ -13,7 +13,7 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
 
     Vector speed = Vector(mouse_x - origin_x, mouse_y - origin_y);
 
-    speed = speed.setMag(10);
+    speed = speed.setMag(40);
 
     object_manager.update_objects(
         std::make_shared<Bullet>(

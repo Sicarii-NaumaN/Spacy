@@ -18,7 +18,8 @@ public:
     void drawFrontWall();
     void drawSideWalls();
     void drawField();
-
+    void drawGates();
+    
     void drawPlayer();
     void drawEnemy();
 

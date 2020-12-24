@@ -62,7 +62,7 @@ bool GameEnvironment::start_game()
 
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
         {
-            std::cout << current_game_duration.total_seconds() << std::endl;
+            //std::cout << current_game_duration.total_seconds() << std::endl;
             last_tick   = curr_time;
             need_update = true;
 
@@ -76,6 +76,12 @@ bool GameEnvironment::start_game()
                     }
                     case Object::Type::BULLET: {
                         obj->update();
+                        auto bullet = std::static_pointer_cast<Bullet>(obj);
+                        // TODO: Сделать очередь из пуль
+                        if (bullet->lifetime <= 0) {
+                            objects.erase(i);
+                            i--;
+                        }
                         break;
                     }
                 }

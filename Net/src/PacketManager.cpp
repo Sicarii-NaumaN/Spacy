@@ -31,8 +31,7 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             int side = tree.get("side", 0);
 
 
-            struct PlayerInterface pl(id, side, VectorInterface(x, y),
-                                      ModelInterface(3, 7));
+            struct PlayerInterface pl(id, side, VectorInterface(x, y));
 
             std::shared_ptr<ObjectInterface> ptr =
                 std::make_shared<PlayerInterface>(pl);
@@ -46,7 +45,11 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             int x  = tree.get("x", 0);
             int y  = tree.get("y", 0);
 
-            struct BulletInterface bullet()
+            struct BulletInterface bullet(id, VectorInterface(x, y));
+            std::shared_ptr<ObjectInterface> ptr =
+                std::make_shared<BulletInterface>(bullet);
+            vector.push_back(ptr);
+            break;
         }
 
             default : {

@@ -11,14 +11,6 @@ struct VectorInterface
         , y(ypos) {}
 };
 
-struct ModelInterface
-{
-    float width, height;
-    ModelInterface(int w, int h)
-        : height(h)
-        , width(w) {}
-};
-
 struct EventInterface
 {
     enum EventType
@@ -83,21 +75,19 @@ struct ObjectInterface
         MAP
     };
     VectorInterface position;
-    ModelInterface  model;
     Type            type;
     int             ID;
-    ObjectInterface(Type t, int id, VectorInterface pos, ModelInterface mod)
+    ObjectInterface(Type t, int id, VectorInterface pos)
         : type(t)
         , ID(id)
-        , position(pos)
-        , model(mod) {}
+        , position(pos) {}
 };
 
 struct PlayerInterface : ObjectInterface
 {
     int side;
-    PlayerInterface(int id, int side, VectorInterface pos, ModelInterface mod)
-        : ObjectInterface(Type::PLAYER, id, pos, mod)
+    PlayerInterface(int id, int side, VectorInterface pos)
+        : ObjectInterface(Type::PLAYER, id, pos)
         , side(side) {}
 };
 
