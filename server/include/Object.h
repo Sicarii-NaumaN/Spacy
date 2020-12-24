@@ -10,8 +10,8 @@ const static double DEFAULT_BULLET_SPEED  = 20;
 const static int    SHOT_COULDOWN_TICKS   = 15;
 const static int    BULLET_TICKS_LIVETIME = 250;
 
-const static int    WINDOW_H = 800;
-const static int    WINDOW_W = 1280;
+const static int WINDOW_H = 800;
+const static int WINDOW_W = 1280;
 
 struct Vector
 {
@@ -35,7 +35,16 @@ struct Vector
         return
             { this->x * value, this->y * value };
     }
+    Vector normalize() {
+        float len = sqrt(sqr() + sqr(y));
+        return Vector(x / len, y / len);
+    }
 
+    Vector setMag(float value) {
+        Vector normalized = this->normalize();
+        return normalized * value;
+
+    }
 
     float distance_between(const Vector &other) const
     {
@@ -161,12 +170,12 @@ private:
 class Bullet : public Object
 {
 public:
-    Bullet(int id, int iniciator_id, Vector pos, Vector speed, )
+    Bullet(int id, int iniciator_id, Vector pos, Vector speed)
         : Object(Type::BULLET, id, pos)
         , iniciator_ID(iniciator_id)
         , speed(speed)
-        , lifetime(BULLET_TICKS_LIFETIME),
-        , state(1){}
+        , lifetime(BULLET_TICKS_LIFETIME)
+        , state(1) {}
 
 
     void update() override
@@ -174,8 +183,12 @@ public:
         if (state == BulletState::ACTIVE)
         {
             if (state == 0)
+            {
                 return;
-            if (lifetime == 0) {
+            }
+
+            if (lifetime == 0)
+            {
                 state = 0;
                 return;
             }
@@ -186,5 +199,5 @@ public:
     Vector speed;
     int    lifetime;
     int    iniciator_ID;
-    bool state;
+    bool   state;
 };

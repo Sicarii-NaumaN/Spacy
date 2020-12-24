@@ -66,9 +66,19 @@ bool GameEnvironment::start_game()
             last_tick   = curr_time;
             need_update = true;
 
-            auto players = object_manager.get_users();
-            for (auto player : players) {
-                player->update();
+            auto objects = object_manager.get_objects_by_map();
+            for (int i = 0; i < objects.size(); ++i) {
+                auto obj = objects[i];
+                switch (obj->type) {
+                    case Object::Type::PLAYER: {
+                        obj->update();
+                        break;
+                    }
+                    case Object::Type::BULLET: {
+                        obj->update();
+                        break;
+                    }
+                }
             }
 
             net_server.notify_all_users(object_manager.get_objects_by_map());

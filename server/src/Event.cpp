@@ -9,12 +9,21 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
     Player                  player    = *sh_player.get();
 
     // if (sh_player->state_.is_shot_avaible())
-        // {
-        object_manager.update_objects(
-            std::make_shared<Bullet>(object_manager.pick_enable_id(),
-                                     bullet_postiton, player.speed, player.ID));
-        player.state_.shot();
-        sh_player->state_.shot();
+    // {
+
+    Vector speed = Vector(mouse_x - origin_x, mouse_y - origin_y);
+
+    speed = speed.setMag(10);
+
+    object_manager.update_objects(
+        std::make_shared<Bullet>(
+            object_manager.pick_enable_id(),
+            player.ID,
+            Vector(origin_x, origin_y),
+            speed)
+        );
+    // player.state_.shot();
+    // sh_player->state_.shot();
     // }
     return(std::make_shared<Player>(player));
 }
@@ -25,9 +34,9 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 {
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
 
-    Player                  player = *sh_player.get();
+    Player player = *sh_player.get();
 
-    float                   defaultSpeed = 30;
+    float defaultSpeed = 30;
 
     std::cout << "KEYSTATE IS " << state << std::endl;
 
