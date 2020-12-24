@@ -64,6 +64,10 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
     {
         auto ptr = std::static_pointer_cast<ShotInterface>(event);
         root.put("type", "shot");
+        root.put("origin_x", ptr->origin_x);
+        root.put("origin_y", ptr->origin_y);
+        root.put("mouse_x", ptr->mouse_x);
+        root.put("mouse_y", ptr->mouse_y);
         break;
     }
 
@@ -72,6 +76,9 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
         auto ptr = std::static_pointer_cast<KeyPressedEvent>(event);
         root.put("type", "keypressed");
         root.put("keycode", ptr->keyCode);
+        root.put("mouse_x", ptr->mouse_x);
+        root.put("mouse_y", ptr->mouse_y);
+        root.put("state", ptr->state);
         break;
     }
 

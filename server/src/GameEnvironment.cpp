@@ -54,12 +54,6 @@ bool GameEnvironment::start_game()
     boost::posix_time::time_duration current_tick_duration;
     auto                             last_tick = boost::posix_time::microsec_clock::universal_time();
 
-    std::cout << "[TIMER] "
-              << "CURRENT = " << current_game_duration.total_seconds()
-              << std::endl;
-    std::cout << "[TIMER] "
-              << "MAXIMUM = " << max_game_duration << std::endl;
-
     // Главный таймер
     while (current_game_duration.total_seconds() < max_game_duration)
     {
@@ -71,6 +65,12 @@ bool GameEnvironment::start_game()
             std::cout << current_game_duration.total_seconds() << std::endl;
             last_tick   = curr_time;
             need_update = true;
+
+            auto players = object_manager.get_users();
+            for (auto player : players) {
+                player->update();
+            }
+
             net_server.notify_all_users(object_manager.get_objects_by_map());
         }
         curr_time             = boost::posix_time::microsec_clock::universal_time();

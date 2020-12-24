@@ -56,7 +56,6 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config)
     setWindowIcon();
 }
 
-
 void Graphics::drawShape(const sf::Texture &texture)
 {
     sf::ConvexShape field(4);
@@ -77,7 +76,6 @@ void Graphics::drawShape(const sf::Texture &texture)
     field.setTexture(&texture);
     window.draw(field, transform);
 }
-
 
 void Graphics::drawSideWalls()
 {
@@ -121,7 +119,6 @@ void Graphics::drawSideWalls()
     window.draw(right_wall, transform);
 }
 
-
 void Graphics::drawBackWall()
 {
     float           w = config.window_width;
@@ -153,7 +150,6 @@ void Graphics::drawBackWall()
 
     window.draw(back_wall, transform);
 }
-
 
 void Graphics::drawFrontWall()
 {
@@ -187,7 +183,6 @@ void Graphics::drawFrontWall()
     window.draw(front_wall, transform);
 }
 
-
 void Graphics::drawField()
 {
     sf::RectangleShape background;
@@ -210,7 +205,6 @@ void Graphics::drawField()
     drawBackWall();                // Задняя стенка
     drawSideWalls();               // Боковые стены
 }
-
 
 void Graphics::movePlayerTo(float x, float y)
 {

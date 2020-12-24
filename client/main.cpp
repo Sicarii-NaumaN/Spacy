@@ -58,8 +58,8 @@ int main()
             {
                 std::shared_ptr<PlayerInterface> player =
                     std::static_pointer_cast<PlayerInterface>(m);
-                std::cout << player->position.x << ' ' << player->position.y
-                          << std::endl;
+                // std::cout << player->position.x << ' ' << player->position.y
+                //           << std::endl;
                 graphics.movePlayerTo(player->position.x, player->position.y);
                 break;
             }
@@ -123,8 +123,8 @@ int main()
             graphics.drawField();
             graphics.drawPlayer();
             graphics.drawFrontWall();
-            window.display();
         }
+        window.display();
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
     return(0);

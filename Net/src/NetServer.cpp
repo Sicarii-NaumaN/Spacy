@@ -51,8 +51,6 @@ void NetServer::notify_all_users(std::unordered_map<int, std::shared_ptr<Object>
     for (auto &item : users)
     {
         int str = buf.size();
-        std::cout << "WRITING TO USER\n";
-        std::cout << buf << std::endl;
         item.sock->write_some(
             buffer(std::to_string(std::to_string(str).size()), 1));
         item.sock->write_some(buffer(std::to_string(str), 10));
@@ -104,7 +102,7 @@ int NetServer::do_read_header(User &user)
               << "Reading size of message" << std::endl;
     char buf[1024] = "";
 
-    user.sock->read_some(buffer(buf, 2));
+    user.sock->read_some(buffer(buf, 3));
     std::cout << "[NET SERVER] "
               << "Message===================" << std::endl;
     std::cout << buf;

@@ -7,8 +7,10 @@ PlayerModel::PlayerModel(float startX, float startY, float width, float height,
     , sightToX(sightToX)
     , sightToY(sightToY)
 {
-    position.x = startX;
-    position.y = startY;
+    position =
+    {
+        startX, startY
+    };
     sprite.setPosition(position.x, position.y);
 }
 
@@ -36,28 +38,10 @@ void PlayerModel::setTexture(const sf::Texture &texture)
 
 void PlayerModel::setPosition(float x, float y)
 {
-    position.x = x;
-    position.y = y;
-
-    float wall_offset = 20;
-
-    if (position.x > 1280 - wall_offset)
+    position =
     {
-        position.x = 1280 - wall_offset;
-    }
-    else if (position.x < 0 + wall_offset)
-    {
-        position.x = 0 + wall_offset;
-    }
-
-    if (position.y > 725)
-    {
-        position.y = 725;
-    }
-    else if (position.y < 550)
-    {
-        position.y = 550;
-    }
+        x, y
+    };
 }
 
 

@@ -11,7 +11,7 @@
 #include <PacketManagerServer.h>
 #include <queue>
 
-const static unsigned int FRAMES_PER_SECOND = 15;
+const static unsigned int FRAMES_PER_SECOND = 10;
 const static unsigned int MAX_PLAYERS       = 30;
 
 class GameEnvironment

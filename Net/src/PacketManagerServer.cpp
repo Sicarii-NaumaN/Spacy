@@ -82,8 +82,12 @@ std::shared_ptr<Event> PacketManagerServer::packet_adaptation_server(ptree &root
     {
     case 2:
     {
-        int  id   = root.get("IDuser", 0);
-        auto shot = Shot(id);
+        int  id       = root.get("IDuser", 0);
+        int  mouse_x  = root.get("mouse_x", 0);
+        int  mouse_y  = root.get("mouse_y", 0);
+        int  origin_x = root.get("origin_x", 0);
+        int  origin_y = root.get("origin_y", 0);
+        auto shot     = Shot(id, mouse_x, mouse_y, origin_x, origin_y);
         ptr = std::make_shared<Shot>(shot);
         break;
     }
@@ -92,7 +96,10 @@ std::shared_ptr<Event> PacketManagerServer::packet_adaptation_server(ptree &root
     {
         int  id       = root.get("IDuser", 0);
         int  key_code = root.get("keycode", 0);
-        auto keypress = KeyPressed(id, key_code);
+        int  mouse_x  = root.get("mouse_x", 0);
+        int  mouse_y  = root.get("mouse_y", 0);
+        int  state    = root.get("state", 0);
+        auto keypress = KeyPressed(id, key_code, mouse_x, mouse_y, state);
         ptr = std::make_shared<KeyPressed>(keypress);
         break;
     }
@@ -103,4 +110,4 @@ std::shared_ptr<Event> PacketManagerServer::packet_adaptation_server(ptree &root
     }
     }
     return(ptr);
-}
+} // PacketManagerServer::packet_adaptation_server

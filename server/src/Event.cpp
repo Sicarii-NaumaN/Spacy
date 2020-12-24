@@ -28,17 +28,43 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
                                             ObjectManager           &object_manager)
 {
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
-    Player                  player    = *sh_player.get();
 
-    float                   defaultSpeed = 5;
+    Player                  player = *sh_player.get();
 
-    std::cout << "HELLO BLAYT\n";
+    float defaultSpeed = 10;
+    if (state == 1)
+        defaultSpeed = 0;
 
-    player.setSpeed(defaultSpeed, 0);
-    player.update();
+    std::cout << "KEYSTATE IS " << state << std::endl;
+
+
+    //WASD - 0123
+    switch (key_code)
+    {
+    case 0:
+        player.setSpeedY(-defaultSpeed);
+        player.setSpeedX(0);
+        break;
+
+    case 1:
+        player.setSpeedX(-defaultSpeed);
+        player.setSpeedY(0);
+        break;
+
+    case 2:
+        player.setSpeedY(defaultSpeed);
+        player.setSpeedX(0);
+        break;
+
+    case 3:
+        player.setSpeedX(defaultSpeed);
+        player.setSpeedY(0);
+        break;
+    }
+
     std::cout << "SDLFKJSDLF" << player.position.x << ' ' << player.position.y
               << std::endl;
     object_manager.update_objects(std::make_shared<Player>(player));
 
     return(std::make_shared<Player>(player));
-}
+} // KeyPressed::process

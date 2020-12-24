@@ -7,6 +7,7 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <list>
 
 class ObjectManager
 {
@@ -15,6 +16,7 @@ public:
         : id_counter(0) {}
     void update_objects(std::shared_ptr<Object> changed_object);
     std::shared_ptr<Object> &get_object_by_id(int id);
+    std::list<std::shared_ptr<Player>> get_users();
     std::unordered_map<int, std::shared_ptr<Object> > &get_objects_by_map();
     int pick_enable_id() const;
 

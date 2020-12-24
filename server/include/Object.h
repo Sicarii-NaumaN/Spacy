@@ -113,6 +113,8 @@ public:
     void update() override { position = position + speed; }
 
     void setSpeed(float vx, float vy) { speed = Vector(vx, vy); }
+    void setSpeedX(float vx) { speed.x = vx; }
+    void setSpeedY(float vy) { speed.y = vy; }
 
     PlayerState state_;
     Vector      speed;
