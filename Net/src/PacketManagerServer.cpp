@@ -6,7 +6,13 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
 {
     ptree root;
 
-    root.put("object", object.size());
+    int size = 0;
+    for (auto obj : object) {
+        if (obj.second != nullptr)
+            size++;
+    }
+
+    root.put("object", size);
 
     for (int j = 0; j < object.size(); ++j)
     {

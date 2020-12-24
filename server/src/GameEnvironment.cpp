@@ -37,17 +37,15 @@ bool GameEnvironment::start_game()
 
     initialize_objects();
     game_is_active = true;
-    std::cout << "[GAME ENV] "
-              << "Updating objects" << std::endl;
+    std::cout << "[GAME ENV] " << "Updating objects" << std::endl;
     boost::thread th([&]() {
         this->update_objects();
     });
-    std::cout << "[GAME ENV] "
-              << "Objects updated" << std::endl;
+    // boost::thread th(boost::bind(&(this->update_objects), this, boost::ref(object_manager)));
+    std::cout << "[GAME ENV] " << "Objects updated" << std::endl;
     threads.push_back(move(th));
 
-    std::cout << "[GAME ENV] "
-              << "Starting main game cycle" << std::endl;
+    std::cout << "[GAME ENV] " << "Starting main game cycle" << std::endl;
     // Определяем переменные времени
     auto                             round_start = boost::posix_time::microsec_clock::universal_time();
     boost::posix_time::time_duration current_game_duration;
@@ -62,56 +60,24 @@ bool GameEnvironment::start_game()
 
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
         {
-            //std::cout << current_game_duration.total_seconds() << std::endl;
             last_tick   = curr_time;
-            need_update = true;
-
-            auto objects = object_manager.get_objects_by_map();
-
-            for (int i = 0; i < objects.size(); ++i)
-            {
-                auto obj = objects[i];
-
-                switch (obj->type)
-                {
-                case Object::Type::PLAYER:
-                {
-                    obj->update();
-                    break;
-                }
-
-                case Object::Type::BULLET:
-                {
-                    obj->update();
-                    auto bullet = std::static_pointer_cast<Bullet>(obj);
-
-                    // TODO: Сделать очередь из пуль
-                    if (bullet->state == 0)
-                    {
-                        object_manager.remove_object(i);
-                        i--;
-                    }
-                    break;
-                }
-                }
-            }
-
+            std::cout << "BEFORE KILL " << object_manager.get_objects_by_map().size() << std::endl;
+            object_manager.update_all_and_kill_dead_bullets();
+            std::cout << "AFTER KILL " << object_manager.get_objects_by_map().size() << std::endl;
             net_server.notify_all_users(object_manager.get_objects_by_map());
+            std::cout << "AFTER NOTIFICATION " << object_manager.get_objects_by_map().size() << std::endl;
+            need_update = true;
         }
         curr_time             = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
     }
-    std::cout << "[GAME ENV] "
-              << "Game over" << std::endl;
+    std::cout << "[GAME ENV] " << "Game over" << std::endl;
     game_is_active = false;
 
     for (auto &th : threads)
-    {
         th.join();
-    }
 
-    std::cout << "[GAME ENV] "
-              << "Exiting..." << std::endl;
+    std::cout << "[GAME ENV] " << "Exiting..." << std::endl;
     return(0);
 } // GameEnvironment::start_game
 
@@ -132,15 +98,14 @@ void GameEnvironment::update_objects()
     while (game_is_active)
     {
         // Получаем объекты
-        std::unordered_map<int, std::shared_ptr<Object> > &objects =
-            object_manager.get_objects_by_map();
+        // std::unordered_map<int, std::shared_ptr<Object> > &objects =
+        //     object_manager.get_objects_by_map();
 
         // Проверка на столкновения
         if (need_update)
         {
-            // TODO: отскок шарика от стен
             need_update = false;
-            // Обновляем состояние объектов, проверяем на коллизии в новом состоянии
+
         }
         else
         {
@@ -148,15 +113,10 @@ void GameEnvironment::update_objects()
 
             if (!event_queue.empty())
             {
-                // Тащим событие из очереди
                 std::shared_ptr<Event> event = event_queue.front();
                 event_queue.pop();
-
-                // Получаем объект, к которому относится событие
-                auto object = object_manager.get_object_by_id(event->IniciatorID);
-                // Вычисляем его новое состояние
+                auto object    = object_manager.get_object_by_id(event->IniciatorID);
                 auto new_state = event->process(object, object_manager);
-
                 *object = *new_state;
             }
         }
@@ -196,7 +156,7 @@ void GameEnvironment::serve_user(User &user)
     while (game_is_active)
     {
         std::shared_ptr<Event> event = net_server.get_client_action(user);
-        // * DEBUG * //
+
         std::cout << "server: EVENT RECEIVED!" << std::endl;
 
         std::lock_guard<std::mutex> lock(events_mutex);
