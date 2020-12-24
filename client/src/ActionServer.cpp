@@ -45,6 +45,9 @@ void ActionServer::connectClient()
     netClient.connect_to_server(addr_server, port);
 }
 
+int ActionServer::getId() {
+    return netClient.get_id();
+}
 
 void ActionServer::closeConnection()
 {

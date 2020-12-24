@@ -95,8 +95,10 @@ struct ObjectInterface
 
 struct PlayerInterface : ObjectInterface
 {
-    PlayerInterface(int id, VectorInterface pos, ModelInterface mod)
-        : ObjectInterface(Type::PLAYER, id, pos, mod) {}
+    int side;
+    PlayerInterface(int id, int side, VectorInterface pos, ModelInterface mod)
+        : ObjectInterface(Type::PLAYER, id, pos, mod)
+        , side(side) {}
 };
 
 struct BulletStateInterface

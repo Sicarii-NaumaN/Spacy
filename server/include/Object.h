@@ -107,9 +107,10 @@ private:
 class Player : public Object
 {
 public:
-    Player(int id, Vector pos, Vector speed)
+    Player(int id, int side, Vector pos, Vector speed)
         : Object(Type::PLAYER, id, pos, Model(26, 26))
-        , speed(speed) {}
+        , speed(speed)
+        , side(side) {}
     void update() override { position = position + speed; }
 
     void setSpeed(float vx, float vy) { speed = Vector(vx, vy); }
@@ -118,6 +119,7 @@ public:
 
     PlayerState state_;
     Vector      speed;
+    int side;
 };
 
 class Map : public Object

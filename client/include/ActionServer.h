@@ -32,6 +32,7 @@ public:
     void sendKeyPressedAction(int keyCode, int mx, int my);
     void sendKeyReleasedAction(int keyCode, int mx, int my);
     void sendActionShot(int ox, int oy, int mx, int my);
+    int getId();
 
     std::vector<std::shared_ptr<ObjectInterface> > getMessage();
 };

@@ -23,13 +23,15 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
         {
         case Object::Type::PLAYER:
         {
-            int                              id = tree.get("id", 0);
-            int                              x  = tree.get("x", 0);
-            int                              y  = tree.get("y", 0);
-            int                              w  = tree.get("w", 0);
-            int                              h  = tree.get("h", 0);
+            int id   = tree.get("id", 0);
+            int x    = tree.get("x", 0);
+            int y    = tree.get("y", 0);
+            int w    = tree.get("w", 0);
+            int h    = tree.get("h", 0);
+            int side = tree.get("side", 0);
 
-            struct PlayerInterface           pl(id, VectorInterface(x, y),
+
+            struct PlayerInterface           pl(id, side, VectorInterface(x, y),
                                                 ModelInterface(3, 7));
             std::shared_ptr<ObjectInterface> ptr =
                 std::make_shared<PlayerInterface>(pl);
@@ -90,4 +92,4 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
     std::stringstream buf;
     write_json(buf, root);
     return(buf.str());
-}
+} // PacketManager::packet_handle_client

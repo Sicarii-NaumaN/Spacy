@@ -156,8 +156,21 @@ void GameEnvironment::update_objects()
 std::shared_ptr<Player> GameEnvironment::init_user(User &user)
 {
     int                     id     = user.get_username();
+    int side = id;
+    int pos_x = 0, pos_y = 0;
+    int speed_x = 0, speed_y = 0;
+
+    if (side == 0) {
+        pos_x = 640;
+        pos_y = 600;
+    }
+    else if (side == 1) {
+        pos_x = 640;
+        pos_y = 200;
+    }
+
     std::shared_ptr<Player> player =
-        std::make_shared<Player>(id, Vector(0, 0), Vector(0, 0));
+        std::make_shared<Player>(id, side, Vector(pos_x, pos_y), Vector(speed_x, speed_y));
 
     return(player);
 }

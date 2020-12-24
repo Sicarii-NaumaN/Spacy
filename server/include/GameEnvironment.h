@@ -44,5 +44,5 @@ private:
 
     bool       need_update;
     bool       game_is_active;
-    int        player_count = 1;
+    int        player_count = 2;
 };
