@@ -62,15 +62,13 @@ public:
         BULLET,
         MAP
     };
-    Object(Type t, int id, Vector pos, Model mod)
+    Object(Type t, int id, Vector pos)
         : type(t)
         , ID(id)
-        , position(pos)
-        , model(mod) {}
+        , position(pos) {}
     virtual void update() = 0;
 
     Vector position;
-    Model  model;
     Type   type;
     int    ID;
 };
@@ -108,7 +106,7 @@ class Player : public Object
 {
 public:
     Player(int id, int side, Vector pos, Vector speed)
-        : Object(Type::PLAYER, id, pos, Model(26, 26))
+        : Object(Type::PLAYER, id, pos)
         , speed(speed)
         , side(side) {}
     void update() override { position = position + speed; }
@@ -119,14 +117,14 @@ public:
 
     PlayerState state_;
     Vector      speed;
-    int side;
+    int         side;
 };
 
 class Map : public Object
 {
 public:
     Map(int id, int durations_tick, std::vector<std::shared_ptr<Object> > plrs)
-        : Object(Type::MAP, id, Vector(0, 0), Model(0, 0))
+        : Object(Type::MAP, id, Vector(0, 0))
         , game_duration_ticks(durations_tick)
         , players(move(plrs))
         , map_centr(
@@ -160,68 +158,33 @@ private:
     Vector                                map_centr;
 };
 
-class BulletState
-{
-public:
-    enum State
-    {
-        ACTIVE,
-        INACTIVE
-    };
-    BulletState()
-        : state_(State::ACTIVE)
-        , live_tick(0) {}
-
-
-    void state_to_inactive()
-    {
-        if (state_ == State::ACTIVE)
-        {
-            state_ = State::INACTIVE;
-        }
-    }
-
-
-    State get_state()
-    {
-        next_tick();
-        return(state_);
-    }
-
-private:
-    void next_tick()
-    {
-        live_tick++;
-
-        if (live_tick > BULLET_TICKS_LIVETIME)
-        {
-            state_    = State::INACTIVE;
-            live_tick = 0;
-        }
-    }
-    int   live_tick;
-    State state_;
-};
-
 class Bullet : public Object
 {
 public:
-    Bullet(int id, Vector pos, Vector sight, int iniciator_id)
-        : Object(Type::BULLET, id, pos, Model(7, 7))
-        , sight(sight)
-        , speed(DEFAULT_BULLET_SPEED)
-        , iniciator_ID(iniciator_id) {}
+    Bullet(int id, int iniciator_id, Vector pos, Vector speed, )
+        : Object(Type::BULLET, id, pos)
+        , iniciator_ID(iniciator_id)
+        , speed(speed)
+        , lifetime(BULLET_TICKS_LIFETIME),
+        , state(1){}
 
 
     void update() override
     {
-        if (state.get_state() == BulletState::ACTIVE)
+        if (state == BulletState::ACTIVE)
         {
-            position = position + sight * speed;
+            if (state == 0)
+                return;
+            if (lifetime == 0) {
+                state = 0;
+                return;
+            }
+            lifetime--;
+            position = position + speed;
         }
     }
-    BulletState state;
-    Vector      sight;
-    int         iniciator_ID;
-    double      speed;
+    Vector speed;
+    int    lifetime;
+    int    iniciator_ID;
+    bool state;
 };

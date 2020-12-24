@@ -7,7 +7,7 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
     // std::cout << "[Adaptation] Starting adaptation...\n";
     std::vector<std::shared_ptr<ObjectInterface> > vector;
 
-    std::map<std::string, int>                     mp;
+    std::map<std::string, int> mp;
 
     mp["player"] = Object::Type::PLAYER;
     mp["bullet"] = Object::Type::BULLET;
@@ -31,18 +31,27 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             int side = tree.get("side", 0);
 
 
-            struct PlayerInterface           pl(id, side, VectorInterface(x, y),
-                                                ModelInterface(3, 7));
+            struct PlayerInterface pl(id, side, VectorInterface(x, y),
+                                      ModelInterface(3, 7));
+
             std::shared_ptr<ObjectInterface> ptr =
                 std::make_shared<PlayerInterface>(pl);
             vector.push_back(ptr);
             break;
         }
 
-        default:
+        case Object::Type::BULLET:
         {
-            break;
+            int id = tree.get("id", 0);
+            int x  = tree.get("x", 0);
+            int y  = tree.get("y", 0);
+
+            struct BulletInterface bullet()
         }
+
+            default : {
+                break;
+            }
         }
     }
 

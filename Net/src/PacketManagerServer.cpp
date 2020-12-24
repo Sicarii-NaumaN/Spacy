@@ -23,8 +23,6 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
                 tree.put("id", ptr->ID);
                 tree.put("x", (int)ptr->position.x);
                 tree.put("y", (int)ptr->position.y);
-                tree.put("w", (int)ptr->model.width);
-                tree.put("h", (int)ptr->model.height);
                 tree.put("side", ptr->side);
                 root.add_child(std::to_string(j), tree);
                 break;

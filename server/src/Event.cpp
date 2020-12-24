@@ -8,18 +8,14 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
     Player                  player    = *sh_player.get();
 
-    if (sh_player->state_.is_shot_avaible())
-    {
-        // sh_player->sight = player.normalize(sight);
-        Vector bullet_postiton =
-            player.position +
-            Vector(player.model.width / 2.0, player.model.height / 2.0);
+    // if (sh_player->state_.is_shot_avaible())
+        // {
         object_manager.update_objects(
             std::make_shared<Bullet>(object_manager.pick_enable_id(),
                                      bullet_postiton, player.speed, player.ID));
         player.state_.shot();
         sh_player->state_.shot();
-    }
+    // }
     return(std::make_shared<Player>(player));
 }
 

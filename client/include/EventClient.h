@@ -101,29 +101,11 @@ struct PlayerInterface : ObjectInterface
         , side(side) {}
 };
 
-struct BulletStateInterface
-{
-    enum State
-    {
-        ACTIVE,
-        INACTIVE
-    };
-    BulletStateInterface()
-        : state_(State::ACTIVE)
-        , live_tick(0) {}
-    int   live_tick;
-    State state_;
-};
 
 struct BulletInterface : ObjectInterface
 {
-    BulletInterface(int id, VectorInterface pos, int iniciator_id)
-        : ObjectInterface(Type::BULLET, id, pos, ModelInterface(15, 15))
-        , speed(DEFAULT_BULLET_SPEED_CLIENT)
-        , iniciator_ID(iniciator_id) {}
-    BulletStateInterface state;
-    int                  iniciator_ID;
-    int                  speed;
+    BulletInterface(int id, VectorInterface pos)
+        : ObjectInterface(Type::BULLET, id, pos) {}
 };
 
 #endif // SPACY_EVENT_H
