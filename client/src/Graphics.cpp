@@ -1,8 +1,9 @@
 #include "Graphics.h"
 
-Graphics::Graphics(sf::RenderWindow &window, const Config &config)
+Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
     : window(window)
     , config(config)
+    , flipped(flipped)
 {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
 
@@ -40,13 +41,8 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config)
     transform.translate(0, -100);
 
     player.setTexture(player_texture[5]);
-    player.resize(0.20, 0.20);
-    player.setPosition(500, 400);
 
     enemy.setTexture(enemy_texture[5]);
-    enemy.resize(0.10, 0.10);
-    enemy.setPosition(500, 750);
-    //    enemy.setTexture(enemy_texture);
 
     // Параметры проецирования:
     // Угол наклона плоскости проецирования
@@ -55,6 +51,7 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config)
 
     setWindowIcon();
 }
+
 
 void Graphics::drawShape(const sf::Texture &texture)
 {
@@ -76,6 +73,7 @@ void Graphics::drawShape(const sf::Texture &texture)
     field.setTexture(&texture);
     window.draw(field, transform);
 }
+
 
 void Graphics::drawSideWalls()
 {
@@ -119,6 +117,7 @@ void Graphics::drawSideWalls()
     window.draw(right_wall, transform);
 }
 
+
 void Graphics::drawBackWall()
 {
     float           w = config.window_width;
@@ -150,6 +149,7 @@ void Graphics::drawBackWall()
 
     window.draw(back_wall, transform);
 }
+
 
 void Graphics::drawFrontWall()
 {
@@ -183,6 +183,7 @@ void Graphics::drawFrontWall()
     window.draw(front_wall, transform);
 }
 
+
 void Graphics::drawField()
 {
     sf::RectangleShape background;
@@ -205,6 +206,7 @@ void Graphics::drawField()
     drawBackWall();                // Задняя стенка
     drawSideWalls();               // Боковые стены
 }
+
 
 void Graphics::movePlayerTo(float x, float y)
 {
@@ -283,5 +285,8 @@ void Graphics::drawEnemy()
 
 void Graphics::moveEnemyTo(float x, float y)
 {
-    enemy.setPosition(x, y);
+    float w = config.window_width;
+    float h = config.window_height;
+
+    enemy.setPosition(w - x, h - y);
 }

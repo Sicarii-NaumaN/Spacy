@@ -33,7 +33,8 @@ int main()
 
     sf::RenderWindow window(
         sf::VideoMode(config.window_width, config.window_height), "Spacy");
-    Graphics         graphics(window, config);
+
+    Graphics         graphics(window, config, actionServer.getId() % 2 == 1);
 
     // graphics.movePlayerTo(x, y);
 
@@ -61,7 +62,7 @@ int main()
 
                 // std::cout << player->position.x << ' ' << player->position.y
                 //           << std::endl;
-                if (player->side == actionServer.getId())
+                if (player->ID == actionServer.getId())
                 {
                     graphics.movePlayerTo(player->position.x, player->position.y);
                 }

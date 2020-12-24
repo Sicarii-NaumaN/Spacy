@@ -29,7 +29,7 @@ public:
 
     void setWindowIcon();
 
-    explicit Graphics(sf::RenderWindow &window, const Config &config);
+    explicit Graphics(sf::RenderWindow &window, const Config &config, bool flipped = false);
     virtual ~Graphics() = default;
 
 private:
@@ -51,6 +51,7 @@ private:
     sf::Transform    transform;
 
     Projector        projector;
+    bool flipped;
 };
 
 #endif // SPACY_GRAPHICS_H
