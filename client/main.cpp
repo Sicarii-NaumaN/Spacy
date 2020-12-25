@@ -162,8 +162,10 @@ int main()
             graphics.drawPlayer();
             graphics.drawEnemy();
             graphics.drawFrontWall();
+            window.clear();
+            window.display();
         }
-        window.display();
+        
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
     return(0);
