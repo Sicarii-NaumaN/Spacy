@@ -35,7 +35,7 @@ bool GameEnvironment::start_game()
         threads.push_back(move(th));
     }
 
-    initialize_objects();
+//    initialize_objects();
     game_is_active = true;
     std::cout << "[GAME ENV] " << "Updating objects" << std::endl;
     boost::thread th([&]() {
@@ -134,12 +134,12 @@ std::shared_ptr<Player> GameEnvironment::init_user(User &user)
     if (side == 0)
     {
         pos_x = 640;
-        pos_y = 600;
+        pos_y = 700;
     }
     else if (side == 1)
     {
         pos_x = 640;
-        pos_y = 200;
+        pos_y = 700;
     }
     std::shared_ptr<Player> player =
         std::make_shared<Player>(id, side, Vector(pos_x, pos_y), Vector(speed_x, speed_y));

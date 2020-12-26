@@ -58,10 +58,14 @@ sf::Vector2f Graphics::getPlayerPosition() {
 }
 
 void Graphics::drawGates() {
-    sf::CircleShape gates;
-    gates.setRadius(30.0);
-    gates.setPosition(1290, 400);
-    window.draw(gates);
+    sf::CircleShape gates_first;
+    gates_first.setRadius(25.0);
+    gates_first.setPosition(615, 650 );
+    window.draw(gates_first);
+    sf::CircleShape gates_second;
+    gates_second.setRadius(7.0);
+    gates_second.setPosition(635, 435 );
+    window.draw(gates_second);
 }
 
 void Graphics::drawShape(const sf::Texture &texture)

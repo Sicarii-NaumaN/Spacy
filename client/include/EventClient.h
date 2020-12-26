@@ -77,6 +77,7 @@ struct ObjectInterface
     VectorInterface position;
     Type            type;
     int             ID;
+
     ObjectInterface(Type t, int id, VectorInterface pos)
         : type(t)
         , ID(id)

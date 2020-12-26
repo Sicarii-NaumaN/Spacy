@@ -18,9 +18,9 @@ void ObjectManager::update_all_and_kill_dead_bullets() {
             std::cout << "4";
             if (bullet->state == 0) {
                 std::cout << "5";
-                deleted = true;
+                //deleted = true;
                 std::cout << "before " << objects.size() << std::endl;
-                obj = this->objects.erase(obj);
+                //obj = this->objects.erase(obj);
                 std::cout << "after " << objects.size() << std::endl;
                 std::cout << "6";
             }

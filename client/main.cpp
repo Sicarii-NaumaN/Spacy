@@ -143,7 +143,7 @@ int main()
             last_tick = curr_time;
 
             graphics.drawField();
-            graphics.drawGates();
+
             for (auto m : msg)
             {
                 switch (m->type)
@@ -152,7 +152,9 @@ int main()
                 {
                     std::shared_ptr<BulletInterface> bullet =
                         std::static_pointer_cast<BulletInterface>(m);
+
                     std::cout << "BULLET HERE: x = " << bullet->position.x << ", y = " << bullet->position.y << std::endl;
+
                     graphics.drawBullet(bullet->position.x, bullet->position.y);
 
                     break;
@@ -162,10 +164,12 @@ int main()
             graphics.drawPlayer();
             graphics.drawEnemy();
             graphics.drawFrontWall();
-            window.clear();
-            window.display();
+            graphics.drawGates();
+
+
         }
-        
+        //window.clear();
+        window.display();
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
     return(0);
