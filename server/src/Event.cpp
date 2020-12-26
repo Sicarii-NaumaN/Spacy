@@ -37,27 +37,28 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
     Player player = *sh_player.get();
 
     float defaultSpeed = 30;
-
-    std::cout << "KEYSTATE IS " << state << std::endl;
+    int side = (player.side == 0)? 1 : -1;
+    float speed = defaultSpeed * side;
+    Vector current_speed = player.speed * side;
 
     if (state == 0)
     {
         switch (key_code) //WASD - 0123
         {
         case 0:
-            player.setSpeedY(-defaultSpeed);
+            player.setSpeedY(-speed);
             break;
 
         case 1:
-            player.setSpeedX(-defaultSpeed);
+            player.setSpeedX(-speed);
             break;
 
         case 2:
-            player.setSpeedY(defaultSpeed);
+            player.setSpeedY(speed);
             break;
 
         case 3:
-            player.setSpeedX(defaultSpeed);
+            player.setSpeedX(speed);
             break;
         }
     }
@@ -67,7 +68,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
         {
         case 0:
 
-            if (player.speed.y < 0)
+            if (current_speed.y < 0)
             {
                 player.setSpeedY(0);
             }
@@ -75,7 +76,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 
         case 1:
 
-            if (player.speed.x < 0)
+            if (current_speed.x < 0)
             {
                 player.setSpeedX(0);
             }
@@ -83,7 +84,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 
         case 2:
 
-            if (player.speed.y > 0)
+            if (current_speed.y > 0)
             {
                 player.setSpeedY(0);
             }
@@ -91,7 +92,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 
         case 3:
 
-            if (player.speed.x > 0)
+            if (current_speed.x > 0)
             {
                 player.setSpeedX(0);
             }

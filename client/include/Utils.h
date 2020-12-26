@@ -33,18 +33,26 @@ public:
 
     sf::Vector2f projectPoint(float x, float y) { return(projectPoint({ x, y })); }
 
+    sf::Vector2f getOriginPoint(sf::Vector2f projected) {
+        auto origin = sf::Vector2f(0, 0);
+        projected.y += 100;
+        origin.y = (C * point.y * point.z + (projected.y - point.y) * (B * point.y + C * point.z)) / (C * point.z - B * point.y + B * projected.y);
+        origin.x = point.x + (projected.x - point.x) * (B * point.y - B * origin.y + C * point.z) / (C * point.z);
+
+        return origin;
+    }
 
     // Проецирование точки
-    sf::Vector2f projectPoint(sf::Vector2f from)
+    sf::Vector2f projectPoint(sf::Vector2f origin)
     {
-        float t = C * point.z / (B * point.y - B * from.y + C * point.z);
+        auto projected = sf::Vector2f(0, 0);
+        float t = C * point.z / (B * point.y - B * origin.y + C * point.z);
 
         // Преобразованные координаты
-        float new_x = point.x + (from.x - point.x) * t;
-        float new_y = point.y + (from.y - point.y) * t;
+        projected.x = point.x + (origin.x - point.x) * t;
+        projected.y = point.y + (origin.y - point.y) * t;
 
-        return
-            { new_x, new_y };
+        return projected;
     }
 
 

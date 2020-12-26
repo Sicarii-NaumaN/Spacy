@@ -34,7 +34,11 @@ public:
     explicit Graphics(sf::RenderWindow &window, const Config &config, bool flipped = false);
     virtual ~Graphics() = default;
 
+    sf::Vector2i invertPositionIfFlipped(sf::Vector2i pos);
+
     sf::Vector2f getPlayerPosition();
+    sf::Vector2f getOriginPoint(sf::Vector2f origin) { return projector.getOriginPoint(origin); }
+    sf::Vector2i getProjectedMousePosition(sf::Vector2i mouse);
 
 private:
     struct Config    config;

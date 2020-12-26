@@ -38,10 +38,7 @@ void ObjectManager::update_all_and_kill_dead_bullets() {
 int ObjectManager::pick_enable_id() const
 {
     std::lock_guard<std::mutex> lg(id_cointer_m);
-    int                         result = id_counter;
-
-    id_counter++;
-    return(result);
+    return(id_counter++);
 }
 
 

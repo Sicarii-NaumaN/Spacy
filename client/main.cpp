@@ -59,8 +59,6 @@ int main()
                 std::shared_ptr<PlayerInterface> player =
                     std::static_pointer_cast<PlayerInterface>(m);
 
-                // std::cout << player->position.x << ' ' << player->position.y
-                //           << std::endl;
                 if (player->ID == actionServer.getId())
                 {
                     if (player->side == 1)
@@ -80,7 +78,7 @@ int main()
 
         while (window.pollEvent(event))
         {
-            sf::Vector2 mousePos = sf::Mouse::getPosition(window);
+            auto mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
 
             switch (event.type)
             {
@@ -154,8 +152,6 @@ int main()
                 {
                     std::shared_ptr<BulletInterface> bullet =
                         std::static_pointer_cast<BulletInterface>(m);
-
-                    std::cout << "BULLET HERE: x = " << bullet->position.x << ", y = " << bullet->position.y << std::endl;
 
                     graphics.drawBullet(bullet->position.x, bullet->position.y);
 

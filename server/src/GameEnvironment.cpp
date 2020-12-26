@@ -139,7 +139,7 @@ std::shared_ptr<Player> GameEnvironment::init_user(User &user)
     else if (side == 1)
     {
         pos_x = 640;
-        pos_y = 700;
+        pos_y = 100;
     }
     std::shared_ptr<Player> player =
         std::make_shared<Player>(id, side, Vector(pos_x, pos_y), Vector(speed_x, speed_y));
