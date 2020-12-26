@@ -260,12 +260,14 @@ void Graphics::setWindowIcon()
 
 void Graphics::drawBullet(float x, float y)
 {
+    float h = config.window_height;
     BulletModel bullet;
 
     bullet.setTexture(bullet_texture);
 
     float bullet_width = bullet.getWidth();
-
+    if (flipped)
+        y = h - y;
     auto  projected_position = projector.projectPoint(sf::Vector2f(x, y));
 
     bullet.setSpritePosition(projected_position.x, projected_position.y);

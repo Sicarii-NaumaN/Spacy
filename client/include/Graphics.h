@@ -19,12 +19,13 @@ public:
     void drawSideWalls();
     void drawField();
     void drawGates();
-    
+
     void drawPlayer();
     void drawEnemy();
 
     void movePlayerTo(float x, float y);
     void moveEnemyTo(float x, float y);
+    void setFlipped() {flipped = true;}
 
     void drawBullet(float x, float y);
 

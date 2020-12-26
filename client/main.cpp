@@ -63,6 +63,8 @@ int main()
                 //           << std::endl;
                 if (player->ID == actionServer.getId())
                 {
+                    if (player->side == 1)
+                        graphics.setFlipped();
                     graphics.movePlayerTo(player->position.x, player->position.y);
                 }
                 else
