@@ -77,14 +77,14 @@ void Graphics::drawGates() {  // g- отрисовка ворот, требуе�
     gates_texture.loadFromFile(config.textures_path + "gates.png");
 
     gates_first.setTexture(gates_texture);
-    gates_first.setPosition(615, 430); //TODO
+    gates_first.setPosition(610, 430); //TODO
     gates_first.scale(1 , 0.5);
 
     window.draw(gates_first);
     sf::Sprite gates_second;
     gates_second.setTexture(gates_texture);
     gates_second.scale(1.6, 1.6); //TODO
-    gates_second.setPosition(500, 650);
+    gates_second.setPosition(590, 650);
     window.draw(gates_second);
 }
 
