@@ -99,7 +99,9 @@ set (NET_SERVER ${NET_HDRS_SERVER} ${NET_SRC_SERVER})
 set (NET_CLIENT ${NET_HDRS_CLIENT} ${NET_SRC_CLIENT})
 
 add_executable(SpacyClient client/main.cpp ${CLIENT} ${NET_CLIENT})
+add_executable(SpacyClient2 client/main.cpp ${CLIENT} ${NET_CLIENT})
 add_executable(SpacyServer server/src/main.cpp ${SERVER} ${NET_SERVER})
 
 target_link_libraries(SpacyClient sfml-graphics sfml-audio ${Boost_LIBRARIES})
+target_link_libraries(SpacyClient2 sfml-graphics sfml-audio ${Boost_LIBRARIES})
 target_link_libraries(SpacyServer ${Boost_LIBRARIES})
