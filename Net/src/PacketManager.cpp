@@ -12,8 +12,8 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
     mp["player"] = Object::Type::PLAYER;
     mp["bullet"] = Object::Type::BULLET;
     mp["map"]    = Object::Type::MAP;
-
-    for (int j = 0; j < root.get("object", 0); ++j)
+    auto size = root.get("object", 0);
+    for (int j = 0; j < size; ++j)
     {
         ptree tree = root.get_child(std::to_string(j));
 
@@ -76,6 +76,7 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
     {
     case 2:
     {
+
         auto ptr = std::static_pointer_cast<ShotInterface>(event);
         root.put("type", "shot");
         root.put("origin_x", ptr->origin_x);

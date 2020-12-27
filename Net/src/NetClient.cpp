@@ -73,6 +73,6 @@ int NetClient::do_read_header()
     std::istringstream iss(buf2, std::istringstream::in);
     int                val;
     iss >> val;
-    // std::cout << "Size = " << val << std::endl;
+     std::cout << "Size = " << val << std::endl;
     return(val);
 }

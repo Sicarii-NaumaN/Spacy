@@ -14,14 +14,9 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
     Vector speed = Vector(mouse_x - origin_x, mouse_y - origin_y);
 
     speed = speed.setMag(40);
+    auto changed = std::make_shared<Bullet>(object_manager.pick_enable_id(),player.ID,Vector(origin_x, origin_y),speed);
+    object_manager.update_objects(changed, -1);
 
-    object_manager.update_objects(
-        std::make_shared<Bullet>(
-            object_manager.pick_enable_id(),
-            player.ID,
-            Vector(origin_x, origin_y),
-            speed)
-        );
     // player.state_.shot();
     // sh_player->state_.shot();
     // }
@@ -101,7 +96,8 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
     }
     // std::cout << "SDLFKJSDLF" << player.position.x << ' ' << player.position.y
     //           << std::endl;
-    object_manager.update_objects(std::make_shared<Player>(player));
+    auto pl = std::make_shared<Player>(player);
+    object_manager.update_objects(std::make_shared<Player>(player), key_code);
 
     return(std::make_shared<Player>(player));
 } // KeyPressed::process

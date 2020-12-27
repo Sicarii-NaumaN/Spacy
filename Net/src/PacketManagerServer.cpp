@@ -2,14 +2,19 @@
 #include <PacketManagerServer.h>
 
 
-std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, std::shared_ptr<Object> > &object)
+std::string PacketManagerServer::packet_handle_server(std::vector<std::shared_ptr<Object> > &object)
 {
     ptree root;
 
     int size = 0;
-    for (auto obj : object) {
-        if (obj.second != nullptr)
+    for (size_t i = 0; i< object.size(); i++) {
+        if (object[i] != nullptr) {
             size++;
+        } else {
+            object.erase(object.begin()+i);
+            std::cout << "I am NOT HERE!!!!!! " << object.size() << size << std::endl;
+        }
+
     }
 
     root.put("object", size);
@@ -36,6 +41,7 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
 
             case Object::Type::BULLET:
             {
+                std::cout << "I am HERE!!!!!! " << object.size() << size << std::endl;
                 auto ptr = std::static_pointer_cast<Bullet>(object[j]);
                 tree.put("type", "bullet");
                 tree.put("x", (int)ptr->position.x);
@@ -45,6 +51,7 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
             }
             } // switch
         }
+
     }
 
     std::stringstream buf;
