@@ -26,7 +26,7 @@ public:
 
 private:
     ObjectManager                       object_manager;
-    std::queue<std::shared_ptr<Event> > event_queue;
+    std::queue<std::shared_ptr<Event>> event_queue;
 
     NetServer                           net_server;
 
