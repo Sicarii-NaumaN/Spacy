@@ -4,7 +4,7 @@
 void BulletModel::draw(sf::RenderTarget &renderTarget,
                        sf::RenderStates renderStates)
 {
-    sprite.scale(0.1, 0.1);
+    //sprite.scale(0.1, 0.1);
 
     sf::Transform transform;
     transform.translate(0, -100);

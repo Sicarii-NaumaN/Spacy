@@ -21,9 +21,8 @@ void NetClient::connect_to_server(std::string addr_server, int port)
 }
 
 
-std::vector<std::shared_ptr<ObjectInterface> > NetClient::get_server_message()
-{
-    // std::cout << "Getting server message...\n";
+std::vector<std::shared_ptr<ObjectInterface> > NetClient::get_server_message(){
+    std::cout << "Getting server message...\n";
     ptree                   root;
     int                     size_buff = do_read_header();
     std::basic_string<char> str("", size_buff);

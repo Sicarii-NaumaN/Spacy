@@ -44,8 +44,9 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             int id = tree.get("id", 0);
             int x  = tree.get("x", 0);
             int y  = tree.get("y", 0);
+            int state  = tree.get("state", 0);
 
-            struct BulletInterface bullet(id, VectorInterface(x, y));
+            struct BulletInterface bullet(id, VectorInterface(x, y), state);
             std::shared_ptr<ObjectInterface> ptr =
                 std::make_shared<BulletInterface>(bullet);
             vector.push_back(ptr);

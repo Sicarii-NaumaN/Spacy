@@ -93,10 +93,9 @@ struct PlayerInterface : ObjectInterface
 };
 
 
-struct BulletInterface : ObjectInterface
-{
-    BulletInterface(int id, VectorInterface pos)
-        : ObjectInterface(Type::BULLET, id, pos) {}
+struct BulletInterface : ObjectInterface{
+    int state;
+    BulletInterface(int id, VectorInterface pos, int state) : state(state), ObjectInterface(Type::BULLET, id, pos) {}
 };
 
 #endif // SPACY_EVENT_H

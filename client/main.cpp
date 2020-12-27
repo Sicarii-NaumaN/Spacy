@@ -12,16 +12,15 @@
 
 #include "Game.h"
 
-const int   fps           = 30;
+const int fps = 30;
 const float tick_duration = 1.0 / fps;
 
 
-int main()
-{
-    struct Config                    config;
-    ActionServer                     actionServer;
+int main() {
+    struct Config config;
+    ActionServer actionServer;
     // ActionManager user;
-    bool                             isGame = false;
+    bool isGame = false;
     std::map<sf::Keyboard::Key, int> keyToCode;
 
     keyToCode[sf::Keyboard::W] = 0;
@@ -32,7 +31,7 @@ int main()
     actionServer.connectClient();
 
     sf::RenderWindow window(
-        sf::VideoMode(config.window_width, config.window_height), "Spacy");
+            sf::VideoMode(config.window_width, config.window_height), "Spacy");
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 
@@ -43,126 +42,109 @@ int main()
     window.setKeyRepeatEnabled(false);
 
     boost::posix_time::time_duration current_tick_duration;
-    auto                             last_tick = boost::posix_time::microsec_clock::universal_time();
+    auto last_tick = boost::posix_time::microsec_clock::universal_time();
+    auto start_time = boost::posix_time::microsec_clock::universal_time();
 
-    int                              i = 0;
-
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         auto msg = actionServer.getMessage();
-        for (auto m : msg)
-        {
-            switch (m->type)
-            {
-            case ObjectInterface::Type::PLAYER:
-            {
-                std::shared_ptr<PlayerInterface> player =
-                    std::static_pointer_cast<PlayerInterface>(m);
+        for (auto m : msg) {
+            switch (m->type) {
+                case ObjectInterface::Type::PLAYER: {
+                    std::shared_ptr<PlayerInterface> player =
+                            std::static_pointer_cast<PlayerInterface>(m);
 
-                if (player->ID == actionServer.getId())
-                {
-                    if (player->side == 1)
-                        graphics.setFlipped();
-                    graphics.movePlayerTo(player->position.x, player->position.y);
+                    if (player->ID == actionServer.getId()) {
+                        if (player->side == 1) {
+                            graphics.setFlipped();
+                        }
+                        graphics.movePlayerTo(player->position.x, player->position.y);
+                    } else {
+                        graphics.moveEnemyTo(player->position.x, player->position.y);
+                    }
+                    break;
                 }
-                else
-                {
-                    graphics.moveEnemyTo(player->position.x, player->position.y);
-                }
-                break;
-            }
             }
         }
 
         sf::Event event;
 
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             auto mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
 
-            switch (event.type)
-            {
-            case sf::Event::Closed:
-                window.close();
-                break;
+            switch (event.type) {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
 
-            case sf::Event::KeyPressed:
-            {
-                auto key = event.key.code;
+                case sf::Event::KeyPressed: {
+                    auto key = event.key.code;
 
-                switch (event.key.code)
-                {
-                case sf::Keyboard::W:
-                case sf::Keyboard::A:
-                case sf::Keyboard::S:
-                case sf::Keyboard::D:
-                    actionServer.sendKeyPressedAction(keyToCode[key], mousePos.x,
-                                                      mousePos.y);
+                    switch (event.key.code) {
+                        case sf::Keyboard::W:
+                        case sf::Keyboard::A:
+                        case sf::Keyboard::S:
+                        case sf::Keyboard::D:
+                            actionServer.sendKeyPressedAction(keyToCode[key], mousePos.x,
+                                                              mousePos.y);
+                            break;
+                    }
                     break;
                 }
-                break;
-            }
 
-            case sf::Event::KeyReleased:
-            {
-                auto key = event.key.code;
+                case sf::Event::KeyReleased: {
+                    auto key = event.key.code;
 
-                switch (event.key.code)
-                {
-                case sf::Keyboard::W:
-                case sf::Keyboard::A:
-                case sf::Keyboard::S:
-                case sf::Keyboard::D:
-                    actionServer.sendKeyReleasedAction(keyToCode[key], mousePos.x,
-                                                       mousePos.y);
+                    switch (event.key.code) {
+                        case sf::Keyboard::W:
+                        case sf::Keyboard::A:
+                        case sf::Keyboard::S:
+                        case sf::Keyboard::D:
+                            actionServer.sendKeyReleasedAction(keyToCode[key], mousePos.x,
+                                                               mousePos.y);
+                            break;
+                    }
                     break;
                 }
-                break;
-            }
 
-            case sf::Event::MouseButtonPressed:
-            {
-                if (event.mouseButton.button == sf::Mouse::Left)
-                {
-                    auto pl_pos = graphics.getPlayerPosition();
-                    actionServer.sendActionShot(
-                        pl_pos.x,
-                        pl_pos.y,
-                        mousePos.x,
-                        mousePos.y
-                    );
+                case sf::Event::MouseButtonPressed: {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        auto pl_pos = graphics.getPlayerPosition();
+                        actionServer.sendActionShot(
+                                pl_pos.x,
+                                pl_pos.y,
+                                mousePos.x,
+                                mousePos.y
+                        );
+                    }
                 }
-            }
             } // switch
         }
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
-        if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
-        {
+        if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
             last_tick = curr_time;
-
             graphics.drawField();
 
-            for (auto m : msg)
-            {
-                switch (m->type)
-                {
-                case ObjectInterface::Type::BULLET:
-                {
-                    std::shared_ptr<BulletInterface> bullet =
-                        std::static_pointer_cast<BulletInterface>(m);
+            for (auto m : msg) {
+                switch (m->type) {
+                    case ObjectInterface::Type::BULLET: {
+                        std::shared_ptr<BulletInterface> bullet =
+                                std::static_pointer_cast<BulletInterface>(m);
 
-                    graphics.drawBullet(bullet->position.x, bullet->position.y);
+                        // g- вместе с коордами пульки передаем её state
+                        graphics.drawBullet(bullet->position.x, bullet->position.y, bullet->state);
 
-                    break;
-                }
+                        break;
+                    }
                 }
             }
-            graphics.drawPlayer();
-            graphics.drawEnemy();
+            graphics.drawPlayer();  // g- изменён порядок отрисовки, чтобы ворота не перекрывали противника
             graphics.drawFrontWall();
             graphics.drawGates();
+            graphics.drawEnemy();
+
+
 
 
         }
@@ -170,5 +152,5 @@ int main()
         window.display();
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
-    return(0);
+    return (0);
 } // main

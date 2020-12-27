@@ -11,17 +11,17 @@ std::vector<User> NetServer::accept_users(int                 players_count,
 {
     ip::tcp::acceptor acc(io_service, ip::tcp::endpoint(ip::tcp::v4(), 8001));
     int               player = 0;
-    std::cout << "I'll trying to accept user\n";
+//    std::cout << "I'll trying to accept user\n";
 
     while (true)
     {
-        std::cout << "Users connected now: " << player << std::endl;
+//        std::cout << "Users connected now: " << player << std::endl;
 
         if (player == players_count)
         {
             break;
         }
-        std::cout << "Connecting to user...\n";
+//        std::cout << "Connecting to user...\n";
         boost::shared_ptr<boost::asio::ip::tcp::socket> user_socket(
             new ip::tcp::socket(io_service));
         users.emplace_back(objm.pick_enable_id(), user_socket);

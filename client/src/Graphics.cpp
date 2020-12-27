@@ -1,10 +1,7 @@
 #include "Graphics.h"
 
 Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
-    : window(window)
-    , config(config)
-    , flipped(flipped)
-{
+        : window(window), config(config), flipped(flipped) {
     background_texture.loadFromFile(config.textures_path + "bg.jpg");
 
     player_texture[0].loadFromFile(config.textures_path + "left-5.png");
@@ -53,45 +50,46 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
 }
 
 
-sf::Vector2f Graphics::getPlayerPosition()
-{
-    return(player.getPosition());
+sf::Vector2f Graphics::getPlayerPosition() {
+    return (player.getPosition());
 }
 
-sf::Vector2i Graphics::invertPositionIfFlipped(sf::Vector2i pos)
-{
-    if (!flipped)
-    {
-        return(pos);
+sf::Vector2i Graphics::invertPositionIfFlipped(sf::Vector2i pos) {
+    if (!flipped) {
+        return (pos);
     }
-    return(sf::Vector2i(config.window_width - pos.x, config.window_height - pos.y));
+    return (sf::Vector2i(config.window_width - pos.x, config.window_height - pos.y));
 }
 
 sf::Vector2i Graphics::getProjectedMousePosition(sf::Vector2i mouse) {
-    auto mousef = sf::Vector2f((float)mouse.x, (float)mouse.y);
+    auto mousef = sf::Vector2f((float) mouse.x, (float) mouse.y);
     auto projected_mouse = getOriginPoint(mousef);
-    drawBullet(projected_mouse.x, projected_mouse.y);
-    auto projected_mousei = sf::Vector2i((int)projected_mouse.x, (int)projected_mouse.y);
+    drawBullet(projected_mouse.x, projected_mouse.y, 1);
+    auto projected_mousei = sf::Vector2i((int) projected_mouse.x, (int) projected_mouse.y);
     auto inverted_projected_mousei = invertPositionIfFlipped(projected_mousei);
     return inverted_projected_mousei;
 }
 
-void Graphics::drawGates()
-{
-    sf::CircleShape gates_first;
+void Graphics::drawGates() {  // g- отрисовка ворот, требуется подобрать координаты по X и скейлы по X
+    sf::Sprite gates_first;
 
-    gates_first.setRadius(25.0);
-    gates_first.setPosition(615, 650);
+    sf::Texture gates_texture;
+    gates_texture.loadFromFile(config.textures_path + "gates.png");
+
+    gates_first.setTexture(gates_texture);
+    gates_first.setPosition(615, 430); //TODO
+    gates_first.scale(1 , 0.5);
+
     window.draw(gates_first);
-    sf::CircleShape gates_second;
-    gates_second.setRadius(7.0);
-    gates_second.setPosition(635, 435);
+    sf::Sprite gates_second;
+    gates_second.setTexture(gates_texture);
+    gates_second.scale(1.6, 1.6); //TODO
+    gates_second.setPosition(500, 650);
     window.draw(gates_second);
 }
 
 
-void Graphics::drawShape(const sf::Texture &texture)
-{
+void Graphics::drawShape(const sf::Texture &texture) {
     sf::ConvexShape field(4);
 
     float w = config.window_width;
@@ -112,8 +110,7 @@ void Graphics::drawShape(const sf::Texture &texture)
 }
 
 
-void Graphics::drawSideWalls()
-{
+void Graphics::drawSideWalls() {
     float w = config.window_width;
     float h = config.window_height;
 
@@ -122,7 +119,7 @@ void Graphics::drawSideWalls()
     auto p10 = projector.projectPoint(w, h);
     auto p11 = projector.projectPoint(w, 0);
 
-    float top_width    = abs(p00.x - p11.x);
+    float top_width = abs(p00.x - p11.x);
     float bottom_width = abs(p01.x - p10.x);
     float scale_factor = top_width / bottom_width;
 
@@ -155,8 +152,7 @@ void Graphics::drawSideWalls()
 }
 
 
-void Graphics::drawBackWall()
-{
+void Graphics::drawBackWall() {
     float w = config.window_width;
     float h = config.window_height;
 
@@ -165,7 +161,7 @@ void Graphics::drawBackWall()
     auto p10 = projector.projectPoint(w, h);
     auto p11 = projector.projectPoint(w, 0);
 
-    float top_width    = abs(p00.x - p11.x);
+    float top_width = abs(p00.x - p11.x);
     float bottom_width = abs(p01.x - p10.x);
     float scale_factor = top_width / bottom_width;
 
@@ -188,8 +184,7 @@ void Graphics::drawBackWall()
 }
 
 
-void Graphics::drawFrontWall()
-{
+void Graphics::drawFrontWall() {
     float w = config.window_width;
     float h = config.window_height;
 
@@ -198,7 +193,7 @@ void Graphics::drawFrontWall()
     auto p10 = projector.projectPoint(w, h);
     auto p11 = projector.projectPoint(w, 0);
 
-    float top_width    = abs(p00.x - p11.x);
+    float top_width = abs(p00.x - p11.x);
     float bottom_width = abs(p01.x - p10.x);
     float scale_factor = top_width / bottom_width;
 
@@ -221,14 +216,13 @@ void Graphics::drawFrontWall()
 }
 
 
-void Graphics::drawField()
-{
+void Graphics::drawField() {
     sf::RectangleShape background;
 
     background.setSize(
-    {
-        (float)window.getSize().x, (float)window.getSize().y
-    });
+            {
+                    (float) window.getSize().x, (float) window.getSize().y
+            });
 
     sf::Texture texture;
     sf::Texture wall_texture;
@@ -245,20 +239,17 @@ void Graphics::drawField()
 }
 
 
-void Graphics::movePlayerTo(float x, float y)
-{
+void Graphics::movePlayerTo(float x, float y) {
     player.setPosition(x, y);
 }
 
 
-void Graphics::drawPlayer()
-{
-    auto  pos = player.getPosition();
-    float x   = pos.x;
-    float y   = pos.y;
+void Graphics::drawPlayer() {
+    auto pos = player.getPosition();
+    float x = pos.x;
+    float y = pos.y;
 
-    if (flipped)
-    {
+    if (flipped) {
         x = config.window_width - x;
         y = config.window_height - y;
     }
@@ -268,17 +259,16 @@ void Graphics::drawPlayer()
 
     player.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width    = projector.projectLength(sf::Vector2f(x, y), player_width);
+    float new_width = projector.projectLength(sf::Vector2f(x, y), player_width);
     float scale_factor = new_width / player_width;
 
     player.resize(scale_factor);
-    player.setTexture(player_texture[(int)(x / 117)]);
+    player.setTexture(player_texture[(int) (x / 117)]);
     player.draw(window, renderStates);
 }
 
 
-void Graphics::setWindowIcon()
-{
+void Graphics::setWindowIcon() {
     sf::Image icon;
 
     icon.loadFromFile(config.textures_path + "icon.png");
@@ -286,16 +276,18 @@ void Graphics::setWindowIcon()
 }
 
 
-void Graphics::drawBullet(float x, float y)
-{
+void Graphics::drawBullet(float x, float y, int state) {
+    if (state == 0 || y < 50)  // g- если пулька неактивна - не отрисовываем её, так же стараемся не отрисовывать ниже стенки игрока
+        return;
+
+
     BulletModel bullet;
 
     bullet.setTexture(bullet_texture);
 
     float bullet_width = bullet.getWidth();
 
-    if (flipped)
-    {
+    if (flipped) {
         x = config.window_width - x;
         y = config.window_height - y;
     }
@@ -303,7 +295,7 @@ void Graphics::drawBullet(float x, float y)
 
     bullet.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width    = projector.projectLength(sf::Vector2f(x, y), bullet_width);
+    float new_width = projector.projectLength(sf::Vector2f(x, y), bullet_width);
     float scale_factor = new_width / bullet_width;
     bullet.resize(scale_factor);
 
@@ -311,14 +303,12 @@ void Graphics::drawBullet(float x, float y)
 }
 
 
-void Graphics::drawEnemy()
-{
-    auto  pos = enemy.getPosition();
-    float x   = pos.x;
-    float y   = pos.y;
+void Graphics::drawEnemy() {
+    auto pos = enemy.getPosition();
+    float x = pos.x;
+    float y = pos.y;
 
-    if (flipped)
-    {
+    if (flipped) {
         x = config.window_width - x;
         y = config.window_height - y;
     }
@@ -328,16 +318,15 @@ void Graphics::drawEnemy()
 
     enemy.setSpritePosition(projected_position.x, projected_position.y);
 
-    float new_width    = projector.projectLength(sf::Vector2f(x, y), enemy_width);
+    float new_width = projector.projectLength(sf::Vector2f(x, y), enemy_width);
     float scale_factor = new_width / enemy_width;
 
     enemy.resize(scale_factor);
-    enemy.setTexture(enemy_texture[(int)(x / 117)]);
+    enemy.setTexture(enemy_texture[(int) (x / 117)]);
     enemy.draw(window, renderStates);
 }
 
 
-void Graphics::moveEnemyTo(float x, float y)
-{
+void Graphics::moveEnemyTo(float x, float y) {
     enemy.setPosition(x, y);
 }

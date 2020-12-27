@@ -27,7 +27,7 @@ public:
     void moveEnemyTo(float x, float y);
     void setFlipped() {flipped = true;}
 
-    void drawBullet(float x, float y);
+    void drawBullet(float x, float y, int state);
 
     void setWindowIcon();
 

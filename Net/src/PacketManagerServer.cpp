@@ -40,6 +40,7 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
                 tree.put("type", "bullet");
                 tree.put("x", (int)ptr->position.x);
                 tree.put("y", (int)ptr->position.y);
+                tree.put("state", (int)ptr->state);
                 root.add_child(std::to_string(j), tree);
                 break;
             }
