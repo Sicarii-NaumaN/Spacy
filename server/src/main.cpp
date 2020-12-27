@@ -14,21 +14,3 @@ int main()
     new_game.start_game();
     return(0);
 }
-
-// Игровые события:
-//
-// Клиент нажал клавишу.
-//    keyPressed {
-//      int keyCode;
-//      int playerID;
-//    }
-//
-// Клиент подключился
-//     .... {
-//
-//   }
-//
-// Клиент отключился
-//    playerDisconnected {
-//
-//    }

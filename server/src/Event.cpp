@@ -35,7 +35,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
 
     Player player = *sh_player.get();
-
+    std::cout << "TRYING TO MOVE PLAYER #" << player.ID;
     float defaultSpeed = 30;
     int side = (player.side == 0)? 1 : -1;
     float speed = defaultSpeed * side;

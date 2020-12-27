@@ -81,7 +81,38 @@ public:
     Player(int id, int side, Vector pos, Vector speed)
             : Object(Type::PLAYER, id, pos), speed(speed), side(side) {}
 
-    void update() override { position = position + speed; }
+    void update() override {
+        position = position + speed;
+        constrain();
+    }
+
+    void constrain() {
+
+        int margin_y = 30;
+
+        if (side == 0) {
+            if (position.x < 0)
+                position.x = 0;
+            else if (position.x > 1280)
+                position.x = 1280;
+
+            if (position.y < 600)
+                position.y = 600;
+            else if (position.y > 800 - margin_y)
+                position.y = 800 - margin_y;
+        }
+        else if (side == 1) {
+            if (position.x < 0)
+                position.x = 0;
+            else if (position.x > 1280)
+                position.x = 1280;
+
+            if (position.y < 0)
+                position.y = 0;
+            else if (position.y > 200 - margin_y)
+                position.y = 200 - margin_y;
+        }
+    }
 
     void setSpeed(float vx, float vy) { speed = Vector(vx, vy); }
 

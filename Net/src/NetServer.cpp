@@ -11,12 +11,12 @@ std::vector<User> NetServer::accept_users(int                 players_count,
 {
     ip::tcp::acceptor acc(io_service, ip::tcp::endpoint(ip::tcp::v4(), 8001));
     int               player = 0;
+
 //    std::cout << "I'll trying to accept user\n";
 
     while (true)
     {
 //        std::cout << "Users connected now: " << player << std::endl;
-
         if (player == players_count)
         {
             break;
@@ -61,36 +61,28 @@ void NetServer::notify_all_users(std::unordered_map<int, std::shared_ptr<Object>
 
 std::shared_ptr<Event> NetServer::get_client_action(User &user)
 {
-    std::cout << "[NET SERVER] "
-              << "Getting client action" << std::endl;
+    // std::cout << "[NET SERVER] " << "Getting client action" << std::endl;
     ptree root;
     char  buf[1024] = "";
 
-    std::cout << "[NET SERVER] "
-              << "Reading header" << std::endl;
+    // std::cout << "[NET SERVER] " << "Reading header" << std::endl;
     int size_buff = do_read_header(user);
-    std::cout << "[NET SERVER] "
-              << "Header ready" << std::endl;
 
-    std::cout << "[NET SERVER] "
-              << "Socket read" << std::endl;
+    // std::cout << "[NET SERVER] " << "Header ready" << std::endl;
+
+    // std::cout << "[NET SERVER] " << "Socket read" << std::endl;
 
     user.sock->read_some(buffer(buf, size_buff));
-    std::cout << "[NET SERVER] "
-              << "Socket read done" << std::endl;
+    // std::cout << "[NET SERVER] " << "Socket read done" << std::endl;
     std::string       json = std::string(buf);
     std::stringstream stream(json);
 
-    std::cout << "[NET SERVER] "
-              << "Parsing message" << std::endl;
-    std::cout << "[NET SERVER] "
-              << "Message=========================" << std::endl;
-    std::cout << json;
-    std::cout << "[NET SERVER] "
-              << "End of message==================" << std::endl;
+    // std::cout << "[NET SERVER] " << "Parsing message" << std::endl;
+    // std::cout << "[NET SERVER] " << "Message=========================" << std::endl;
+    // std::cout << json;
+    // std::cout << "[NET SERVER] " << "End of message==================" << std::endl;
     read_json(stream, root);
-    std::cout << "[NET SERVER] "
-              << "Parsing done" << std::endl;
+    // std::cout << "[NET SERVER] " << "Parsing done" << std::endl;
     root.put("IDuser", user.get_username());
     return(packet_manager.packet_adaptation_server(root));
 }
@@ -98,25 +90,24 @@ std::shared_ptr<Event> NetServer::get_client_action(User &user)
 
 int NetServer::do_read_header(User &user)
 {
-    std::cout << "[NET SERVER] "
-              << "Reading size of message" << std::endl;
+    // std::cout << "[NET SERVER] " << "Reading size of message" << std::endl;
     char buf0[1] = "";
     char buf[10] = "";
+
     user.sock->read_some(buffer(buf0, 1));
     std::istringstream iss0(buf0, std::istringstream::in);
-    int                val0;
+
+    int val0;
     iss0 >> val0;
 
     user.sock->read_some(buffer(buf, val0));
-    std::cout << "[NET SERVER] "
-              << "Message===================" << std::endl;
-    std::cout << buf;
-    std::cout << "[NET SERVER] "
-              << "End of message============" << std::endl;
+    // std::cout << "[NET SERVER] " << "Message===================" << std::endl;
+    // std::cout << buf;
+    // std::cout << "[NET SERVER] " << "End of message============" << std::endl;
     std::istringstream iss(buf, std::istringstream::in);
-    int                val;
+
+    int val;
     iss >> val;
-    std::cout << "[NET SERVER] "
-              << "Size of message: " << val << std::endl;
+    // std::cout << "[NET SERVER] " << "Size of message: " << val << std::endl;
     return(val);
 }
