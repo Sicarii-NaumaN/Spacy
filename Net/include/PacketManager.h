@@ -8,7 +8,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <EventClient.h>
 #include <memory>
-#include <Object.h>
 #include <PlayerModel.h>
 #include <string>
 #include <vector>

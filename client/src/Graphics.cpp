@@ -64,7 +64,6 @@ sf::Vector2i Graphics::invertPositionIfFlipped(sf::Vector2i pos) {
 sf::Vector2i Graphics::getProjectedMousePosition(sf::Vector2i mouse) {
     auto mousef = sf::Vector2f((float) mouse.x, (float) mouse.y);
     auto projected_mouse = getOriginPoint(mousef);
-    drawBullet(projected_mouse.x, projected_mouse.y, 1);
     auto projected_mousei = sf::Vector2i((int) projected_mouse.x, (int) projected_mouse.y);
     auto inverted_projected_mousei = invertPositionIfFlipped(projected_mousei);
     return inverted_projected_mousei;

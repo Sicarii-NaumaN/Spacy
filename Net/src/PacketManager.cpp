@@ -9,9 +9,9 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
 
     std::map<std::string, int> mp;
 
-    mp["player"] = Object::Type::PLAYER;
-    mp["bullet"] = Object::Type::BULLET;
-    mp["map"]    = Object::Type::MAP;
+    mp["player"] = 0;
+    mp["bullet"] = 1;
+    mp["map"]    = 2;
 
     for (int j = 0; j < root.get("object", 0); ++j)
     {
@@ -21,7 +21,7 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
         // tree.get("type", "") << std::endl;
         switch (mp[tree.get("type", "")])
         {
-        case Object::Type::PLAYER:
+        case 0:
         {
             int id   = tree.get("id", 0);
             int x    = tree.get("x", 0);
@@ -39,7 +39,7 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             break;
         }
 
-        case Object::Type::BULLET:
+        case 1:
         {
             int id = tree.get("id", 0);
             int x  = tree.get("x", 0);

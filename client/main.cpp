@@ -12,21 +12,26 @@
 
 #include "Game.h"
 
-const int   fps           = 60;
+const int   fps           = 30;
 const float tick_duration = 1.0 / fps;
 
-bool hasMessage = false;
+bool new_message_received = false;
+std::vector<std::shared_ptr<ObjectInterface>> msg;
 
-std::vector<std::shared_ptr<ObjectInterface>> getServerMessage() {
-    std::vector<std::shared_ptr<ObjectInterface>> msg = actionServer.getMessage();
-    hasMessage = true;
-    return msg;
+void getServerMessage(ActionServer *actionServer) {
+    while (true) {
+        msg = actionServer->getMessage();
+        new_message_received = false;
+        for (auto m : msg)
+            std::cout << m->type;
+    }
 }
 
 int main()
 {
-    struct Config                    config;
-    ActionServer                     actionServer;
+    struct Config config;
+    ActionServer  actionServer;
+
     std::map<sf::Keyboard::Key, int> keyToCode;
 
     keyToCode[sf::Keyboard::W] = 0;
@@ -46,8 +51,8 @@ int main()
     graphics.drawGates();
     window.display();
 
-    auto msg = actionServer.getMessage();
-
+    msg = actionServer.getMessage();
+    std::cout << "Got first server message\n";
     for (auto m : msg)
     {
         if (m->type == ObjectInterface::Type::PLAYER)
@@ -73,7 +78,10 @@ int main()
     graphics.drawEnemy();
     graphics.drawPlayer();
 
-    sf::Thread thread(&(actionServer.getMessage));
+    std::cout << "Thread launch...\n";
+    sf::Thread thread(&getServerMessage, &actionServer);
+    thread.launch();
+    std::cout << "Thread launched\n";
 
 
     boost::posix_time::time_duration current_tick_duration;
@@ -83,8 +91,6 @@ int main()
 
     while (window.isOpen())
     {
-
-        msg = actionServer.getMessage();
         sf::Event event;
 
         auto mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
@@ -143,8 +149,10 @@ int main()
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
-        if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
+        if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
         {
+            std::cout << "Processing new server message\n";
+            new_message_received = true;
             last_tick = curr_time;
 
             window.clear();
@@ -162,21 +170,21 @@ int main()
                     break;
                 }
 
-                case ObjectInterface::Type::PLAYER:
+                case ObjectInterface::Type::PLAYER: {
                     std::shared_ptr<PlayerInterface> player =
                         std::static_pointer_cast<PlayerInterface>(m);
-
                     if (player->ID == actionServer.getId())
                         graphics.movePlayerTo(player->position.x, player->position.y);
                     else
                         graphics.moveEnemyTo(player->position.x, player->position.y);
                     break;
                 }
+                }
             }
 
             graphics.drawPlayer();
             graphics.drawFrontWall();
-        graphics.drawGates();
+            graphics.drawGates();
             graphics.drawEnemy();
         }
         window.display();
