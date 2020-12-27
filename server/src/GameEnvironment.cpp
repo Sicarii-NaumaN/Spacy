@@ -87,12 +87,19 @@ void GameEnvironment::initialize_objects() {
 void GameEnvironment::update_objects() {
     while (game_is_active) {
         // Получаем объекты
-        // std::unordered_map<int, std::shared_ptr<Object> > &objects =
-        //     object_manager.get_objects_by_map();
+        std::unordered_map<int, std::shared_ptr<Object> > &objects =
+                object_manager.get_objects_by_map();
 
         // Проверка на столкновения
         if (need_update) {
-            need_update = false;
+            for (auto object : objects){
+                if(object.second->type == Object::BULLET){
+                    object.second->update();
+                    collisions.check(objects, object.second);
+                }
+            }
+
+                need_update = false;
 
         } else {
             std::lock_guard<std::mutex> lock(events_mutex);

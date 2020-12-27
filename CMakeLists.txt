@@ -45,7 +45,7 @@ set(
         server/include/Object.h
         server/include/ObjectManager.h
         server/include/Event.h
-)
+        server/include/Collisions.h server/src/Collisions.cpp)
 
 set(
         NET_SRC_SERVER

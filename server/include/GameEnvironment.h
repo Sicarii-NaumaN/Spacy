@@ -10,6 +10,7 @@
 #include <ObjectManager.h>
 #include <PacketManagerServer.h>
 #include <queue>
+#include "Collisions.h"
 
 const static unsigned int FRAMES_PER_SECOND = 30;
 const static unsigned int MAX_PLAYERS       = 30;
@@ -45,4 +46,5 @@ private:
     bool       need_update;
     bool       game_is_active;
     int        player_count = 2;
+    CollisionManager collisions;
 };
