@@ -73,13 +73,13 @@ void Graphics::drawGates(int gates1_posx, int gates2_posx) {  // g- отрисо
 
     sf::Sprite gates_first;
     gates_first.setTexture(gates_texture);
-    gates_first.setPosition(590, 400); //TODO
+    gates_first.setPosition(600, 400); //TODO
     gates_first.scale(0.8 , 0.6);
     window.draw(gates_first);
 
     sf::Sprite gates_second;
     gates_second.setTexture(gates_texture);
-    gates_second.setPosition(590, 620);
+    gates_second.setPosition(556, 620);
     gates_second.scale(1.4, 1); //TODO
     window.draw(gates_second);
 }
