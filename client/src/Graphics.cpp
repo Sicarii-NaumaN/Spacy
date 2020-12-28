@@ -28,8 +28,6 @@ Graphics::Graphics(sf::RenderWindow &window, const Config &config, bool flipped)
     enemy_texture[9].loadFromFile(config.textures_path + "back-right-4.png");
     enemy_texture[10].loadFromFile(config.textures_path + "back-right-5.png");
 
-    //    enemy_texture.loadFromFile(config.textures_path + "front.png");
-
     metal_light_texture.loadFromFile(config.textures_path + "metal_light.jpg");
     metal_texture.loadFromFile(config.textures_path + "metal.jpg");
 
@@ -69,21 +67,20 @@ sf::Vector2i Graphics::getProjectedMousePosition(sf::Vector2i mouse) {
     return inverted_projected_mousei;
 }
 
-void Graphics::drawGates() {  // g- отрисовка ворот, требуется подобрать координаты по X и скейлы по X
-    sf::Sprite gates_first;
-
+void Graphics::drawGates(int gates1_posx, int gates2_posx) {  // g- отрисовка ворот, требуется подобрать координаты по X и скейлы по X
     sf::Texture gates_texture;
-    gates_texture.loadFromFile(config.textures_path + "gates.png");
+    gates_texture.loadFromFile(config.textures_path + "Gates.png");
 
+    sf::Sprite gates_first;
     gates_first.setTexture(gates_texture);
-    gates_first.setPosition(610, 430); //TODO
-    gates_first.scale(1 , 0.5);
-
+    gates_first.setPosition(gates1_posx, 430); //TODO
+    //gates_first.scale(3 , 0.5);
     window.draw(gates_first);
+
     sf::Sprite gates_second;
     gates_second.setTexture(gates_texture);
-    gates_second.scale(1.6, 1.6); //TODO
-    gates_second.setPosition(590, 650);
+    gates_second.setPosition(gates2_posx, 650);
+    //    gates_second.scale(2, 1.6); //TODO
     window.draw(gates_second);
 }
 

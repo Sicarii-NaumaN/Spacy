@@ -20,6 +20,14 @@ bool GameEnvironment::start_game() {
 //    std::cout << "[GAME ENV] "
 //              << "Players connected" << std::endl;
     // Создаем слушателя событий для каждого пользователя
+
+    // g- Создаём объект для таблицы очков
+    int stat_id = object_manager.pick_enable_id();
+    GameStatistics gamestat(stat_id, 60);
+    auto stat_ptr = std::make_shared<GameStatistics>(gamestat);
+
+    object_manager.update_objects(stat_ptr);
+
     std::vector<boost::thread> threads;
 
     for (auto &usr : players_init) {

@@ -18,7 +18,7 @@ struct EventInterface
         SHOT,
         KEYPRESSED
     };
-    EventType type; // move, blink
+    EventType type;
     EventInterface(EventType t)
         : type(t) {}
 };
@@ -72,7 +72,7 @@ struct ObjectInterface
     {
         PLAYER,
         BULLET,
-        MAP
+        GAMESTATISTICS
     };
     VectorInterface position;
     Type            type;
@@ -96,6 +96,19 @@ struct PlayerInterface : ObjectInterface
 struct BulletInterface : ObjectInterface{
     int state;
     BulletInterface(int id, VectorInterface pos, int state) : state(state), ObjectInterface(Type::BULLET, id, pos) {}
+};
+
+struct GamestatisticsInterface : ObjectInterface{
+    int team1_score;
+    int team2_score;
+    int time_remaining;
+
+    //Сделать ворота движующимися
+    int gates1_posx;
+    int gates2_posx;
+    GamestatisticsInterface(int t1_s, int  t2_s, int g1_pos, int g2_pos) :
+        team1_score(t1_s), team2_score(t2_s), gates1_posx(g1_pos), gates2_posx(g2_pos), time_remaining(60),
+        ObjectInterface(Type::GAMESTATISTICS, -1, {0,0}) {}
 };
 
 #endif // SPACY_EVENT_H

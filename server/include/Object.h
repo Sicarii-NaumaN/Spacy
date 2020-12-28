@@ -63,6 +63,7 @@ public:
     enum Type {
         PLAYER,
         BULLET,
+        GAMESTATISTICS
     };
 
     Object(Type t, int id, Vector pos)
@@ -163,9 +164,48 @@ public:
         constrain();
     }
 
-
     Vector speed;
     int collisions_count = 0;
     int iniciator_ID;
     bool state;
+};
+
+class GameStatistics : public Object {
+public:
+    int team1_score;
+    int team2_score;
+    int time_remaining;
+
+    //Сделать ворота движующимися
+    int gates1_posx;
+    int gates2_posx;
+
+    int gates1_speed;
+    int gates2_speed;
+
+    GameStatistics(int id, int game_duration)
+            : Object(Type::GAMESTATISTICS, id, Vector(0, 0))
+            , team1_score(0)
+            , team2_score(0)
+            , gates1_posx(640)
+            , gates2_posx(640)
+            , time_remaining(game_duration) {}
+
+    void addPoint(int team) {
+        if (team == 0)
+            team1_score++;
+        else if (team == 1)
+            team2_score++;
+    }
+
+    void update() {
+        std::cout << "GATES UPDATED" << std::endl;
+
+        gates1_posx += gates1_speed;
+        gates2_posx -= gates2_speed;
+        if(gates1_posx > 1230 || gates1_posx < 100)
+            gates1_speed *= -1;
+        if(gates2_posx > 1230 || gates2_posx < 100)
+            gates2_speed *= -1;
+    }
 };

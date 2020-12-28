@@ -12,7 +12,7 @@
 
 #include "Game.h"
 
-const int   fps           = 30;
+const int fps = 30;
 const float tick_duration = 1.0 / fps;
 
 bool new_message_received = false;
@@ -22,15 +22,14 @@ void getServerMessage(ActionServer *actionServer) {
     while (true) {
         msg = actionServer->getMessage();
         new_message_received = false;
-        for (auto m : msg)
-            std::cout << m->type;
+//        for (auto m : msg)
+//            std::cout << m->type;
     }
 }
 
-int main()
-{
+int main() {
     struct Config config;
-    ActionServer  actionServer;
+    ActionServer actionServer;
 
     std::map<sf::Keyboard::Key, int> keyToCode;
 
@@ -38,6 +37,8 @@ int main()
     keyToCode[sf::Keyboard::A] = 1;
     keyToCode[sf::Keyboard::S] = 2;
     keyToCode[sf::Keyboard::D] = 3;
+    int gates1_pos;
+    int gates2_pos;
 
     actionServer.connectClient();
 
@@ -49,29 +50,26 @@ int main()
 
     graphics.drawField();
     graphics.drawFrontWall();
-    graphics.drawGates();
+    graphics.drawGates(0, 0);
     window.display();
 
     msg = actionServer.getMessage();
-    std::cout << "Got first server message\n";
-    for (auto m : msg)
-    {
-        if (m->type == ObjectInterface::Type::PLAYER)
-        {
+//    std::cout << "Got first server message\n";
+    for (auto m : msg) {
+        if (m->type == ObjectInterface::Type::PLAYER) {
             std::shared_ptr<PlayerInterface> player =
-                std::static_pointer_cast<PlayerInterface>(m);
+                    std::static_pointer_cast<PlayerInterface>(m);
             if (player->ID == actionServer.getId() && player->side == 1) {
                 graphics.setFlipped();
                 break;
 
-            if (player->ID == actionServer.getId()) {
-                if (player->side == 1)
-                    graphics.setFlipped();
-                graphics.movePlayerTo(player->position.x, player->position.y);
-            }
-            else
-                graphics.moveEnemyTo(player->position.x, player->position.y);
-            break;
+                if (player->ID == actionServer.getId()) {
+                    if (player->side == 1)
+                        graphics.setFlipped();
+                    graphics.movePlayerTo(player->position.x, player->position.y);
+                } else
+                    graphics.moveEnemyTo(player->position.x, player->position.y);
+                break;
             }
         }
     }
@@ -79,28 +77,25 @@ int main()
     graphics.drawEnemy();
     graphics.drawPlayer();
 
-    std::cout << "Thread launch...\n";
+//    std::cout << "Thread launch...\n";
     sf::Thread thread(&getServerMessage, &actionServer);
     thread.launch();
-    std::cout << "Thread launched\n";
+//    std::cout << "Thread launched\n";
 
 
     boost::posix_time::time_duration current_tick_duration;
 
-    auto last_tick  = boost::posix_time::microsec_clock::universal_time();
+    auto last_tick = boost::posix_time::microsec_clock::universal_time();
     auto start_time = boost::posix_time::microsec_clock::universal_time();
     sf::Vector2i mousePos;
 
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         sf::Event event;
         mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
 
         // Обработка событий окна
-        while (window.pollEvent(event))
-        {
-            switch (event.type)
-            {
+        while (window.pollEvent(event)) {
+            switch (event.type) {
                 case sf::Event::Closed:
                     window.close();
                     break;
@@ -113,8 +108,8 @@ int main()
                         case sf::Keyboard::A:
                         case sf::Keyboard::S:
                         case sf::Keyboard::D:
-                        actionServer.sendKeyPressedAction(keyToCode[key], mousePos.x, mousePos.y);
-                        break;
+                            actionServer.sendKeyPressedAction(keyToCode[key], mousePos.x, mousePos.y);
+                    break;
                     break;
                 }
 
@@ -126,22 +121,21 @@ int main()
                         case sf::Keyboard::A:
                         case sf::Keyboard::S:
                         case sf::Keyboard::D:
-                        actionServer.sendKeyReleasedAction(keyToCode[key], mousePos.x,
-                                                           mousePos.y);
-                        break;
+                            actionServer.sendKeyReleasedAction(keyToCode[key], mousePos.x,
+                                                               mousePos.y);
+                    break;
                     break;
                 }
 
                 case sf::Event::MouseButtonPressed:
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
                         auto pl_pos = graphics.getPlayerPosition();
                         actionServer.sendActionShot(
-                            pl_pos.x,
-                            pl_pos.y,
-                            mousePos.x,
-                            mousePos.y
-                            );
+                                pl_pos.x,
+                                pl_pos.y,
+                                mousePos.x,
+                                mousePos.y
+                        );
                     }
                     break;
             } // switch
@@ -151,48 +145,56 @@ int main()
         current_tick_duration = curr_time - last_tick;
 
 
-        if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
-        {
+        if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
 
-            std::cout << "Processing new server message\n";
+//            std::cout << "Processing new server message\n";
             new_message_received = true;
             last_tick = curr_time;
 
             window.clear();
             graphics.drawField();
 
-            for (auto m : msg)
-            {
-                switch (m->type)
-                {
-                case ObjectInterface::Type::BULLET: {
-                    std::shared_ptr<BulletInterface> bullet =
-                        std::static_pointer_cast<BulletInterface>(m);
+            for (auto m : msg) {
+                switch (m->type) {
+                    case ObjectInterface::Type::BULLET: {
+                        std::shared_ptr<BulletInterface> bullet =
+                                std::static_pointer_cast<BulletInterface>(m);
 
-                    graphics.drawBullet(bullet->position.x, bullet->position.y, bullet->state);
-                    break;
-                }
+                        graphics.drawBullet(bullet->position.x, bullet->position.y, bullet->state);
+                        break;
+                    }
 
-                case ObjectInterface::Type::PLAYER: {
-                    std::shared_ptr<PlayerInterface> player =
-                        std::static_pointer_cast<PlayerInterface>(m);
-                    if (player->ID == actionServer.getId())
-                        graphics.movePlayerTo(player->position.x, player->position.y);
-                    else
-                        graphics.moveEnemyTo(player->position.x, player->position.y);
-                    break;
-                }
+                    case ObjectInterface::Type::PLAYER: {
+                        std::shared_ptr<PlayerInterface> player =
+                                std::static_pointer_cast<PlayerInterface>(m);
+                        if (player->ID == actionServer.getId())
+                            graphics.movePlayerTo(player->position.x, player->position.y);
+                        else
+                            graphics.moveEnemyTo(player->position.x, player->position.y);
+                        break;
+                    }
+                    case ObjectInterface::Type::GAMESTATISTICS: {
+                        std::shared_ptr<GamestatisticsInterface> stat =
+                                std::static_pointer_cast<GamestatisticsInterface>(m);
+
+                        gates1_pos = stat->gates1_posx;
+                        gates2_pos = stat->gates2_posx;
+
+                        std::cout << gates1_pos << " !!! " << gates2_pos; // g- TODO В PacketManager правильные значения, здесь же 0, 0
+
+                        break;
+                    }
                 }
             }
 
             graphics.drawPlayer();
             graphics.drawFrontWall();
-            graphics.drawGates();
+            graphics.drawGates(gates1_pos, gates2_pos);
             graphics.drawEnemy();
             window.display();
         }
 
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
-    return(0);
+    return (0);
 } // main
