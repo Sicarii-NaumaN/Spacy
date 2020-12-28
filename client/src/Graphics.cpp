@@ -337,6 +337,65 @@ void Graphics::moveEnemyTo(float x, float y) {
     enemy.setPosition(x, y);
 }
 
-void Graphics::drawScore(int score1, int score2) {
+void Graphics::drawScore(std::string score1, std::string score2) {
+    sf::Text id1;
+    sf::Text pts1;
 
+    sf::Font font;
+    if (!font.loadFromFile("../client/fonts/arial.ttf")){std::cout << "STUPID FUCKING FONT COCK CUNT\n\n\n";}
+
+    sf::Text text;
+    sf::Text text2;
+
+    sf::Text name;
+    sf::Text name2;
+
+    text.setFont(font); // font is a sf::Font
+    text.setString(score1);
+    text.setCharacterSize(24); // in pixels, not points!
+    text.setFillColor(sf::Color::White);
+    text.setStyle(sf::Text::Bold);
+
+    text2.setFont(font); // font is a sf::Font
+    text2.setString(score2);
+    text2.setCharacterSize(24); // in pixels, not points!
+    text2.setFillColor(sf::Color::White);
+    text2.setStyle(sf::Text::Bold);
+
+
+    name.setFont(font); // font is a sf::Font
+    name.setString("player 1");
+    name.setCharacterSize(24); // in pixels, not points!
+    name.setFillColor(sf::Color::White);
+    name.setStyle(sf::Text::Bold);
+
+    name2.setFont(font); // font is a sf::Font
+    name2.setString("player 2");
+    name2.setCharacterSize(24); // in pixels, not points!
+    name2.setFillColor(sf::Color::White);
+    name2.setStyle(sf::Text::Bold);
+
+
+
+    text.setPosition(1240, 20);
+    text2.setPosition(1240, 40);
+
+    name.setPosition(1090, 20);
+    name2.setPosition(1090, 40);
+
+    window.draw(text);
+    window.draw(text2);
+    window.draw(name);
+    window.draw(name2);
 }
+
+
+
+
+
+
+
+
+
+
+
