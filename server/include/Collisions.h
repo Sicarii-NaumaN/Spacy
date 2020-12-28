@@ -17,7 +17,7 @@ public:
 
     void resolve_collision(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet);
 private:
-    static int COLLISION_RADIUS = 60;
+    const static int COLLISION_RADIUS = 60;
     bool collides(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet) const ;
 
 

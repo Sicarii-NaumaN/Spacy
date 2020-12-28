@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-const static double DEFAULT_BULLET_SPEED = 20;
+const static double DEFAULT_BULLET_SPEED = 5;
 const static int BULLET_TICKS_LIFETIME = 100;
 const static int MAX_BULLET_COLLISIONS = 3;
 const static int PLAYER_COLLISION_RADIUS = 10;

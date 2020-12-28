@@ -1,6 +1,9 @@
 #include <Event.h>
 #include <iostream>
 
+#define DEFAUL_PLAYER_SPEED 10
+#define DEFAUL_BULLET_SPEED 15
+
 
 std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
                                       ObjectManager           &object_manager)
@@ -13,7 +16,7 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
 
     Vector speed = Vector(mouse_x - origin_x, mouse_y - origin_y);
 
-    speed = speed.setMag(40);
+    speed = speed.setMag(DEFAUL_BULLET_SPEED);
 
     object_manager.update_objects(
         std::make_shared<Bullet>(
@@ -36,7 +39,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
 
     Player player = *sh_player.get();
     std::cout << "TRYING TO MOVE PLAYER #" << player.ID;
-    float defaultSpeed = 30;
+    float defaultSpeed = DEFAUL_PLAYER_SPEED;
     int side = (player.side == 0)? 1 : -1;
     float speed = defaultSpeed * side;
     Vector current_speed = player.speed * side;
