@@ -88,7 +88,7 @@ public:
 
     void constrain() {
 
-        int margin_y = 30;
+        int margin_y = 50;
 
         if (side == 0) {
             if (position.x < 0)

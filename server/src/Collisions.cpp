@@ -40,15 +40,15 @@ void CollisionManager::gates(std::shared_ptr<Object> object, std::shared_ptr<Gam
     if(bullet->state == 0)
         return; // неактивные пули не участвуют в коллизиях
 
-    if (std::abs(630 - bullet->position.x) < 200 && std::abs(400 - bullet->position.y) < 10) {
+    if (std::abs(640 - bullet->position.x) < 70 && std::abs(20 - bullet->position.y) < 20) {
         stat->addPoint(0);
-//        bullet->state = 0;
+        bullet->state = 0;
         return;
     }
 
-    if (std::abs(630 - bullet->position.x) < 200 && std::abs(620 - bullet->position.y) < 10 ) {
+    if (std::abs(640 - bullet->position.x) < 70 && std::abs(780 - bullet->position.y) < 20 ) {
         stat->addPoint(1);
-//        bullet->state = 0;
+        bullet->state = 0;
         return;
     }
 }

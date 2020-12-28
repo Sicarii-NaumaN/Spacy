@@ -66,11 +66,8 @@ bool GameEnvironment::start_game() {
 
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
             last_tick = curr_time;
-            std::cout << "BEFORE KILL " << object_manager.get_objects_by_map().size() << std::endl;
             object_manager.update_all_and_kill_dead_bullets();
-            std::cout << "AFTER KILL " << object_manager.get_objects_by_map().size() << std::endl;
             net_server.notify_all_users(object_manager.get_objects_by_map());
-            std::cout << "AFTER NOTIFICATION " << object_manager.get_objects_by_map().size() << std::endl;
             need_update = true;
         }
         curr_time = boost::posix_time::microsec_clock::universal_time();
@@ -107,8 +104,8 @@ void GameEnvironment::update_objects() {
             for (auto object : objects) {
                 if (object.second->type == Object::BULLET) {
                     object.second->update();
-                    collisions.gates(object.second, stat);
                     collisions.check(objects, object.second);
+                    collisions.gates(object.second, stat);
                 }
             }
 
