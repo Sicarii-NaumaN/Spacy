@@ -100,11 +100,11 @@ struct BulletInterface : ObjectInterface{
 
 struct Statistics : ObjectInterface
 {
-    int time_remaining;
-    int score0;
-    int score1;
+    std::string time_remaining;
+    std::string score0;
+    std::string score1;
 
-    Statistics(int time, int s0, int s1)
+    Statistics(std::string time, std::string s0, std::string s1)
             : ObjectInterface(Type::STATS, 0, VectorInterface(0, 0))
             , time_remaining(time)
             , score0(s0)

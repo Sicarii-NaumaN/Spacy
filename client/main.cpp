@@ -39,8 +39,9 @@ int main() {
     keyToCode[sf::Keyboard::A] = 1;
     keyToCode[sf::Keyboard::S] = 2;
     keyToCode[sf::Keyboard::D] = 3;
-    int gates1_pos;
-    int gates2_pos;
+    std::string score1;
+    std::string score2;
+    std::string time;
 
     actionServer.connectClient();
 
@@ -73,6 +74,7 @@ int main() {
         }
     }
     graphics.drawField();
+
     graphics.drawFrontWall();
     graphics.drawGates(0, 0);
     graphics.drawEnemy();
@@ -177,6 +179,12 @@ int main() {
                     case ObjectInterface::Type::STATS: {
                         std::shared_ptr<Statistics> stats =
                                 std::static_pointer_cast<Statistics>(m);
+
+                        score1 = stats->score0;
+                        score2 = stats->score1;
+                        time   = stats->time_remaining;
+//                        std::cout << stats->time_remaining << ' '
+//                                  << stats->score0 << "  FUCK FUCK FUCK "  << stats->score1 << std::endl;
                     }
                 }
             }
@@ -187,6 +195,7 @@ int main() {
         graphics.drawFrontWall();
         graphics.drawGates(0, 0);
         graphics.drawEnemy();
+        graphics.drawScore(score1, score2, time);
         window.display();
     }
     curr_time = boost::posix_time::microsec_clock::universal_time();
