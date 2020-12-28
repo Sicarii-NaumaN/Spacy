@@ -59,6 +59,8 @@ bool GameEnvironment::start_game() {
     stat = std::static_pointer_cast<GameStatistics>(
             object_manager.get_object_by_id(stat_id));
 
+
+
     // Главный таймер
     while ((current_time = current_game_duration.total_seconds()) < max_game_duration) {
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
@@ -107,6 +109,8 @@ void GameEnvironment::update_objects() {
                     collisions.check(objects, object.second);
                     collisions.gates(object.second, stat);
                 }
+                if (stat != nullptr)
+                    stat->time_remaining = max_game_duration - current_time;
             }
 
             need_update = false;

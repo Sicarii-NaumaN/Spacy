@@ -144,7 +144,7 @@ public:
             ++collisions_count;
         }
 
-        if (y > 770 || y < 50) { // g- 50 для того чтобы пулька не выходила за заднюю стенку (front wall)
+        if (y > 750 || y < 50) { // g- 50 для того чтобы пулька не выходила за заднюю стенку (front wall)
             speed.y *= -1;
             ++collisions_count;
         }
