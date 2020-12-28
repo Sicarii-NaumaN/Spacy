@@ -22,6 +22,7 @@ public:
     int get_id() { return(id); }
 
 private:
+    bool read_flag = true;
     boost::shared_ptr<boost::asio::ip::tcp::socket> socket_ptr;
     int                                             id;
     boost::asio::io_service                         io_service;

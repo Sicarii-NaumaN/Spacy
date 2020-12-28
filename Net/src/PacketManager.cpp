@@ -18,7 +18,6 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
         ptree tree = root.get_child(std::to_string(j));
 
         // std::cout << "[Adaptation] Parsing object #" << j << " of type " <<
-        // tree.get("type", "") << std::endl;
         switch (mp[tree.get("type", "")])
         {
             case 0:
@@ -57,6 +56,9 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
                 std::string score0 = tree.get("score0", "");
                 std::string score1 = tree.get("score1", "");
                 std::string time_remaining = tree.get("remaining", "");
+
+                if (std::stoi(time_remaining) == 0)
+                    return std::vector<std::shared_ptr<ObjectInterface>>();
 
                 struct Statistics stats(time_remaining, score0, score1);
                 std::shared_ptr<ObjectInterface> ptr =

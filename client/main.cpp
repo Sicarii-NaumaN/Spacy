@@ -15,17 +15,18 @@
 const int fps = 30;
 const float tick_duration = 1.0 / fps;
 
+bool game = true;
 bool new_message_received = false;
 std::vector<std::shared_ptr<ObjectInterface>> msg;
 sf::Mutex mutex;
 
 void getServerMessage(ActionServer *actionServer) {
-    while (true) {
-        mutex.lock();
+    while (game) {
+        //mutex.lock();
         msg = actionServer->getMessage();
         new_message_received = false;
-        mutex.unlock();
-        sf::sleep(sf::milliseconds(1));
+        //mutex.unlock();
+        //sf::sleep(sf::milliseconds(1));
     }
 }
 
@@ -91,6 +92,8 @@ int main() {
     sf::Vector2i mousePos;
 
     while (window.isOpen()) {
+        if (!game)
+            break;
         sf::Event event;
         mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
 
@@ -147,7 +150,7 @@ int main() {
 
 
         if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
-            mutex.lock();
+            //mutex.lock();
 
             new_message_received = true;
             last_tick = curr_time;
@@ -181,13 +184,16 @@ int main() {
                         score1 = stats->score0;
                         score2 = stats->score1;
                         time   = stats->time_remaining;
-//                        std::cout << stats->time_remaining << ' '
-//                                  << stats->score0 << "  FUCK FUCK FUCK "  << stats->score1 << std::endl;
+                        if (std::stoi(time) <= 1) {
+                            game = false;
+                            break;
+                        }
+                        break;
                     }
                 }
             }
-            mutex.unlock();
-                    } // endif
+            //mutex.unlock();
+        } // endif
 
         graphics.drawPlayer();
         graphics.drawFrontWall();
@@ -196,7 +202,25 @@ int main() {
         graphics.drawScore(score1, score2, time);
         window.display();
     }
-    curr_time = boost::posix_time::microsec_clock::universal_time();
+    window.clear();
+    while (window.isOpen()) {
+        sf::Event event;
 
+        ////
+        // game over screen here >
+        ////
+
+        while (window.pollEvent(event)) {
+            switch (event.type) {
+                case sf::Event::MouseButtonPressed:
+                case sf::Event::KeyPressed: {
+                    window.close();
+                    break;
+                }
+            }
+        }
+    }
+
+    exit(0);
     return (0);
 }

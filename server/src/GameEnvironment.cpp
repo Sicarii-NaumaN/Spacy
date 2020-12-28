@@ -62,7 +62,7 @@ bool GameEnvironment::start_game() {
 
 
     // Главный таймер
-    while ((current_time = current_game_duration.total_seconds()) < max_game_duration) {
+    while ((current_time = current_game_duration.total_seconds()) <= max_game_duration) {
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
