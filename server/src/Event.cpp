@@ -35,7 +35,6 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
 
     Player player = *sh_player.get();
-    std::cout << "TRYING TO MOVE PLAYER #" << player.ID;
     float defaultSpeed = 30;
     int side = (player.side == 0)? 1 : -1;
     float speed = defaultSpeed * side;
@@ -67,35 +66,23 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
         switch (key_code) //WASD - 0123
         {
         case 0:
-
             if (current_speed.y < 0)
-            {
                 player.setSpeedY(0);
-            }
             break;
 
         case 1:
-
             if (current_speed.x < 0)
-            {
                 player.setSpeedX(0);
-            }
             break;
 
         case 2:
-
             if (current_speed.y > 0)
-            {
                 player.setSpeedY(0);
-            }
             break;
 
         case 3:
-
             if (current_speed.x > 0)
-            {
                 player.setSpeedX(0);
-            }
             break;
         }
     }

@@ -43,7 +43,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     window.setKeyRepeatEnabled(false);
-    window.setFramerateLimit(60);
+        window.setFramerateLimit(60);
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 
@@ -182,6 +182,15 @@ int main()
                         graphics.moveEnemyTo(player->position.x, player->position.y);
                     break;
                 }
+
+                case ObjectInterface::Type::STATS: {
+                    std::shared_ptr<Statistics> stats =
+                        std::static_pointer_cast<Statistics>(m);
+
+                        //blah blah blah
+                    std::cout << stats->time_remaining << ' '
+                            << stats->score0 << ' ' << stats->score1 << std::endl;
+                }
                 }
             }
 
@@ -189,9 +198,8 @@ int main()
             graphics.drawFrontWall();
             graphics.drawGates();
             graphics.drawEnemy();
-            window.display();
         }
-
+        window.display();
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
     return(0);

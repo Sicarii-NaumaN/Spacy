@@ -63,7 +63,7 @@ public:
     enum Type {
         PLAYER,
         BULLET,
-        MAP
+        GAMESTATS
     };
 
     Object(Type t, int id, Vector pos)
@@ -74,6 +74,29 @@ public:
     Vector position;
     Type type;
     int ID;
+};
+
+class GameStatistics : public Object {
+public:
+    int team1_score;
+    int team2_score;
+    int time_remaining;
+
+    GameStatistics(int id, int game_duration)
+            : Object(Type::GAMESTATS, id, Vector(0, 0))
+            , team1_score(0)
+            , team2_score(0)
+            , time_remaining(game_duration) {}
+
+    void addPoint(int team) {
+        if (team == 0)
+            team1_score++;
+        else if (team == 1)
+            team2_score++;
+    }
+
+    void update() {}
+
 };
 
 class Player : public Object {
@@ -88,7 +111,7 @@ public:
 
     void constrain() {
 
-        int margin_y = 30;
+        int margin_y = 50;
 
         if (side == 0) {
             if (position.x < 0)
@@ -96,8 +119,8 @@ public:
             else if (position.x > 1280)
                 position.x = 1280;
 
-            if (position.y < 600)
-                position.y = 600;
+            if (position.y < 500)
+                position.y = 500;
             else if (position.y > 800 - margin_y)
                 position.y = 800 - margin_y;
         }
@@ -107,10 +130,10 @@ public:
             else if (position.x > 1280)
                 position.x = 1280;
 
-            if (position.y < 0)
-                position.y = 0;
-            else if (position.y > 200 - margin_y)
-                position.y = 200 - margin_y;
+            if (position.y < 0 + margin_y)
+                position.y = 0 + margin_y;
+            else if (position.y > 300)
+                position.y = 300;
         }
     }
 

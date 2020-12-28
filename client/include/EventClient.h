@@ -72,7 +72,7 @@ struct ObjectInterface
     {
         PLAYER,
         BULLET,
-        MAP
+        STATS
     };
     VectorInterface position;
     Type            type;
@@ -84,6 +84,19 @@ struct ObjectInterface
         , position(pos) {}
 };
 
+struct Statistics : ObjectInterface
+{
+    int time_remaining;
+    int score0;
+    int score1;
+
+    Statistics(int time, int s0, int s1)
+        : ObjectInterface(Type::STATS, 0, VectorInterface(0, 0))
+        , time_remaining(time)
+        , score0(s0)
+        , score1(s1) {}
+};
+
 struct PlayerInterface : ObjectInterface
 {
     int side;
@@ -91,6 +104,7 @@ struct PlayerInterface : ObjectInterface
         : ObjectInterface(Type::PLAYER, id, pos)
         , side(side) {}
 };
+
 
 
 struct BulletInterface : ObjectInterface{

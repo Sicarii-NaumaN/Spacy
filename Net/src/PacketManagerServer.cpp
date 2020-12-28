@@ -44,6 +44,15 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
                 root.add_child(std::to_string(j), tree);
                 break;
             }
+
+            case Object::Type::GAMESTATS:
+            {
+                auto ptr = std::static_pointer_cast<GameStatistics>(object[j]);
+                tree.put("type", "stats");
+                tree.put("remaining", ptr->time_remaining);
+                tree.put("score0", ptr->team1_score);
+                tree.put("score1", ptr->team2_score);
+            }
             } // switch
         }
     }

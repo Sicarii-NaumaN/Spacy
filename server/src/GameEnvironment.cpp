@@ -10,15 +10,9 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
 
 
 bool GameEnvironment::start_game() {
-//    std::cout << "[GAME ENV] "
-//              << "Starting game..." << std::endl;
-    // Ждем пользователей
-//    std::cout << "[GAME ENV] "
-//              << "Waiting for players..." << std::endl;
     std::vector<User> players_init =
             net_server.accept_users(player_count, object_manager);
-//    std::cout << "[GAME ENV] "
-//              << "Players connected" << std::endl;
+
     // Создаем слушателя событий для каждого пользователя
     std::vector<boost::thread> threads;
 
@@ -32,39 +26,36 @@ bool GameEnvironment::start_game() {
 
 //    initialize_objects();
     game_is_active = true;
-    std::cout << "[GAME ENV] " << "Updating objects" << std::endl;
     boost::thread th([&]() {
         this->update_objects();
     });
-    // boost::thread th(boost::bind(&(this->update_objects), this, boost::ref(object_manager)));
-    std::cout << "[GAME ENV] " << "Objects updated" << std::endl;
     threads.push_back(move(th));
 
-    std::cout << "[GAME ENV] " << "Starting main game cycle" << std::endl;
     // Определяем переменные времени
     auto round_start = boost::posix_time::microsec_clock::universal_time();
     boost::posix_time::time_duration current_game_duration;
     boost::posix_time::time_duration current_tick_duration;
     auto last_tick = boost::posix_time::microsec_clock::universal_time();
 
+    object_manager.update_objects(
+        std::make_shared<GameStatistics>(
+            object_manager.pick_enable_id(),
+            max_game_duration - current_game_duration.total_seconds())
+        );
     // Главный таймер
-    while (current_game_duration.total_seconds() < max_game_duration) {
+    while ((current_time = current_game_duration.total_seconds()) < max_game_duration) {
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
         if ((current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
             last_tick = curr_time;
-            std::cout << "BEFORE KILL " << object_manager.get_objects_by_map().size() << std::endl;
             object_manager.update_all_and_kill_dead_bullets();
-            std::cout << "AFTER KILL " << object_manager.get_objects_by_map().size() << std::endl;
             net_server.notify_all_users(object_manager.get_objects_by_map());
-            std::cout << "AFTER NOTIFICATION " << object_manager.get_objects_by_map().size() << std::endl;
             need_update = true;
         }
         curr_time = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
     }
-//    std::cout << "[GAME ENV] " << "Game over" << std::endl;
     game_is_active = false;
 
     for (auto &th : threads)
@@ -75,23 +66,29 @@ bool GameEnvironment::start_game() {
 } // GameEnvironment::start_game
 
 
-void GameEnvironment::initialize_objects() {
-    std::vector<std::shared_ptr<Object> > players;
-
-    for (int i = 0; i < player_count; i++) {
-        players.push_back(object_manager.get_object_by_id(i));
-    }
-}
+// void GameEnvironment::initialize_objects() {
+//     std::vector<std::shared_ptr<Object> > players;
+//
+//     for (int i = 0; i < player_count; i++) {
+//         players.push_back(object_manager.get_object_by_id(i));
+//     }
+// }
 
 
 void GameEnvironment::update_objects() {
     while (game_is_active) {
         // Получаем объекты
-        // std::unordered_map<int, std::shared_ptr<Object> > &objects =
-        //     object_manager.get_objects_by_map();
+        std::unordered_map<int, std::shared_ptr<Object> > &objects =
+            object_manager.get_objects_by_map();
 
         // Проверка на столкновения
         if (need_update) {
+            auto stat = std::static_pointer_cast<GameStatistics>(objects[2]);
+            if (!"Пуля попала в ворота") {
+                int player_side = 1; // Сторона игрока
+                stat->addPoint(player_side);
+            }
+            stat->time_remaining = current_time;
             need_update = false;
 
         } else {
@@ -132,12 +129,8 @@ std::shared_ptr<Player> GameEnvironment::init_user(User &user) {
 void GameEnvironment::serve_user(User &user) {
     std::cout << "[GAME ENV -- SERVICE] "
               << "Serve user start" << std::endl;
-
     while (game_is_active) {
         std::shared_ptr<Event> event = net_server.get_client_action(user);
-
-        std::cout << "server: EVENT RECEIVED!" << std::endl;
-
         std::lock_guard<std::mutex> lock(events_mutex);
         event_queue.push(event);
     }

@@ -34,6 +34,8 @@ private:
     double                              max_game_duration;
     double                              points_to_win;
 
+    int current_time;
+
     void initialize_objects();
     void update_objects();
 
