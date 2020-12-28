@@ -14,7 +14,7 @@ void CollisionManager::check(const std::unordered_map<int, std::shared_ptr<Objec
         if (obj.second->type == Object::PLAYER) {
             auto player = std::static_pointer_cast<Player>(obj.second);
             if (collides(player, bullet) && player->ID != bullet->iniciator_ID) {
-                std::cout << "BULLET COLLIDED\n";
+                // std::cout << "BULLET COLLIDED\n";
                 bullet->state = 0;
                 return; //Выходим из функции т.к одновременная коллизия с двумя объектами невозможна
             }

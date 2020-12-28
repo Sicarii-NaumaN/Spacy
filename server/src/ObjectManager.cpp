@@ -3,15 +3,15 @@
 #include <ObjectManager.h>
 
 void ObjectManager::update_all_and_kill_dead_bullets() {
-    std::cout << "BLABLA " << objects.size() << std::endl;
+    // std::cout << "BLABLA " << objects.size() << std::endl;
     for (auto obj = objects.begin(); obj != objects.end();)
     {
-        std::cout << "1";
-        bool deleted = false;
+        // std::cout << "1";
+        // bool deleted = false;
 
         obj->second->update();
 
-        std::cout << "2";
+        // std::cout << "2";
 //        switch (obj->second->type)
 //        {
 //        case Object::Type::BULLET:
@@ -28,13 +28,13 @@ void ObjectManager::update_all_and_kill_dead_bullets() {
 //            }
 //            break;
 //        }
-        if (!deleted) {
-            std::cout << "7";
+        // if (!deleted) {
+            // std::cout << "7";
             obj++;
-        }
-        std::cout << "8\n";
+        // }
+        // std::cout << "8\n";
     }
-    std::cout << "after all " << objects.size() << std::endl;
+    // std::cout << "after all " << objects.size() << std::endl;
 }
 
 int ObjectManager::pick_enable_id() const
