@@ -151,13 +151,13 @@ std::shared_ptr<Player> GameEnvironment::init_user(User &user) {
 
 
 void GameEnvironment::serve_user(User &user) {
-    std::cout << "[GAME ENV -- SERVICE] "
-              << "Serve user start" << std::endl;
+    // std::cout << "[GAME ENV -- SERVICE] "
+    //           << "Serve user start" << std::endl;
 
     while (game_is_active) {
         std::shared_ptr<Event> event = net_server.get_client_action(user);
 
-        std::cout << "server: EVENT RECEIVED!" << std::endl;
+        // std::cout << "server: EVENT RECEIVED!" << std::endl;
 
         std::lock_guard<std::mutex> lock(events_mutex);
         event_queue.push(event);

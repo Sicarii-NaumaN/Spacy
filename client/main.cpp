@@ -17,13 +17,15 @@ const float tick_duration = 1.0 / fps;
 
 bool new_message_received = false;
 std::vector<std::shared_ptr<ObjectInterface>> msg;
+sf::Mutex mutex;
 
 void getServerMessage(ActionServer *actionServer) {
     while (true) {
+        //mutex.lock();
         msg = actionServer->getMessage();
         new_message_received = false;
-//        for (auto m : msg)
-//            std::cout << m->type;
+        //mutex.unlock();
+        //sf::sleep(sf::milliseconds(1));
     }
 }
 
@@ -53,7 +55,6 @@ int main() {
     window.display();
 
     msg = actionServer.getMessage();
-//    std::cout << "Got first server message\n";
     for (auto m : msg) {
         if (m->type == ObjectInterface::Type::PLAYER) {
             std::shared_ptr<PlayerInterface> player =
@@ -79,11 +80,8 @@ int main() {
     graphics.drawEnemy();
     graphics.drawPlayer();
 
-//    std::cout << "Thread launch...\n";
     sf::Thread thread(&getServerMessage, &actionServer);
     thread.launch();
-//    std::cout << "Thread launched\n";
-
 
     boost::posix_time::time_duration current_tick_duration;
 
@@ -150,13 +148,15 @@ int main() {
 
         if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
 
-//            std::cout << "Processing new server message\n";
+            //mutex.lock();
             new_message_received = true;
+            //mutex.unlock();
             last_tick = curr_time;
 
             window.clear();
             graphics.drawField();
 
+            //mutex.lock();
             for (auto m : msg) {
                 switch (m->type) {
                     case ObjectInterface::Type::BULLET: {
@@ -180,7 +180,6 @@ int main() {
                         std::shared_ptr<Statistics> stats =
                                 std::static_pointer_cast<Statistics>(m);
 
-                        //blah blah blah
                         score1 = stats->score0;
                         score2 = stats->score1;
                         time   = stats->time_remaining;
@@ -189,6 +188,7 @@ int main() {
                     }
                 }
             }
+            //mutex.unlock();
         }
 
         graphics.drawPlayer();

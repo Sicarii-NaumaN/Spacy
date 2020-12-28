@@ -28,8 +28,8 @@ std::vector<std::shared_ptr<ObjectInterface> > NetClient::get_server_message(){
     std::basic_string<char> str("", size_buff);
 
     socket_ptr->read_some(buffer(str, size_buff));
-    std::cout << "Message received\n";
-    std::cout << str << std::endl;
+    // std::cout << "Message received\n";
+    // std::cout << str << std::endl;
     std::stringstream stream(str);
     read_json(stream, root);
     return(packet_manager.packet_adaptation_client(root));
