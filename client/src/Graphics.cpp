@@ -337,9 +337,10 @@ void Graphics::moveEnemyTo(float x, float y) {
     enemy.setPosition(x, y);
 }
 
-void Graphics::drawScore(std::string score1, std::string score2) {
+void Graphics::drawScore(std::string score1, std::string score2, std::string t) {
     sf::Text id1;
     sf::Text pts1;
+    sf::Text time;
 
     sf::Font font;
     if (!font.loadFromFile("../client/fonts/arial.ttf")){std::cout << "STUPID FUCKING FONT COCK CUNT\n\n\n";}
@@ -355,6 +356,12 @@ void Graphics::drawScore(std::string score1, std::string score2) {
     text.setCharacterSize(24); // in pixels, not points!
     text.setFillColor(sf::Color::White);
     text.setStyle(sf::Text::Bold);
+
+    time.setFont(font); // font is a sf::Font
+    time.setString(t);
+    time.setCharacterSize(24); // in pixels, not points!
+    time.setFillColor(sf::Color::White);
+    time.setStyle(sf::Text::Bold);
 
     text2.setFont(font); // font is a sf::Font
     text2.setString(score2);
@@ -379,11 +386,13 @@ void Graphics::drawScore(std::string score1, std::string score2) {
 
     text.setPosition(1240, 20);
     text2.setPosition(1240, 40);
+    time.setPosition(1150, 80);
 
     name.setPosition(1090, 20);
     name2.setPosition(1090, 40);
 
     window.draw(text);
+    window.draw(time);
     window.draw(text2);
     window.draw(name);
     window.draw(name2);

@@ -56,7 +56,7 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
             {
                 std::string score0 = tree.get("score0", "");
                 std::string score1 = tree.get("score1", "");
-                int time_remaining = tree.get("remaining", 0);
+                std::string time_remaining = tree.get("remaining", "");
 
                 struct Statistics stats(time_remaining, score0, score1);
                 std::shared_ptr<ObjectInterface> ptr =
