@@ -43,6 +43,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(config.window_width, config.window_height), "Spacy");
     window.setKeyRepeatEnabled(false);
+    window.setFramerateLimit(60);
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 
@@ -88,12 +89,12 @@ int main()
 
     auto last_tick  = boost::posix_time::microsec_clock::universal_time();
     auto start_time = boost::posix_time::microsec_clock::universal_time();
+    sf::Vector2i mousePos;
 
     while (window.isOpen())
     {
         sf::Event event;
-
-        auto mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
+        mousePos = graphics.getProjectedMousePosition(sf::Mouse::getPosition(window));
 
         // Обработка событий окна
         while (window.pollEvent(event))
@@ -149,8 +150,10 @@ int main()
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
+
         if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration)
         {
+
             std::cout << "Processing new server message\n";
             new_message_received = true;
             last_tick = curr_time;
@@ -186,8 +189,9 @@ int main()
             graphics.drawFrontWall();
             graphics.drawGates();
             graphics.drawEnemy();
+            window.display();
         }
-        window.display();
+
         curr_time = boost::posix_time::microsec_clock::universal_time();
     }
     return(0);

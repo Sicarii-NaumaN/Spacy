@@ -63,7 +63,6 @@ public:
     enum Type {
         PLAYER,
         BULLET,
-        MAP
     };
 
     Object(Type t, int id, Vector pos)
@@ -107,8 +106,8 @@ public:
             else if (position.x > 1280)
                 position.x = 1280;
 
-            if (position.y < 0)
-                position.y = 0;
+            if (position.y < 20)
+                position.y = 30; // Чтоб корабль не торчал
             else if (position.y > 200 - margin_y)
                 position.y = 200 - margin_y;
         }
@@ -128,7 +127,7 @@ public:
 class Bullet : public Object {
 public:
     Bullet(int id, int iniciator_id, Vector pos, Vector speed)
-            : Object(Type::BULLET, id, pos), iniciator_ID(iniciator_id), speed(speed), lifetime(BULLET_TICKS_LIFETIME),
+            : Object(Type::BULLET, id, pos), iniciator_ID(iniciator_id), speed(speed),
               state(1) {}
 
 
@@ -136,7 +135,7 @@ public:
         int x = position.x;
         int y = position.y;
 
-        Vector enemy_pos = {0,0};
+        //Vector enemy_pos = {0,0};
 
 
         if (x > 1280 || x < 0) {
@@ -160,19 +159,12 @@ public:
             return;
         }
 
-        if (lifetime == 0) {
-            state = 0;
-            return;
-        }
-        lifetime--;
-
         position = position + speed;
         constrain();
     }
 
 
     Vector speed;
-    int lifetime;
     int collisions_count = 0;
     int iniciator_ID;
     bool state;
