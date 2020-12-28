@@ -21,11 +21,11 @@ sf::Mutex mutex;
 
 void getServerMessage(ActionServer *actionServer) {
     while (true) {
-        //mutex.lock();
+        mutex.lock();
         msg = actionServer->getMessage();
         new_message_received = false;
-        //mutex.unlock();
-        //sf::sleep(sf::milliseconds(1));
+        mutex.unlock();
+        sf::sleep(sf::milliseconds(1));
     }
 }
 
@@ -147,16 +147,14 @@ int main() {
 
 
         if (!new_message_received && (current_tick_duration.total_milliseconds() / 1000.0) > tick_duration) {
+            mutex.lock();
 
-            //mutex.lock();
             new_message_received = true;
-            //mutex.unlock();
             last_tick = curr_time;
 
             window.clear();
             graphics.drawField();
 
-            //mutex.lock();
             for (auto m : msg) {
                 switch (m->type) {
                     case ObjectInterface::Type::BULLET: {
@@ -188,8 +186,8 @@ int main() {
                     }
                 }
             }
-            //mutex.unlock();
-        }
+            mutex.unlock();
+                    } // endif
 
         graphics.drawPlayer();
         graphics.drawFrontWall();
