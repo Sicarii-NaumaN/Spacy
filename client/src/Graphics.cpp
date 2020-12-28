@@ -74,13 +74,13 @@ void Graphics::drawGates(int gates1_posx, int gates2_posx) {  // g- отрисо
     sf::Sprite gates_first;
     gates_first.setTexture(gates_texture);
     gates_first.setPosition(gates1_posx, 430); //TODO
-    //gates_first.scale(3 , 0.5);
+    gates_first.scale(0.6 , 0.3);
     window.draw(gates_first);
 
     sf::Sprite gates_second;
     gates_second.setTexture(gates_texture);
     gates_second.setPosition(gates2_posx, 650);
-    //    gates_second.scale(2, 1.6); //TODO
+    gates_second.scale(0.6, 0.6); //TODO
     window.draw(gates_second);
 }
 
@@ -210,8 +210,17 @@ void Graphics::drawFrontWall() {
 
     window.draw(front_wall, transform);
 }
-
-
+void Graphics::drawMenu() {
+    sf::RectangleShape background;
+    background.setSize(
+            {
+                    (float) window.getSize().x, (float) window.getSize().y
+            });
+    sf::Texture texture;
+    texture.loadFromFile(config.textures_path + "menu.png");
+    background.setTexture(&texture);
+    window.draw(background);
+}
 void Graphics::drawField() {
     sf::RectangleShape background;
 
@@ -222,6 +231,7 @@ void Graphics::drawField() {
 
     sf::Texture texture;
     sf::Texture wall_texture;
+
 
     texture.loadFromFile(config.textures_path + "space.png");
     wall_texture.loadFromFile(config.textures_path + "metal.jpg");

@@ -48,9 +48,7 @@ int main() {
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 
-    graphics.drawField();
-    graphics.drawFrontWall();
-    graphics.drawGates(0, 0);
+    graphics.drawMenu();
     window.display();
 
     msg = actionServer.getMessage();
@@ -73,7 +71,9 @@ int main() {
             }
         }
     }
-
+    graphics.drawField();
+    graphics.drawFrontWall();
+    graphics.drawGates(0, 0);
     graphics.drawEnemy();
     graphics.drawPlayer();
 
