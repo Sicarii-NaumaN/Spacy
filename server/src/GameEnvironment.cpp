@@ -21,13 +21,6 @@ bool GameEnvironment::start_game() {
 //              << "Players connected" << std::endl;
     // Создаем слушателя событий для каждого пользователя
 
-    // g- Создаём объект для таблицы очков
-    int stat_id = object_manager.pick_enable_id();
-    GameStatistics gamestat(stat_id, 60);
-    auto stat_ptr = std::make_shared<GameStatistics>(gamestat);
-
-    object_manager.update_objects(stat_ptr);
-
     std::vector<boost::thread> threads;
 
     for (auto &usr : players_init) {
@@ -55,8 +48,19 @@ bool GameEnvironment::start_game() {
     boost::posix_time::time_duration current_tick_duration;
     auto last_tick = boost::posix_time::microsec_clock::universal_time();
 
+    stat_id = object_manager.pick_enable_id();
+
+    object_manager.update_objects(
+            std::make_shared<GameStatistics>(
+                    stat_id,
+                    max_game_duration - current_game_duration.total_seconds())
+    );
+
+    stat = std::static_pointer_cast<GameStatistics>(
+            object_manager.get_object_by_id(stat_id));
+
     // Главный таймер
-    while (current_game_duration.total_seconds() < max_game_duration) {
+    while ((current_time = current_game_duration.total_seconds()) < max_game_duration) {
         auto curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
@@ -100,15 +104,15 @@ void GameEnvironment::update_objects() {
 
         // Проверка на столкновения
         if (need_update) {
-            for (auto object : objects){
-                if(object.second->type == Object::BULLET){
+            for (auto object : objects) {
+                if (object.second->type == Object::BULLET) {
                     object.second->update();
+                    collisions.gates(object.second, stat);
                     collisions.check(objects, object.second);
                 }
             }
 
-                need_update = false;
-
+            need_update = false;
         } else {
             std::lock_guard<std::mutex> lock(events_mutex);
 
@@ -121,6 +125,7 @@ void GameEnvironment::update_objects() {
             }
         }
     }
+
 } // GameEnvironment::update_objects
 
 

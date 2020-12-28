@@ -72,7 +72,7 @@ struct ObjectInterface
     {
         PLAYER,
         BULLET,
-        GAMESTATISTICS
+        STATS
     };
     VectorInterface position;
     Type            type;
@@ -98,17 +98,17 @@ struct BulletInterface : ObjectInterface{
     BulletInterface(int id, VectorInterface pos, int state) : state(state), ObjectInterface(Type::BULLET, id, pos) {}
 };
 
-struct GamestatisticsInterface : ObjectInterface{
-    int team1_score;
-    int team2_score;
+struct Statistics : ObjectInterface
+{
     int time_remaining;
+    int score0;
+    int score1;
 
-    //Сделать ворота движующимися
-    int gates1_posx;
-    int gates2_posx;
-    GamestatisticsInterface(int t1_s, int  t2_s, int g1_pos, int g2_pos) :
-        team1_score(t1_s), team2_score(t2_s), gates1_posx(g1_pos), gates2_posx(g2_pos), time_remaining(60),
-        ObjectInterface(Type::GAMESTATISTICS, -1, {0,0}) {}
+    Statistics(int time, int s0, int s1)
+            : ObjectInterface(Type::STATS, 0, VectorInterface(0, 0))
+            , time_remaining(time)
+            , score0(s0)
+            , score1(s1) {}
 };
 
 #endif // SPACY_EVENT_H

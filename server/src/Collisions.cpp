@@ -33,3 +33,22 @@ bool CollisionManager::collides(std::shared_ptr<Player> player, std::shared_ptr<
     return std::abs(player->position.x - bullet->position.x) <= 60
             && std::abs(player->position.y - bullet->position.y) <= 60;
 }
+
+void CollisionManager::gates(std::shared_ptr<Object> object, std::shared_ptr<GameStatistics> stat) {
+    auto bullet = std::static_pointer_cast<Bullet>(object);
+
+    if(bullet->state == 0)
+        return; // неактивные пули не участвуют в коллизиях
+
+    if (std::abs(630 - bullet->position.x) < 200 && std::abs(400 - bullet->position.y) < 10) {
+        stat->addPoint(0);
+//        bullet->state = 0;
+        return;
+    }
+
+    if (std::abs(630 - bullet->position.x) < 200 && std::abs(620 - bullet->position.y) < 10 ) {
+        stat->addPoint(1);
+//        bullet->state = 0;
+        return;
+    }
+}

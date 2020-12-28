@@ -19,6 +19,7 @@ public:
     void drawSideWalls();
     void drawField();
     void drawMenu();
+    void drawScore(int score1, int score2);
     void drawGates(int gates1_pos, int gates2_posx);
 
     void drawPlayer();

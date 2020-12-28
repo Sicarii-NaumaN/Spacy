@@ -2,7 +2,8 @@
 #include <iostream>
 
 
-std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_client(ptree &root) {
+std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_client(ptree &root)
+{
     // std::cout << "[Adaptation] Starting adaptation...\n";
     std::vector<std::shared_ptr<ObjectInterface> > vector;
 
@@ -10,20 +11,23 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
 
     mp["player"] = 0;
     mp["bullet"] = 1;
-    mp["stat"]   = 2;
+    mp["stats"]  = 2;
 
-    for (int j = 0; j < root.get("object", 0); ++j) {
+    for (int j = 0; j < root.get("object", 0); ++j)
+    {
         ptree tree = root.get_child(std::to_string(j));
 
         // std::cout << "[Adaptation] Parsing object #" << j << " of type " <<
         // tree.get("type", "") << std::endl;
-        switch (mp[tree.get("type", "")]) {
-            case 0: {
-                int id = tree.get("id", 0);
-                int x = tree.get("x", 0);
-                int y = tree.get("y", 0);
-                int w = tree.get("w", 0);
-                int h = tree.get("h", 0);
+        switch (mp[tree.get("type", "")])
+        {
+            case 0:
+            {
+                int id   = tree.get("id", 0);
+                int x    = tree.get("x", 0);
+                int y    = tree.get("y", 0);
+                int w    = tree.get("w", 0);
+                int h    = tree.get("h", 0);
                 int side = tree.get("side", 0);
 
 
@@ -35,11 +39,12 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
                 break;
             }
 
-            case 1: {
+            case 1:
+            {
                 int id = tree.get("id", 0);
-                int x = tree.get("x", 0);
-                int y = tree.get("y", 0);
-                int state = tree.get("state", 0);
+                int x  = tree.get("x", 0);
+                int y  = tree.get("y", 0);
+                int state  = tree.get("state", 0);
 
                 struct BulletInterface bullet(id, VectorInterface(x, y), state);
                 std::shared_ptr<ObjectInterface> ptr =
@@ -47,21 +52,18 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
                 vector.push_back(ptr);
                 break;
             }
-            case 2: {
-                std::cout << "[Adaptation] STATS\n";
+            case 2:
+            {
+                int score0 = tree.get("score0", 0);
+                int score1 = tree.get("score1", 0);
+                int time_remaining = tree.get("remaining", 0);
 
-                int gates1_posx = tree.get("gates1_posx", 0);
-                int gates2_posx = tree.get("gates2_posx", 0);
-                int team1_score = tree.get("team1_score", 0);
-                int team2_score = tree.get("team2_score", 0);
-
-                std::cout << "[Adaptation] STATS\n" << gates1_posx << " " << gates2_posx << std::endl;
-
-                struct GamestatisticsInterface stat(gates1_posx, gates2_posx, team1_score, team2_score);
+                struct Statistics stats(time_remaining, score0, score1);
                 std::shared_ptr<ObjectInterface> ptr =
-                        std::make_shared<GamestatisticsInterface>(stat);
+                        std::make_shared<Statistics>(stats);
                 vector.push_back(ptr);
                 break;
+
             }
 
             default : {
@@ -71,20 +73,23 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
     }
 
     // std::cout << "[Adaptation] Adaptation finished.\n";
-    return (vector);
+    return(vector);
 } // PacketManager::packet_adaptation_client
 
 
-std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> &event) {
+std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> &event)
+{
     std::map<EventInterface::EventType, int> mp;
 
-    mp[EventInterface::SHOT] = 2;
+    mp[EventInterface::SHOT]       = 2;
     mp[EventInterface::KEYPRESSED] = 3;
 
     ptree root;
 
-    switch (mp[event->type]) {
-        case 2: {
+    switch (mp[event->type])
+    {
+        case 2:
+        {
             auto ptr = std::static_pointer_cast<ShotInterface>(event);
             root.put("type", "shot");
             root.put("origin_x", ptr->origin_x);
@@ -94,7 +99,8 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
             break;
         }
 
-        case 3: {
+        case 3:
+        {
             auto ptr = std::static_pointer_cast<KeyPressedEvent>(event);
             root.put("type", "keypressed");
             root.put("keycode", ptr->keyCode);
@@ -104,11 +110,12 @@ std::string PacketManager::packet_handle_client(std::shared_ptr<EventInterface> 
             break;
         }
 
-        default: {
+        default:
+        {
             break;
         }
     }
     std::stringstream buf;
     write_json(buf, root);
-    return (buf.str());
+    return(buf.str());
 } // PacketManager::packet_handle_client

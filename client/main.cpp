@@ -47,9 +47,9 @@ int main() {
     window.setFramerateLimit(60);
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
-
-    graphics.drawMenu();
-    window.display();
+//
+//    graphics.drawMenu();
+//    window.display();aaaaaa
 
     msg = actionServer.getMessage();
 //    std::cout << "Got first server message\n";
@@ -85,6 +85,7 @@ int main() {
 
     boost::posix_time::time_duration current_tick_duration;
 
+    auto curr_time = boost::posix_time::microsec_clock::universal_time();
     auto last_tick = boost::posix_time::microsec_clock::universal_time();
     auto start_time = boost::posix_time::microsec_clock::universal_time();
     sf::Vector2i mousePos;
@@ -141,7 +142,7 @@ int main() {
             } // switch
         }
 
-        auto curr_time = boost::posix_time::microsec_clock::universal_time();
+        curr_time = boost::posix_time::microsec_clock::universal_time();
         current_tick_duration = curr_time - last_tick;
 
 
@@ -173,28 +174,25 @@ int main() {
                             graphics.moveEnemyTo(player->position.x, player->position.y);
                         break;
                     }
-                    case ObjectInterface::Type::GAMESTATISTICS: {
-                        std::shared_ptr<GamestatisticsInterface> stat =
-                                std::static_pointer_cast<GamestatisticsInterface>(m);
+                    case ObjectInterface::Type::STATS: {
+                        std::shared_ptr<Statistics> stats =
+                                std::static_pointer_cast<Statistics>(m);
 
-                        gates1_pos = stat->gates1_posx;
-                        gates2_pos = stat->gates2_posx;
-
-                        std::cout << gates1_pos << " !!! " << gates2_pos; // g- TODO В PacketManager правильные значения, здесь же 0, 0
-
-                        break;
+                        //blah blah blah
+                        std::cout << stats->time_remaining << ' '
+                                  << stats->score0 << "  FUCK FUCK FUCK "  << stats->score1 << std::endl;
                     }
                 }
             }
-
-            graphics.drawPlayer();
-            graphics.drawFrontWall();
-            graphics.drawGates(gates1_pos, gates2_pos);
-            graphics.drawEnemy();
-            window.display();
         }
 
-        curr_time = boost::posix_time::microsec_clock::universal_time();
+        graphics.drawPlayer();
+        graphics.drawFrontWall();
+        graphics.drawGates(0, 0);
+        graphics.drawEnemy();
+        window.display();
     }
+    curr_time = boost::posix_time::microsec_clock::universal_time();
+
     return (0);
-} // main
+}

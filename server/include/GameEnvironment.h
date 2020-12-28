@@ -44,7 +44,10 @@ private:
     std::mutex events_mutex;
 
     bool       need_update;
+    int current_time;
     bool       game_is_active;
     int        player_count = 2;
     CollisionManager collisions;
+    std::shared_ptr<GameStatistics> stat;
+    int stat_id;
 };

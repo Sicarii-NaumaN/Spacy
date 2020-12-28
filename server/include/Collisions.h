@@ -12,10 +12,8 @@ public:
     void check(const std::unordered_map<int, std::shared_ptr<Object>>& objects,
                                                                 std::shared_ptr<Object> object);
 
-    bool is_object_collided(const std::unordered_map<int, std::shared_ptr<Object>>& objects,
-                            std::shared_ptr<Object> object) const;
+    void gates(std::shared_ptr<Object> object, std::shared_ptr<GameStatistics> stat);
 
-    void resolve_collision(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet);
 private:
     const static int COLLISION_RADIUS = 80;
     bool collides(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet) const ;

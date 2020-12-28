@@ -39,13 +39,12 @@ std::string PacketManagerServer::packet_handle_server(std::unordered_map<int, st
                     break;
                 }
 
-                case Object::Type::GAMESTATISTICS: {
+                case Object::Type::GAMESTATS: {
                     auto ptr = std::static_pointer_cast<GameStatistics>(object[j]);
-                    tree.put("type", "stat");
-                    tree.put("gates1_posx", (int) ptr->gates1_posx);
-                    tree.put("gates2_posx", (int) ptr->gates2_posx);
-                    tree.put("team1_score", (int) ptr->team1_score);
-                    tree.put("team2_score", (int) ptr->team2_score);
+                    tree.put("type", "stats");
+                    tree.put("remaining", ptr->time_remaining);
+                    tree.put("score0", ptr->team1_score);
+                    tree.put("score1", ptr->team2_score);
                     root.add_child(std::to_string(j), tree);
                     break;
                 }
