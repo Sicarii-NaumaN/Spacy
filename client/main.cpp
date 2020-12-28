@@ -48,8 +48,8 @@ int main() {
 
     Graphics graphics(window, config, actionServer.getId() % 2 == 1);
 //
-//    graphics.drawMenu();
-//    window.display();aaaaaa
+    graphics.drawMenu();
+    window.display();
 
     msg = actionServer.getMessage();
 //    std::cout << "Got first server message\n";
