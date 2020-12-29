@@ -11,9 +11,6 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
     Player                  player    = *sh_player.get();
 
-    // if (sh_player->state_.is_shot_avaible())
-    // {
-
     Vector speed = Vector(mouse_x - origin_x, mouse_y - origin_y);
 
     speed = speed.setMag(DEFAUL_BULLET_SPEED);
@@ -25,9 +22,6 @@ std::shared_ptr<Object> Shot::process(std::shared_ptr<Object> obj,
             Vector(origin_x, origin_y),
             speed)
         );
-    // player.state_.shot();
-    // sh_player->state_.shot();
-    // }
     return(std::make_shared<Player>(player));
 }
 
@@ -38,7 +32,6 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
     std::shared_ptr<Player> sh_player = std::static_pointer_cast<Player>(obj);
 
     Player player = *sh_player.get();
-    // std::cout << "TRYING TO MOVE PLAYER #" << player.ID;
     float defaultSpeed = DEFAUL_PLAYER_SPEED;
     int side = (player.side == 0)? 1 : -1;
     float speed = defaultSpeed * side;
@@ -102,8 +95,7 @@ std::shared_ptr<Object> KeyPressed::process(std::shared_ptr<Object> obj,
             break;
         }
     }
-    // std::cout << "SDLFKJSDLF" << player.position.x << ' ' << player.position.y
-    //           << std::endl;
+
     object_manager.update_objects(std::make_shared<Player>(player));
 
     return(std::make_shared<Player>(player));

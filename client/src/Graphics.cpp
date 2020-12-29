@@ -221,6 +221,19 @@ void Graphics::drawMenu() {
     background.setTexture(&texture);
     window.draw(background);
 }
+
+void Graphics::drawResults() {
+    sf::RectangleShape background;
+    background.setSize(
+            {
+                    (float) window.getSize().x, (float) window.getSize().y
+            });
+    sf::Texture texture;
+    texture.loadFromFile(config.textures_path + "gameover.png");
+    background.setTexture(&texture);
+    window.draw(background);
+}
+
 void Graphics::drawField() {
     sf::RectangleShape background;
 

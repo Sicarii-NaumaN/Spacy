@@ -136,7 +136,6 @@ public:
         int x = position.x;
         int y = position.y;
 
-        //Vector enemy_pos = {0,0};
 
 
         if (x > 1280 || x < 0) {

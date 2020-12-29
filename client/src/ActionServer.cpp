@@ -53,32 +53,3 @@ void ActionServer::closeConnection()
 {
     //функция разрыва соединения
 }
-
-// bool ActionServer::checkWinner(const
-// std::vector<std::shared_ptr<ObjectInterface>> &objects){
-//    std::map<ObjectInterface::Type,
-//    std::vector<std::shared_ptr<ObjectInterface>>> group;
-//
-//    for (const std::shared_ptr<ObjectInterface> &obj : objects) {
-//        group[obj->type].push_back(obj);
-//    }
-//
-//    int pointOfWinner = 0;
-//    int idOfWinner = 0;
-//    std::vector<MapInterface> mapData;
-//
-//    for (std::shared_ptr<ObjectInterface> &obj :
-//    group[ObjectInterface::Type::MAP_OBJECT]) {
-//        mapData.emplace_back(*std::static_pointer_cast<MapInterface>(obj));
-//    }
-//
-//    for (auto point : mapData[0].players_pts){
-//        if(point.second > pointOfWinner) {
-//            pointOfWinner = point.second;
-//            idOfWinner = point.first;
-//        }
-//    }
-//
-//    return idOfWinner == myId;
-//
-//}

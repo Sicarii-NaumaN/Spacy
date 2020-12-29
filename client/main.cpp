@@ -206,9 +206,8 @@ int main() {
     while (window.isOpen()) {
         sf::Event event;
 
-        ////
-        // game over screen here >
-        ////
+        graphics.drawResults();
+        window.display();
 
         while (window.pollEvent(event)) {
             switch (event.type) {
@@ -222,5 +221,4 @@ int main() {
     }
 
     exit(0);
-    return (0);
 }

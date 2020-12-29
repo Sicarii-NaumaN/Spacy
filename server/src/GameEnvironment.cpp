@@ -10,16 +10,8 @@ GameEnvironment::GameEnvironment(std::uint16_t port,
 
 
 bool GameEnvironment::start_game() {
-//    std::cout << "[GAME ENV] "
-//              << "Starting game..." << std::endl;
-    // Ждем пользователей
-//    std::cout << "[GAME ENV] "
-//              << "Waiting for players..." << std::endl;
     std::vector<User> players_init =
             net_server.accept_users(player_count, object_manager);
-//    std::cout << "[GAME ENV] "
-//              << "Players connected" << std::endl;
-    // Создаем слушателя событий для каждого пользователя
 
     std::vector<boost::thread> threads;
 
@@ -31,13 +23,12 @@ bool GameEnvironment::start_game() {
         threads.push_back(move(th));
     }
 
-//    initialize_objects();
     game_is_active = true;
     std::cout << "[GAME ENV] " << "Updating objects" << std::endl;
     boost::thread th([&]() {
         this->update_objects();
     });
-    // boost::thread th(boost::bind(&(this->update_objects), this, boost::ref(object_manager)));
+
     std::cout << "[GAME ENV] " << "Objects updated" << std::endl;
     threads.push_back(move(th));
 
@@ -75,7 +66,6 @@ bool GameEnvironment::start_game() {
         curr_time = boost::posix_time::microsec_clock::universal_time();
         current_game_duration = curr_time - round_start;
     }
-//    std::cout << "[GAME ENV] " << "Game over" << std::endl;
     game_is_active = false;
 
     for (auto &th : threads)
@@ -84,15 +74,6 @@ bool GameEnvironment::start_game() {
     std::cout << "[GAME ENV] " << "Exiting..." << std::endl;
     return (0);
 } // GameEnvironment::start_game
-
-
-void GameEnvironment::initialize_objects() {
-    std::vector<std::shared_ptr<Object> > players;
-
-    for (int i = 0; i < player_count; i++) {
-        players.push_back(object_manager.get_object_by_id(i));
-    }
-}
 
 
 void GameEnvironment::update_objects() {
@@ -151,13 +132,11 @@ std::shared_ptr<Player> GameEnvironment::init_user(User &user) {
 
 
 void GameEnvironment::serve_user(User &user) {
-    // std::cout << "[GAME ENV -- SERVICE] "
-    //           << "Serve user start" << std::endl;
 
     while (game_is_active) {
         std::shared_ptr<Event> event = net_server.get_client_action(user);
 
-        // std::cout << "server: EVENT RECEIVED!" << std::endl;
+
 
         std::lock_guard<std::mutex> lock(events_mutex);
         event_queue.push(event);

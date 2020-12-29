@@ -35,7 +35,6 @@ private:
     double                              max_game_duration;
     double                              points_to_win;
 
-    void initialize_objects();
     void update_objects();
 
     std::shared_ptr<Player> init_user(User &user);

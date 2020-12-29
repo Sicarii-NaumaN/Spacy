@@ -4,7 +4,6 @@
 
 std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_client(ptree &root)
 {
-    // std::cout << "[Adaptation] Starting adaptation...\n";
     std::vector<std::shared_ptr<ObjectInterface> > vector;
 
     std::map<std::string, int> mp;
@@ -17,7 +16,6 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
     {
         ptree tree = root.get_child(std::to_string(j));
 
-        // std::cout << "[Adaptation] Parsing object #" << j << " of type " <<
         switch (mp[tree.get("type", "")])
         {
             case 0:
@@ -74,7 +72,6 @@ std::vector<std::shared_ptr<ObjectInterface> > PacketManager::packet_adaptation_
         }
     }
 
-    // std::cout << "[Adaptation] Adaptation finished.\n";
     return(vector);
 } // PacketManager::packet_adaptation_client
 

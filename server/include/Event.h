@@ -3,13 +3,7 @@
 #include <Object.h>
 #include <ObjectManager.h>
 
-enum Direction
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
+
 class Event
 {
 public:
@@ -20,16 +14,6 @@ public:
     int IniciatorID;
 };
 
-class Move : public Event
-{
-public:
-    Move(int Player_ID, Direction dir)
-        : Event(Player_ID)
-        , direction(dir) {}
-    std::shared_ptr<Object> process(std::shared_ptr<Object> obj, ObjectManager &objectmanager) override;
-
-    Direction direction;
-};
 
 class Shot : public Event
 {

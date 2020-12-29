@@ -33,6 +33,6 @@ private:
     std::vector<User>       users;
     boost::asio::io_service io_service;
     PacketManagerServer     packet_manager;
-    // PacketManager qwe;
+
 };
 #endif // SPACY_NETSERVER_H

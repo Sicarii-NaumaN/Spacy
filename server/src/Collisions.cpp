@@ -24,11 +24,6 @@ void CollisionManager::check(const std::unordered_map<int, std::shared_ptr<Objec
 
 }
 
-//void CollisionManager::resolve_collision(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet) {
-//    std::cout << "\n\n\n\n\n\n[COLLISION MANAGER] resolve func\n\n\n\n\n\n" << std::endl;
-//
-//}
-
 bool CollisionManager::collides(std::shared_ptr<Player> player, std::shared_ptr<Bullet> bullet) const {
     return std::abs(player->position.x - bullet->position.x) <= 60
             && std::abs(player->position.y - bullet->position.y) <= 60;

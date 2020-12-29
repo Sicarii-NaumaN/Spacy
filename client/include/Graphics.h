@@ -19,6 +19,7 @@ public:
     void drawSideWalls();
     void drawField();
     void drawMenu();
+    void drawResults();
     void drawScore(std::string score1, std::string score2, std::string t);
     void drawGates(int gates1_pos, int gates2_posx);
 
